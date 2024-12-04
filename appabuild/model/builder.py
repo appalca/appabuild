@@ -5,19 +5,20 @@ Majority of the code is copied and adapted from lca_algebraic package.
 from __future__ import annotations
 
 import itertools
+import os
 import types
 from collections import OrderedDict
 from typing import List, Tuple
 
 import brightway2 as bw
 import lca_algebraic as lcaa
+import yaml
 from apparun.impact_methods import MethodFullName
 from apparun.impact_model import ImpactModel
 from apparun.impact_tree import ImpactTreeNode
 from apparun.parameters import (
     EnumParam,
     FloatParam,
-    ImpactModelParam,
     ImpactModelParams,
 )
 from bw2data.backends.peewee import Activity
@@ -60,46 +61,75 @@ class ImpactModelBuilder:
     """
     Main purpose of this class is to build Impact Models.
     """
-
-    def __init__(self, database_name: str):
+    def __init__(self, user_database_name: str, functional_unit: str, methods: list[str], metadata: dict, output_path:str, compile_models: bool):
         """
-        Initialisation.
-        :param database_name: user database name.
-        """
-        self.database_name = database_name
-        self.database = bw.Database(database_name)
-
-    def build_impact_model(
-        self, functional_unit: str, methods: List[str], metadata: dict
-    ) -> ImpactModel:
-        """
-        Build an Impact Model
+        Initialize the model builder
+        :param user_database_name: name of the user database (foreground database)
         :param functional_unit: uuid of the activity producing the reference flow.
-        :param methods: list of methods to generate arithmetic models for. Expected
-        method format is Appa Run method keys.
-        :param metadata: information about the LCA behind the impact model. Should
-        contain, or link to all information necessary for the end user's proper
-        understanding of the impact model.
+        :param methods: list of methods to generate arithmetic models for.
+            Expected method format is Appa Run method keys.
+        :param metadata: information about the LCA behind the impact model.
+            Should contain, or link to all information necessary for the end user's
+            proper understanding of the impact model.
+        """
+        self.user_database_name = user_database_name
+        self.functional_unit = functional_unit
+        self.methods = methods
+        self.metadata = metadata
+        self.output_path = output_path
+        self.compile_models = compile_models
+        self.bw_user_database = bw.Database(self.user_database_name)
 
+    @staticmethod
+    def from_yaml(lca_config_path: str)-> ImpactModelBuilder:
+        """
+        Initializes a build with information contained in a YAML configuration file
+        :param lca_config_path: path to the file holding the configuration.
+        :return: the Impact Model Builder
+        """
+        with open(lca_config_path, "r") as stream:
+            lca_config = yaml.safe_load(stream)
+            builder = ImpactModelBuilder(
+                lca_config["scope"]["fu"]["database"],
+                lca_config["scope"]["fu"]["name"],
+                lca_config["scope"]["methods"],
+                lca_config["outputs"]["model"]["metadata"],
+                 os.path.join(
+                    lca_config["outputs"]["model"]["path"],
+                    f"{lca_config['outputs']['model']['name']}.yaml"
+                ),
+                lca_config["outputs"]["model"]["compile"]
+            )
+        return builder
+
+    def build_impact_model(self) -> ImpactModel:
+        """
+        Build an Impact Model, the model is a represented as a tree with the functional unit as its root
         :return: built impact model.
         """
-        functional_unit_bw = [i for i in self.database if functional_unit == i["name"]]
+        functional_unit_bw = self.find_functional_unit_in_bw()
+        tree, params = self.build_impact_tree_and_parameters(functional_unit_bw, self.methods)
+        impact_model = ImpactModel(tree=tree, parameters=params, metadata=self.metadata)
+        return impact_model
+
+    def find_functional_unit_in_bw(self) -> ActivityExtended:
+        """
+        Find the bw activity matching the functional unit in the bw database. A single activity
+        should be found as it is to be used as the root of the tree.
+        """
+        functional_unit_bw = [i for i in self.bw_user_database if self.functional_unit == i["name"]]
         if len(functional_unit_bw) < 1:
-            raise BwDatabaseError(f"Cannot find activity {functional_unit} for FU.")
+            raise BwDatabaseError(f"Cannot find activity {self.functional_unit} for FU.")
         if len(functional_unit_bw) > 1:
             raise BwDatabaseError(
-                f"Too many activities matching {functional_unit} for FU: "
+                f"Too many activities matching {self.functional_unit} for FU: "
                 f"{functional_unit_bw}."
             )
         functional_unit_bw = functional_unit_bw[0]
-        tree, params = self.build_impact_tree_and_parameters(
-            functional_unit_bw, methods
-        )
-        impact_model = ImpactModel(tree=tree, parameters=params, metadata=metadata)
-        return impact_model
+        return functional_unit_bw
 
     def build_impact_tree_and_parameters(
-        self, functional_unit_bw: ActivityExtended, methods: List[str]
+            self, functional_unit_bw: ActivityExtended, methods: List[str]
     ) -> Tuple[ImpactTreeNode, ImpactModelParams]:
         """
         Perform LCA, construct all arithmetic models and collect used parameters.
@@ -145,8 +175,8 @@ class ImpactModelBuilder:
                     [
                         elem.name
                         for elem in known_parameters.find_corresponding_parameter(
-                            activity_symbol, must_find_one=False
-                        )
+                        activity_symbol, must_find_one=False
+                    )
                     ]
                     for activity_symbol in activity_symbols
                 ]
@@ -277,7 +307,7 @@ class ImpactModelBuilder:
                 else:
                     if impact_model_tree_node.name_already_in_tree(sub_act["name"]):
                         raise Exception(f"Found recursive activity: {sub_act['name']}")
-                    if sub_act["include_in_tree"]:
+                    if sub_act.get("include_in_tree"):
                         # act_expr = act_to_symbol(sub_act, to_compile=False)
                         ImpactModelBuilder.actToExpression(
                             sub_act,
@@ -294,7 +324,7 @@ class ImpactModelBuilder:
                 avoidedBurden = 1
 
                 if exch.get("type") == "production" and not exch.get(
-                    "input"
+                        "input"
                 ) == exch.get("output"):
                     debug("Avoided burden", exch[lcaa.helpers.name])
                     avoidedBurden = -1
