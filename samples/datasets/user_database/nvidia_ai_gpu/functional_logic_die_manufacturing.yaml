@@ -1,0 +1,21 @@
+name: functional_logic_die_manufacturing
+location: GLO
+type: process
+unit: mm2
+amount: 1
+parameters:
+- area
+- defect_density # defect/mm²
+- fab_location
+- technology_node
+comment: "Logic die post yields (edge loss and line yield, using murphy's model of die yield)."
+exchanges:
+- database: user_database
+  name: functional_cmos_die_production
+  type: technosphere
+  amount: "1/pow((1-exp(-defect_density*area))/(defect_density*area), 2)"
+  parameters_matching:
+    masks: "137.24 * pow(technology_node, -0.317)" # end users are more likely to manipulate technology node than number of lithography masks. Modeled from data in 'Pirson et al. (2022). The Environmental Footprint of IC Production: Review, Analysis, and Lessons From Historical Trends' supplementary materials.
+  input:
+    database: user_database
+    uuid: logic_die_manufacturing

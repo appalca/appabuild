@@ -1,0 +1,8 @@
+project_name: 'sample_project'
+databases:
+  ecoinvent:
+    name: ecoinvent_3.9.1_cutoff
+    path: 'C:\\databases\\ecoinvent_3.9.1_cutoff\\datasets'
+  foreground:
+    name: user_database
+    path: 'samples/datasets/user_database/'
