@@ -1,7 +1,7 @@
-numpy==1.23.*
+numpy==1.26.4
 pandas==2.0.0
-brightway2==2.4.3
-bw2io==0.8.8
+brightway2==2.4.7
+bw2io==0.8.12
 lca_algebraic==1.0.0
 fastapi
 uvicorn[standard]
