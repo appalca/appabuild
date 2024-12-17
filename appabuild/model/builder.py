@@ -8,13 +8,13 @@ import itertools
 import os
 import types
 from collections import OrderedDict
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 
 import brightway2 as bw
 import lca_algebraic as lcaa
 import yaml
 from apparun.impact_methods import MethodFullName
-from apparun.impact_model import ImpactModel
+from apparun.impact_model import ImpactModel, ModelMetadata
 from apparun.impact_tree import ImpactTreeNode
 from apparun.parameters import (
     EnumParam,
@@ -61,7 +61,9 @@ class ImpactModelBuilder:
     """
     Main purpose of this class is to build Impact Models.
     """
-    def __init__(self, user_database_name: str, functional_unit: str, methods: list[str], metadata: dict, output_path:str, compile_models: bool):
+
+    def __init__(self, user_database_name: str, functional_unit: str, methods: list[str], output_path: str,
+                 metadata: Optional[ModelMetadata] = ModelMetadata(), compile_models: bool = True):
         """
         Initialize the model builder
         :param user_database_name: name of the user database (foreground database)
@@ -81,7 +83,7 @@ class ImpactModelBuilder:
         self.bw_user_database = bw.Database(self.user_database_name)
 
     @staticmethod
-    def from_yaml(lca_config_path: str)-> ImpactModelBuilder:
+    def from_yaml(lca_config_path: str) -> ImpactModelBuilder:
         """
         Initializes a build with information contained in a YAML configuration file
         :param lca_config_path: path to the file holding the configuration.
@@ -89,17 +91,17 @@ class ImpactModelBuilder:
         """
         with open(lca_config_path, "r") as stream:
             lca_config = yaml.safe_load(stream)
-            builder = ImpactModelBuilder(
-                lca_config["scope"]["fu"]["database"],
-                lca_config["scope"]["fu"]["name"],
-                lca_config["scope"]["methods"],
-                lca_config["outputs"]["model"]["metadata"],
-                 os.path.join(
-                    lca_config["outputs"]["model"]["path"],
-                    f"{lca_config['outputs']['model']['name']}.yaml"
-                ),
-                lca_config["outputs"]["model"]["compile"]
-            )
+        builder = ImpactModelBuilder(
+            lca_config["scope"]["fu"]["database"],
+            lca_config["scope"]["fu"]["name"],
+            lca_config["scope"]["methods"],
+            os.path.join(
+                lca_config["outputs"]["model"]["path"],
+                f"{lca_config['outputs']['model']['name']}.yaml"
+            ),
+            lca_config["outputs"]["model"]["metadata"],
+            lca_config["outputs"]["model"]["compile"]
+        )
         return builder
 
     def build_impact_model(self) -> ImpactModel:
