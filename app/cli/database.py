@@ -4,8 +4,6 @@ import typer
 import yaml
 
 from appabuild.database.generator.eime import EimeV6Generator
-from appabuild.model.builder import ImpactModelBuilder
-from appabuild.setup import project_setup
 
 app = typer.Typer()
 

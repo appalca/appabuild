@@ -5,6 +5,7 @@ __pycache__/
 build/
 dist/
 apparun.egg-info/
+appabuild.egg-info/
 
 # Environments
 .env
@@ -19,4 +20,4 @@ venv.bak/
 *.idea
 *.iml
 
-# Data
+

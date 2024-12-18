@@ -1,6 +1,6 @@
 scope:
   fu:
-    name: "nvidia_ai_gpu_chip"
+    name: 'nvidia_ai_gpu_chip'
     database: "user_database"
   methods:
     - "EFV3_CLIMATE_CHANGE"
@@ -47,11 +47,11 @@ outputs:
         default: 0.05
         min: 0.01
         max: 0.1
+      - name: inference_per_day
+        type: float
+        default: 3600
+        pm_perc: 0.1
       - name: lifespan
         type: float
         default: 2
-        pm: 1
-      - name: inference_per_day
-        type: float
-        default: 5184000
-        pm_perc: 0
+        pm_perc: 0.1
