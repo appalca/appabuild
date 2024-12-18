@@ -33,7 +33,7 @@ from lca_algebraic.lca import (
 from lca_algebraic.params import _fixed_params, newEnumParam, newFloatParam
 from sympy import Expr, simplify, symbols
 
-from appabuild.database.databases import parameters_registry
+from appabuild.database.databases import parameters_registry, ForegroundDatabase
 from appabuild.exceptions import BwDatabaseError, BwMethodError
 
 act_symbols = {}  # Cache of  act = > symbol
@@ -63,7 +63,8 @@ class ImpactModelBuilder:
     """
 
     def __init__(self, user_database_name: str, functional_unit: str, methods: list[str], output_path: str,
-                 metadata: Optional[ModelMetadata] = ModelMetadata(), compile_models: bool = True):
+                 metadata: Optional[ModelMetadata] = ModelMetadata(), compile_models: bool = True,
+                 parameters: Optional[dict] = None):
         """
         Initialize the model builder
         :param user_database_name: name of the user database (foreground database)
@@ -73,9 +74,13 @@ class ImpactModelBuilder:
         :param metadata: information about the LCA behind the impact model.
             Should contain, or link to all information necessary for the end user's
             proper understanding of the impact model.
+        :param parameters: an ImpactModelParam object will have to be created for each
+        parameter used in all used datasets. See ImpactModelParam attributes to know
+        required fields.
         """
         self.user_database_name = user_database_name
         self.functional_unit = functional_unit
+        self.parameters = parameters
         self.methods = methods
         self.metadata = metadata
         self.output_path = output_path
@@ -91,6 +96,7 @@ class ImpactModelBuilder:
         """
         with open(lca_config_path, "r") as stream:
             lca_config = yaml.safe_load(stream)
+
         builder = ImpactModelBuilder(
             lca_config["scope"]["fu"]["database"],
             lca_config["scope"]["fu"]["name"],
@@ -100,15 +106,22 @@ class ImpactModelBuilder:
                 f"{lca_config['outputs']['model']['name']}.yaml"
             ),
             lca_config["outputs"]["model"]["metadata"],
-            lca_config["outputs"]["model"]["compile"]
+            lca_config["outputs"]["model"]["compile"],
+            lca_config["outputs"]["model"]["parameters"]
         )
         return builder
 
-    def build_impact_model(self) -> ImpactModel:
+    def build_impact_model(self, foreground_database:Optional[ForegroundDatabase] = None) -> ImpactModel:
         """
         Build an Impact Model, the model is a represented as a tree with the functional unit as its root
+        :param foreground_database: database containing the functional unit
         :return: built impact model.
         """
+
+        if foreground_database is not None:
+            foreground_database.set_functional_unit(self.functional_unit, self.parameters)
+            foreground_database.execute_at_build_time()
+
         functional_unit_bw = self.find_functional_unit_in_bw()
         tree, params = self.build_impact_tree_and_parameters(functional_unit_bw, self.methods)
         impact_model = ImpactModel(tree=tree, parameters=params, metadata=self.metadata)

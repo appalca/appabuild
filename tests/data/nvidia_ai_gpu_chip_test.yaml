@@ -1,6 +1,5 @@
 scope:
   fu:
-    description: "nvidia_ai_gpu_chip processing continuously over 5 years"
     name: "nvidia_ai_gpu_chip"
     database: "user_database"
   methods:
@@ -28,3 +27,4 @@ outputs:
         version: "1"
         license: proprietary
         appabuild_version: "0.1"
+    parameters: []
