@@ -164,13 +164,13 @@ class EcoInventDatabase(Database):
         importer.write_database()
 
 
-class UserDatabase(Database):
+class ForegroundDatabase(Database):
     """
     Handles foreground data. Use datasets must have .json, .yaml or .yml extension to
     be imported. Dataset uuid is dataset file's name without extension.
     """
 
-    def __init__(self, name, path, fu_name: str, parameters: Optional[dict] = None):
+    def __init__(self, name, path):
         """
         Initializes a UserDatabase from its name, its path, its reference flow, and
         parameters if any.
@@ -178,17 +178,18 @@ class UserDatabase(Database):
         reference flow as a root.
         :param name: user database name
         :param path: user datasets location
-        :param fu_name: name of the reference flow dataset
-        :param parameters: an ImpactModelParam object will have to be created for each
-        parameter used in all used datasets. See ImpactModelParam attributes to know
-        required fields.
+
         """
         Database.__init__(self, name, path)
-        self.fu_name = fu_name
-        self.parameters = parameters or {}
+        self.fu_name = ""
+        self.parameters = {}
         self.context = UserDatabaseContext(
             serialized_activities=[], activities=[], database=BwDatabase(name=name)
         )
+
+    def set_functional_unit(self, fu_name:str, parameters: dict):
+        self.fu_name = fu_name
+        self.parameters = parameters
 
     def find_activities_on_disk(self) -> None:
         """
@@ -221,9 +222,14 @@ class UserDatabase(Database):
         if self.name in bw.databases:
             resetParams(self.name)
             del bw.databases[self.name]
-        self.declare_parameters()
+
         self.find_activities_on_disk()
+
+
+    def execute_at_build_time(self):
+        self.declare_parameters()
         self.import_in_project()
+
 
     def import_in_project(self) -> None:
         """

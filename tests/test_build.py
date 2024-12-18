@@ -25,7 +25,7 @@ def test_build():
         os.path.join(os.path.realpath(''), 'data/user_database', 'user_database_no_proxy.bw2package'))
     setForeground("user_database")
 
-    lca.build("data/nvidia_ai_gpu_chip_test.yaml")
+    lca.do_build("data/nvidia_ai_gpu_chip_test.yaml")
 
     (same_files, diff_files, irregular_names) = cmpfiles("data/output/expected", "data/output/actual",
                                                          ["nvidia_ai_gpu_chip.yaml"], shallow=False)
