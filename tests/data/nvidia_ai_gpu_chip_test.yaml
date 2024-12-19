@@ -1,0 +1,30 @@
+scope:
+  fu:
+    name: "nvidia_ai_gpu_chip"
+    database: "user_database"
+  methods:
+    - "EFV3_CLIMATE_CHANGE"
+    - "EFV3_MATERIAL_RESOURCES"
+    - "EFV3_WATER_USE"
+outputs:
+  model:
+    path: "data/output/actual"
+    name: "nvidia_ai_gpu_chip"
+    compile: True
+    metadata:
+      author:
+        name: Test Author
+        organization: CEA
+        mail: test.author@cea.fr
+      reviewer:
+        name: Test Reviewer
+        organization: CEA
+        mail: test.reviewer@cea.fr
+      report:
+        link: https://link/to/somewhere
+        description: "A digital system composed of a PCB, a SoC packaged in BGA, and DRAM."
+        date: 03/11/2023
+        version: "1"
+        license: proprietary
+        appabuild_version: "0.1"
+    parameters: []
