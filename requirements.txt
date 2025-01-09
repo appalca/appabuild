@@ -12,7 +12,7 @@ typer
 omegaconf
 pydantic
 scipy
-matplotlib==3.7.1
+matplotlib==3.10.0
 seaborn==0.12.2
 pytest
 plotly
