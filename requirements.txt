@@ -20,5 +20,5 @@ aenum
 kaleido
 tqdm
 ruamel.yaml
-apparun==0.2.0
+apparun==0.3.0
 pre-commit
