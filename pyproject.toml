@@ -1,0 +1,54 @@
+[build-system]
+requires = ["setuptools>=61.0.0", "wheel", "numpy"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["app", "appabuild"]
+
+[project]
+name = "appabuild"
+version = "0.3.0"
+authors = [{ name = "Maxime Peralta", email = "maxime.peralta@cea.fr"}]
+maintainers= [{name = "Maxime Peralta", email = "maxime.peralta@cea.fr"}]
+description = "Appa Build is a package to build impact models"
+keywords = []
+license = { file = "LICENSE.md" }
+readme = "README.md"
+classifiers = [
+    "License :: OSI Approved :: Eclipse Public License 2.0 (EPL-2.0)",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Intended Audience :: Developers",
+]
+requires-python = ">=3.6"
+dependencies = [
+    "numpy>=1.26.4",
+    "pandas>=2.0.0",
+    "brightway2>=2.4.7",
+    "bw2io==0.8.12",
+    "lca_algebraic>=1.0.0",
+    "fastapi",
+    "uvicorn[standard]",
+    "flake8",
+    "black",
+    "isort",
+    "typer",
+    "omegaconf",
+    "pydantic",
+    "scipy",
+    "matplotlib>=3.10.0",
+    "seaborn>=0.12.2",
+    "plotly",
+    "aenum",
+    "kaleido",
+    "tqdm",
+    "ruamel.yaml",
+    "apparun>=0.3.0",
+    "pre-commit",
+]
+
+[project.scripts]
+appabuild = "app.cli.main:cli_app"
+
+[project.urls]
+"Source" = "https://github.com/appalca/appabuild/"
