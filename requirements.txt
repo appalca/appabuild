@@ -1,14 +1,14 @@
 numpy==1.26.4
 pandas==2.0.0
 brightway2==2.4.7
-bw2io==0.8.12
+bw2i==0.8.12
 lca_algebraic==1.0.0
 fastapi
 uvicorn[standard]
 flake8
 black
 isort
-typer
+typer==0.15.1
 omegaconf
 pydantic
 scipy
@@ -22,3 +22,4 @@ tqdm
 ruamel.yaml
 apparun==0.3.0
 pre-commit
+hatchling
