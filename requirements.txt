@@ -8,7 +8,7 @@ uvicorn[standard]
 flake8
 black
 isort
-typer
+typer==0.15.1
 omegaconf
 pydantic
 scipy
@@ -22,3 +22,4 @@ tqdm
 ruamel.yaml
 apparun==0.3.0
 pre-commit
+hatchling

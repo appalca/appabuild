@@ -1,0 +1,54 @@
+name: Publish release to PyPi
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - master
+
+jobs:
+  build:
+    name: build
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the source ode
+        uses: actions/checkout@v3 
+
+      - name: Setup the Python environment
+        uses: actions/setup-python@v5
+        with:
+            python-version: "3.11"
+
+      - name: Build the universal wheel
+        run: |
+          python -m pip install hatchling
+          python -m hatchling build
+      
+      - uses: actions/upload-artifact@v4
+        with:
+          name: wheel
+          path: dist/
+  
+  publish:
+    name: publish
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # IMPORTANT: mandatory for trusted publishing
+    environment:
+      name: pypi
+      url: https://pypi.org/p/appabuild
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: wheel
+          path: dist/
+
+      - name: Publish distribution package to PyPI
+        uses: pypa/gh-action-pypi-publish@release/v1
+        with:
+          verbose: true
+          packages-dir: dist
+          password: ${{ secrets.PYPI_TOKEN }}
