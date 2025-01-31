@@ -7,7 +7,7 @@ packages = ["app", "appabuild"]
 
 [project]
 name = "appabuild"
-version = "0.3.0"
+version = "0.3.1"
 authors = [{ name = "Maxime Peralta", email = "maxime.peralta@cea.fr"}]
 maintainers= [{name = "Maxime Peralta", email = "maxime.peralta@cea.fr"}]
 description = "Appa Build is a package to build impact models"
