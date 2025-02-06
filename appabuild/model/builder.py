@@ -8,7 +8,7 @@ import itertools
 import os
 import types
 from collections import OrderedDict
-from typing import List, Tuple, Optional
+from typing import List, Optional, Tuple
 
 import brightway2 as bw
 import lca_algebraic as lcaa
@@ -16,11 +16,8 @@ import yaml
 from apparun.impact_methods import MethodFullName
 from apparun.impact_model import ImpactModel, ModelMetadata
 from apparun.impact_tree import ImpactTreeNode
-from apparun.parameters import (
-    EnumParam,
-    FloatParam,
-    ImpactModelParams,
-)
+from apparun.parameters import EnumParam, FloatParam, ImpactModelParams
+from apparun.tree_node import NodeProperties
 from bw2data.backends.peewee import Activity
 from lca_algebraic import ActivityExtended, with_db_context
 from lca_algebraic.base_utils import _getAmountOrFormula, _getDb, debug
@@ -33,7 +30,7 @@ from lca_algebraic.lca import (
 from lca_algebraic.params import _fixed_params, newEnumParam, newFloatParam
 from sympy import Expr, simplify, symbols
 
-from appabuild.database.databases import parameters_registry, ForegroundDatabase
+from appabuild.database.databases import ForegroundDatabase, parameters_registry
 from appabuild.exceptions import BwDatabaseError, BwMethodError
 
 act_symbols = {}  # Cache of  act = > symbol
@@ -62,9 +59,16 @@ class ImpactModelBuilder:
     Main purpose of this class is to build Impact Models.
     """
 
-    def __init__(self, user_database_name: str, functional_unit: str, methods: list[str], output_path: str,
-                 metadata: Optional[ModelMetadata] = ModelMetadata(), compile_models: bool = True,
-                 parameters: Optional[dict] = None):
+    def __init__(
+        self,
+        user_database_name: str,
+        functional_unit: str,
+        methods: list[str],
+        output_path: str,
+        metadata: Optional[ModelMetadata] = ModelMetadata(),
+        compile_models: bool = True,
+        parameters: Optional[dict] = None,
+    ):
         """
         Initialize the model builder
         :param user_database_name: name of the user database (foreground database)
@@ -103,15 +107,17 @@ class ImpactModelBuilder:
             lca_config["scope"]["methods"],
             os.path.join(
                 lca_config["outputs"]["model"]["path"],
-                f"{lca_config['outputs']['model']['name']}.yaml"
+                f"{lca_config['outputs']['model']['name']}.yaml",
             ),
             lca_config["outputs"]["model"]["metadata"],
             lca_config["outputs"]["model"]["compile"],
-            lca_config["outputs"]["model"]["parameters"]
+            lca_config["outputs"]["model"]["parameters"],
         )
         return builder
 
-    def build_impact_model(self, foreground_database:Optional[ForegroundDatabase] = None) -> ImpactModel:
+    def build_impact_model(
+        self, foreground_database: Optional[ForegroundDatabase] = None
+    ) -> ImpactModel:
         """
         Build an Impact Model, the model is a represented as a tree with the functional unit as its root
         :param foreground_database: database containing the functional unit
@@ -119,11 +125,15 @@ class ImpactModelBuilder:
         """
 
         if foreground_database is not None:
-            foreground_database.set_functional_unit(self.functional_unit, self.parameters)
+            foreground_database.set_functional_unit(
+                self.functional_unit, self.parameters
+            )
             foreground_database.execute_at_build_time()
 
         functional_unit_bw = self.find_functional_unit_in_bw()
-        tree, params = self.build_impact_tree_and_parameters(functional_unit_bw, self.methods)
+        tree, params = self.build_impact_tree_and_parameters(
+            functional_unit_bw, self.methods
+        )
         impact_model = ImpactModel(tree=tree, parameters=params, metadata=self.metadata)
         return impact_model
 
@@ -132,9 +142,13 @@ class ImpactModelBuilder:
         Find the bw activity matching the functional unit in the bw database. A single activity
         should be found as it is to be used as the root of the tree.
         """
-        functional_unit_bw = [i for i in self.bw_user_database if self.functional_unit == i["name"]]
+        functional_unit_bw = [
+            i for i in self.bw_user_database if self.functional_unit == i["name"]
+        ]
         if len(functional_unit_bw) < 1:
-            raise BwDatabaseError(f"Cannot find activity {self.functional_unit} for FU.")
+            raise BwDatabaseError(
+                f"Cannot find activity {self.functional_unit} for FU."
+            )
         if len(functional_unit_bw) > 1:
             raise BwDatabaseError(
                 f"Too many activities matching {self.functional_unit} for FU: "
@@ -144,7 +158,7 @@ class ImpactModelBuilder:
         return functional_unit_bw
 
     def build_impact_tree_and_parameters(
-            self, functional_unit_bw: ActivityExtended, methods: List[str]
+        self, functional_unit_bw: ActivityExtended, methods: List[str]
     ) -> Tuple[ImpactTreeNode, ImpactModelParams]:
         """
         Perform LCA, construct all arithmetic models and collect used parameters.
@@ -154,7 +168,11 @@ class ImpactModelBuilder:
         :return: root node (corresponding to the reference flow) and used parameters.
         """
         methods_bw = [to_bw_method(MethodFullName[method]) for method in methods]
-        tree = ImpactTreeNode(name=functional_unit_bw["name"], amount=1)
+        tree = ImpactTreeNode(
+            name=functional_unit_bw["name"],
+            amount=1,
+            properties=NodeProperties.from_dict(functional_unit_bw["properties"]),
+        )
         # print("computing model to expression for %s" % model)
         self.actToExpression(functional_unit_bw, tree)
 
@@ -190,8 +208,8 @@ class ImpactModelBuilder:
                     [
                         elem.name
                         for elem in known_parameters.find_corresponding_parameter(
-                        activity_symbol, must_find_one=False
-                    )
+                            activity_symbol, must_find_one=False
+                        )
                     ]
                     for activity_symbol in activity_symbols
                 ]
@@ -327,7 +345,11 @@ class ImpactModelBuilder:
                         ImpactModelBuilder.actToExpression(
                             sub_act,
                             impact_model_tree_node.new_child(
-                                name=sub_act["name"], amount=amount
+                                name=sub_act["name"],
+                                amount=amount,
+                                properties=NodeProperties.from_dict(
+                                    sub_act["properties"]
+                                ),
                             ),
                         )
                         amount = 1  # amount is already handled in tree node
@@ -339,7 +361,7 @@ class ImpactModelBuilder:
                 avoidedBurden = 1
 
                 if exch.get("type") == "production" and not exch.get(
-                        "input"
+                    "input"
                 ) == exch.get("output"):
                     debug("Avoided burden", exch[lcaa.helpers.name])
                     avoidedBurden = -1
