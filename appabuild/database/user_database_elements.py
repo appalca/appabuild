@@ -313,6 +313,10 @@ class Activity(DatabaseElement):
     "If True, activity will become a node in built ImpactModel."
     parameters: Optional[List[str]] = []
     "Optional list of parameters necessary to execute this dataset."
+    properties: Optional[Dict[str, Union[str, float, bool]]] = {}
+    """Properties will remain on impact model, and can be used by apparun to breakdown
+    the results according to life cycle phase, for exemple. Properties can be key/value
+    (ex: {"phase": "production"} or flags (ex: {production_phase: True})."""
 
     def to_bw_format(self) -> Tuple[Tuple[str, str], dict]:
         """
@@ -330,6 +334,7 @@ class Activity(DatabaseElement):
             "amount": self.amount,
             "include_in_tree": self.include_in_tree,
             "exchanges": [exchange.to_bw_format() for exchange in self.exchanges],
+            "properties": self.properties,
         }
 
     @classmethod
@@ -413,6 +418,7 @@ class Activity(DatabaseElement):
             parameters=serialized_activity.parameters,
             include_in_tree=serialized_activity.include_in_tree,
             exchanges=[],
+            properties=serialized_activity.properties,
             context=context,
         )
         context.activities.append(new_activity)
