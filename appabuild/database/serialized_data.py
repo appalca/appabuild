@@ -87,6 +87,10 @@ class SerializedActivity(BaseModel):
     "Free text for any context information about the dataset."
     include_in_tree: Optional[bool] = False
     "If True, activity will become a node in built ImpactModel."
+    properties: Optional[Dict[str, Union[str, float, bool]]] = {}
+    """Properties will remain on impact model, and can be used by apparun to breakdown
+    the results according to life cycle phase, for exemple. Properties can be key/value
+    (ex: {"phase": "production"} or flags (ex: {production_phase: True})."""
 
     @property
     def code(self):
