@@ -1,0 +1,129 @@
+metadata:
+  author:
+    name: Maxime PERALTA
+    organization: CEA
+    mail: maxime.peralta@cea.fr
+  reviewer:
+    name: Mathias TORCASO
+    organization: CEA
+    mail: null
+  report:
+    link: https://appalca.github.io/
+    description: A mock example of Appa LCA's impact model corresponding to a fictive
+      AI chip accelerator based on NVIDIA GPU.
+    date: 03/11/2023
+    version: '1'
+    license: proprietary
+    appabuild_version: '0.2'
+parameters:
+- name: architecture
+  default: Maxwell
+  type: enum
+  weights:
+    Maxwell: 1.0
+    Pascal: 1.0
+- name: cuda_core
+  default: 512.0
+  type: float
+  min: 460.8
+  max: 563.2
+  distrib: linear
+  pm: null
+  pm_perc: 0.1
+- name: energy_per_inference
+  default: 0.05
+  type: float
+  min: 0.01
+  max: 0.1
+  distrib: linear
+  pm: null
+  pm_perc: null
+- name: inference_per_day
+  default: 3600.0
+  type: float
+  min: 3240.0
+  max: 3960.0
+  distrib: linear
+  pm: null
+  pm_perc: 0.1
+- name: lifespan
+  default: 2.0
+  type: float
+  min: 1.8
+  max: 2.2
+  distrib: linear
+  pm: null
+  pm_perc: 0.1
+- name: usage_location
+  default: EU
+  type: enum
+  weights:
+    FR: 1.0
+    EU: 1.0
+tree:
+  name: nvidia_ai_gpu_chip
+  models:
+    EFV3_CLIMATE_CHANGE: 12500.0*architecture_Maxwell*(4.6212599075297227e-9*cuda_core
+      + 7.37132179656539e-6) + 289.6776199311062*architecture_Maxwell*(0.009702834627645097*cuda_core
+      + 1)**2/((1 - 0.6773699850611761*exp(-0.003779619385733156*cuda_core))**2*(70685.775/(0.1889809692866578*cuda_core
+      + 19.47688243064738) - 106.7778184271516*sqrt(2)/sqrt(0.009702834627645097*cuda_core
+      + 1))) + 12500.0*architecture_Pascal*(4.6891975579761074e-9*cuda_core + 7.808281424221127e-6)
+      + 2626.882558417281*architecture_Pascal*(0.0060737847877931227*cuda_core + 1)**2/((1
+      - 0.33777635255702983*exp(-0.0065923115776528474*cuda_core))**2*(70685.775/(0.13184623155305694*cuda_core
+      + 21.707425626610416) - 101.14318001667067*sqrt(2)/sqrt(0.0060737847877931227*cuda_core
+      + 1))) + 0.00036525*energy_per_inference*inference_per_day*lifespan*(0.005*usage_location_EU
+      + 0.021*usage_location_FR)
+  direct_impacts:
+    EFV3_CLIMATE_CHANGE: '0.0'
+  scaled_direct_impacts:
+    EFV3_CLIMATE_CHANGE: '0'
+  children:
+  - name: ai_use_phase
+    models:
+      EFV3_CLIMATE_CHANGE: 0.00036525*energy_per_inference*inference_per_day*lifespan*(0.005*usage_location_EU
+        + 0.021*usage_location_FR)
+    direct_impacts:
+      EFV3_CLIMATE_CHANGE: 0.00036525*energy_per_inference*inference_per_day*lifespan*(0.005*usage_location_EU
+        + 0.021*usage_location_FR)
+    scaled_direct_impacts:
+      EFV3_CLIMATE_CHANGE: 0.00036525*energy_per_inference*inference_per_day*lifespan*(0.005*usage_location_EU
+        + 0.021*usage_location_FR)
+    children: []
+    properties: {}
+    amount: '1.0'
+  - name: nvidia_gpu_chip_manufacturing
+    models:
+      EFV3_CLIMATE_CHANGE: 12500.0*architecture_Maxwell*(4.6212599075297227e-9*cuda_core
+        + 7.37132179656539e-6) + 289.6776199311062*architecture_Maxwell*(0.009702834627645097*cuda_core
+        + 1)**2/((1 - 0.6773699850611761*exp(-0.003779619385733156*cuda_core))**2*(70685.775/(0.1889809692866578*cuda_core
+        + 19.47688243064738) - 106.7778184271516*sqrt(2)/sqrt(0.009702834627645097*cuda_core
+        + 1))) + 12500.0*architecture_Pascal*(4.6891975579761074e-9*cuda_core + 7.808281424221127e-6)
+        + 2626.882558417281*architecture_Pascal*(0.0060737847877931227*cuda_core +
+        1)**2/((1 - 0.33777635255702983*exp(-0.0065923115776528474*cuda_core))**2*(70685.775/(0.13184623155305694*cuda_core
+        + 21.707425626610416) - 101.14318001667067*sqrt(2)/sqrt(0.0060737847877931227*cuda_core
+        + 1)))
+    direct_impacts:
+      EFV3_CLIMATE_CHANGE: 12500.0*architecture_Maxwell*(4.6212599075297227e-9*cuda_core
+        + 7.37132179656539e-6) + 289.6776199311062*architecture_Maxwell*(0.009702834627645097*cuda_core
+        + 1)**2/((1 - 0.6773699850611761*exp(-0.003779619385733156*cuda_core))**2*(70685.775/(0.1889809692866578*cuda_core
+        + 19.47688243064738) - 106.7778184271516*sqrt(2)/sqrt(0.009702834627645097*cuda_core
+        + 1))) + 12500.0*architecture_Pascal*(4.6891975579761074e-9*cuda_core + 7.808281424221127e-6)
+        + 2626.882558417281*architecture_Pascal*(0.0060737847877931227*cuda_core +
+        1)**2/((1 - 0.33777635255702983*exp(-0.0065923115776528474*cuda_core))**2*(70685.775/(0.13184623155305694*cuda_core
+        + 21.707425626610416) - 101.14318001667067*sqrt(2)/sqrt(0.0060737847877931227*cuda_core
+        + 1)))
+    scaled_direct_impacts:
+      EFV3_CLIMATE_CHANGE: 12500.0*architecture_Maxwell*(4.6212599075297227e-9*cuda_core
+        + 7.37132179656539e-6) + 289.6776199311062*architecture_Maxwell*(0.009702834627645097*cuda_core
+        + 1)**2/((1 - 0.6773699850611761*exp(-0.003779619385733156*cuda_core))**2*(70685.775/(0.1889809692866578*cuda_core
+        + 19.47688243064738) - 106.7778184271516*sqrt(2)/sqrt(0.009702834627645097*cuda_core
+        + 1))) + 12500.0*architecture_Pascal*(4.6891975579761074e-9*cuda_core + 7.808281424221127e-6)
+        + 2626.882558417281*architecture_Pascal*(0.0060737847877931227*cuda_core +
+        1)**2/((1 - 0.33777635255702983*exp(-0.0065923115776528474*cuda_core))**2*(70685.775/(0.13184623155305694*cuda_core
+        + 21.707425626610416) - 101.14318001667067*sqrt(2)/sqrt(0.0060737847877931227*cuda_core
+        + 1)))
+    children: []
+    properties: {}
+    amount: '1.0'
+  properties: {}
+  amount: '1.0'
