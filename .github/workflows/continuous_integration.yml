@@ -42,6 +42,8 @@ jobs:
             with:
               python-version: "3.11"
 
+          - run: pip install pytest
+
           - name: Download the application's wheel
             uses: actions/download-artifact@v4
             with:
@@ -51,8 +53,9 @@ jobs:
           - name: Install application's wheel
             run: pip install dist/*.whl
 
-          - name: Test appabuild help works
-            run: appabuild --help
+          - name: Run smoke tests
+            run: pytest tests/smoke_tests
+            
 
   functional-tests-no-db:
       name: Functional tests that don't use EcoInvent databases
@@ -98,10 +101,4 @@ jobs:
             with:
               name: wheel
               path: dist/
-  
-          - name: Install application's wheel
-            run: pip install dist/*.whl
 
-          - name: Run build test
-            run: |
-              appabuild lca build ./samples/conf/appalca_conf.yaml ./samples/conf/nvidia_ai_gpu_chip_lca_conf.yaml
