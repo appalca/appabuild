@@ -27,20 +27,22 @@ def initialize(appabuild_config_path: str) -> ForegroundDatabase:
     with open(appabuild_config_path, "r") as stream:
         appabuild_config = yaml.safe_load(stream)
 
-    print(appabuild_config)
+    ecoinvent_name = (
+        appabuild_config["databases"]["ecoinvent"]["name"]
+        if "ecoinvent" in appabuild_config["databases"]
+        else None
+    )
+
+    ecoinvent_path = (
+        appabuild_config["databases"]["ecoinvent"]["path"]
+        if "ecoinvent" in appabuild_config["databases"]
+        else None
+    )
 
     return project_setup(
         project_name=appabuild_config["project_name"],
-        ecoinvent_name=(
-            appabuild_config["databases"]["ecoinvent"]["name"]
-            if "ecoinvent" in appabuild_config["databases"]
-            else None
-        ),
-        ecoinvent_path=(
-            appabuild_config["databases"]["ecoinvent"]["path"]
-            if "ecoinvent" in appabuild_config["databases"]
-            else None
-        ),
+        ecoinvent_name=ecoinvent_name,
+        ecoinvent_path=ecoinvent_path,
         foreground_name=appabuild_config["databases"]["foreground"]["name"],
         foreground_path=appabuild_config["databases"]["foreground"]["path"],
     )
