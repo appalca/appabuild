@@ -2,8 +2,8 @@ name: Check code modifications integrity before adding them to the code
 
 on:
   push:
-    branches:
-      - '!master'
+    branches-ignore:
+      - master
         
 jobs:
   build:
