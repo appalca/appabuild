@@ -1,0 +1,94 @@
+name: Check code modifications integrity before adding them to the code
+
+on:
+  push:
+    branches:
+      - '!master'
+        
+jobs:
+  build:
+    name: Build the application wheel for the tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Setup the python environment
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Build the application's wheel
+        run: |
+          python -m pip install hatchling
+          python -m hatchling build
+
+      - name: Upload the wheel to an artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheel
+          path: dist/
+
+  smoke-tests:
+      name: Smoke tests
+      needs: build
+      runs-on: ubuntu-latest
+      steps:
+          - name: Checkout source code
+            uses: actions/checkout@v3
+
+          - name: Setup the python environment
+            uses: actions/setup-python@v5
+            with:
+              python-version: "3.11"
+
+          - name: Download the application's wheel
+            uses: actions/download-artifact@v4
+            with:
+              name: wheel
+              path: dist/
+
+          - name: Install application's wheel
+            run: pip install dist/*.whl
+
+          - name: Test appabuild help works
+            run: appabuild help
+
+  functional-tests-no-db:
+      name: Functional tests that don't use EcoInvent databases
+      needs: smoke-tests
+      runs-on: ubuntu-latest
+      steps:
+          - name: Checkout source code
+            uses: actions/checkout@v3
+
+          - name: Setup the python environment
+            uses: actions/setup-python@v5
+            with:
+              python-version: "3.11"
+  
+  functional-tests-db:
+      name: Functional tests that use EcoInvent databases
+      needs: functional-tests-no-db
+      runs-on: ubuntu-latest
+      steps:
+          - name: Checkout source code
+            uses: actions/checkout@v3
+
+          - name: Setup the python environment
+            uses: actions/setup-python@v5
+            with:
+              python-version: "3.11"            
+
+  end-to-end-tests:
+      name: End-to-end tests
+      needs: functional-tests-no-db
+      runs-on: ubuntu-latest
+      steps:
+          - name: Checkout source code
+            uses: actions/checkout@v3
+
+          - name: Setup the python environment
+            uses: actions/setup-python@v5
+            with:
+              python-version: "3.11"
