@@ -46,7 +46,7 @@ dependencies = [
     "kaleido",
     "tqdm",
     "ruamel.yaml",
-    "apparun==0.3.0",
+    "apparun==0.3.2",
     "pre-commit",
     "typer==0.15.1",
 ]
