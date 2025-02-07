@@ -105,5 +105,7 @@ jobs:
           - name: Install application's wheel
             run: pip install dist/*.whl
 
+          - run: pip install pytest
+
           - name: Run end-to-end tests
             run: pytest tests/end_to_end_tests
