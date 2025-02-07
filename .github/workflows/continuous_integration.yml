@@ -52,7 +52,7 @@ jobs:
             run: pip install dist/*.whl
 
           - name: Test appabuild help works
-            run: appabuild help
+            run: appabuild --help
 
   functional-tests-no-db:
       name: Functional tests that don't use EcoInvent databases
