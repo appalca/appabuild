@@ -111,13 +111,17 @@ class SerializedActivity(BaseModel):
         activity_as_dict["exchanges"] = exchanges
         return activity_as_dict
 
-    def to_yaml(self, filepath: str):
+    def to_yaml(self, filepath: str, keep_uuid=False):
         """
         Convert self to yaml file.
         :param filepath: filepath of the yaml file to create.
+        :param keep_uuid: specify if uuid has to be included in the yaml
         """
         with open(filepath, "w") as stream:
-            yaml.dump(self.to_dict(), stream)
+            as_a_dict = self.to_dict()
+            if not keep_uuid:
+                as_a_dict.pop("uuid")
+            yaml.dump(as_a_dict, stream)
 
 
 class SerializedExchange(BaseModel):

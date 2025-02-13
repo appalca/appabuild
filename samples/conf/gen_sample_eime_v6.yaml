@@ -1,0 +1,15 @@
+default:
+  database: user_database
+  unit: unit
+  type: "technosphere"
+  comment: "Negaoctet mock sample dataset exported from Eime V6."
+  amount: 1
+datasets:
+  - name_in_export: "    Mock dataset RER"
+    location: RER
+    name: mock_dataset_RER
+    uuid: mock_dataset_RER
+  - name_in_export: "    Mock dataset FR"
+    location: FR
+    name: mock_dataset_FR
+    uuid : mock_dataset_FR
