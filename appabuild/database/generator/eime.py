@@ -169,13 +169,15 @@ class EimeV6Generator:
             generated_datasets.append(dataset)
         return generated_datasets
 
-    def save_datasets(self, datasets: List[SerializedActivity], output_path: str):
+    @staticmethod
+    def save_datasets(datasets: List[SerializedActivity], output_path: str):
         """
         Export SerializedActivity generated to yaml files.
         :param datasets: SerialiazedActivity datasets to save
         :param output_path: directory to save yaml files.
         :return:
         """
+        os.makedirs(output_path, exist_ok=True)
         for dataset in datasets:
             dataset.to_yaml(os.path.join(output_path, f"{dataset.uuid}.yaml"))
 
