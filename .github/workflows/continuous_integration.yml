@@ -59,7 +59,7 @@ jobs:
         run: pytest tests/smoke
           
   no-db-func-tests:
-    name: Run the functional tests that don't need to use an EcoIvent database
+    name: Run the functional tests that don't need to use an EcoInvent database
     needs: smoke-tests
     runs-on: ubuntu-latest
     steps:
@@ -73,7 +73,7 @@ jobs:
         run: pytest tests/functional_no_db
 
   func-tests:
-    name: Run the functional tests whose use an EcoIvent database
+    name: Run the functional tests whose use an EcoInvent database
     needs: no-db-func-tests
     runs-on: ubuntu-latest
     steps:
