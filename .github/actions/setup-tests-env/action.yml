@@ -1,0 +1,29 @@
+name: Setup tests environment
+description: Setup the environment for the tests, by installing the project's wheel and the tests requirements
+runs:
+    using: "composite"
+    steps:
+        - name: Get cached dependencies
+          uses: actions/cache@v3
+          with:
+            path: ~/.cache/pip
+            key: ${{ runner.os }}-appabuild-${{ hashFiles('**/pyproject.toml') }}
+      
+        - name: Setup Python
+          uses: actions/setup-python@v5
+          with:
+            python-version: "3.11"
+
+        - name: Download the wheel
+          uses: actions/download-artifact@v4
+          with:
+            name: wheel
+            path: dist/
+
+        - name: Install the wheel
+          run: pip install dist/*.whl --progress-bar off
+          shell: bash
+
+        - name: Install tests dependencies
+          run: pip install pytest --progress-bar off
+          shell: bash
