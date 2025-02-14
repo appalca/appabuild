@@ -1,16 +1,13 @@
 name: Publish release to PyPi
 
 on:
-  pull_request:
+  release:
     types:
-      - closed
-    branches:
-      - master
+      - created
 
 jobs:
   build:
     name: build
-    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the source ode
