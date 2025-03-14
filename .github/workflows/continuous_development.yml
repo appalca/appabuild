@@ -1,16 +1,53 @@
 name: Publish release to PyPi
 
 on:
-  pull_request:
+  release:
     types:
-      - closed
-    branches:
-      - master
+      - created
 
 jobs:
+  check-versions:
+    name: Check package versions on PyPi
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install CURL and jq
+        run: sudo apt install curl jq -y
+
+      - name: Get package versions on PyPi
+        run: |
+          curl -s https://test.pypi.org/pypi/learning-br/json | jq -r '.releases | keys[]' > pypi-versions.txt
+          echo "Versions on Pypi:"
+          cat pypi-versions.txt
+
+      - name: Get package version in pyproject.toml
+        run: |
+          grep 'version' pyproject.toml | cut -d'=' -f2 | tr -d ' "' > pyproject-version.txt
+          echo "Last version in pyproject.toml:"
+          cat pyproject-version.txt
+      
+      - name: Check availability
+        run: |
+          if grep -Fxq "$(cat pyproject-version.txt)" pypi-versions.txt; then
+            echo "The version $PYPROJECT_VERSION already exists on PyPi, please use a version number superior to the latest version on PyPi."
+            exit 1
+          fi
+        
+      - name: Delete the invalid release
+        if: failure()
+        run: |
+          export TAG=${{ github.event.release.tag_name }}
+          echo "The invalid release ${{ github.event.release.name }} will be deleted with its tag"
+          gh release delete "$TAG" --yes
+          git push origin --delete refs/tags/$TAG
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   build:
     name: build
-    if: github.event.pull_request.merged == true
+    needs: check-versions
     runs-on: ubuntu-latest
     steps:
       - name: Checkout the source ode
