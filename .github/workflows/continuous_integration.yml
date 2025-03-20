@@ -1,0 +1,101 @@
+name: Check code modifications integrity before adding them to the code
+
+on:
+  pull_request:
+    types:
+      - opened
+      - synchronize
+    branches:
+      - dev
+        
+jobs:
+  build:
+    name: Build the application wheel for the tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install build dependencies
+        run: pip install hatchling
+
+      - name: Build the wheel
+        run: python -m hatchling build
+    
+      - name: Cache pip dependencies
+        id: cache-dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-appabuild-${{ hashFiles('**/pyproject.toml') }} # Generates a key dynamicly
+          restore-keys: ${{ runner.os }}-appabuild-
+      
+      - name: Install the wheel for the cache
+        run: pip install dist/*.whl --progress-bar off
+
+      - name: Upload the wheel
+        uses: actions/upload-artifact@v4
+        with:
+          name: wheel
+          path: dist/
+  
+  smoke-tests:
+    name: Run the smoke tests
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Install tests dependencies
+        uses: ./.github/actions/setup-tests-env
+      
+      - name: Run tests
+        run: pytest tests/smoke
+          
+  no-db-func-tests:
+    name: Run the functional tests that don't need to use an EcoInvent database
+    needs: smoke-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+
+      - name: Install tests dependencies
+        uses: ./.github/actions/setup-tests-env
+
+      - name: Run tests
+        run: pytest tests/functional_no_db
+
+  func-tests:
+    name: Run the functional tests whose use an EcoInvent database
+    needs: no-db-func-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      
+      - name: Install tests dependencies
+        uses: ./.github/actions/setup-tests-env
+      
+      - name: Run tests
+        run: pytest tests/functional_db
+  
+  end-to-end-tests:
+    name: Run the end to end tests
+    needs: no-db-func-tests
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v3
+      
+      - name: Install tests dependencies
+        uses: ./.github/actions/setup-tests-env
+      
+      - name: Run tests
+        run: pytest tests/end_to_end
