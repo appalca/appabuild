@@ -21,6 +21,6 @@ kaleido
 tqdm
 ruamel.yaml
 apparun==0.3.2
-ipython==0.8.34
+ipython==8.34.0
 pre-commit
 hatchling
