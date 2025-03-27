@@ -48,7 +48,7 @@ dependencies = [
     "apparun==0.3.2",
     "pre-commit",
     "typer==0.15.1",
-    "ipython==8.34.0",
+    "ipython>=7.6.0,<=8.34.0",
 ]
 
 [project.scripts]
