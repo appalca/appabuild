@@ -1,0 +1,31 @@
+name: nvidia_ai_gpu_chip
+location: RER
+type: process
+unit: unit
+amount: 1
+parameters:
+- cuda_core
+- architecture # Only Maxwell or Pascal supported
+- usage_location # Only FR or EU supported
+- energy_per_inference # In mW
+- inference_per_day 
+- lifespan # in years
+include_in_tree: True
+comment: "Usage and manufacturing of an NVIDIA GPU chip for doing AI inference."
+exchanges:
+- database: user_database
+  name: use_phase
+  type: technosphere
+  parameters_matching:
+    inference: inference_per_day * lifespan * 365.25
+  amount: 1
+  input:
+    database: user_database
+    uuid: ai_use_phase
+- database: user_database
+  name: manufacturing_phase
+  type: technosphere
+  amount: 1
+  input:
+    database: user_database
+    uuid: nvidia_gpu_chip_manufacturing

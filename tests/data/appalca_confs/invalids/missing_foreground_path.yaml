@@ -1,0 +1,4 @@
+project_name: 'missing_foreground_path'
+databases:
+  foreground:
+    name: user_database

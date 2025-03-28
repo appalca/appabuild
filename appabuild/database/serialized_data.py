@@ -8,9 +8,12 @@ LCA context (background databases, functional unit, LCA parameters...).
 """
 from __future__ import annotations
 
+import math
 from typing import Dict, List, Optional, Union
 
-from pydantic import BaseModel
+import numpy
+from pydantic import BaseModel, field_validator
+from pydantic_core import PydanticCustomError
 from ruamel.yaml import YAML
 
 yaml = YAML()
@@ -71,7 +74,7 @@ class SerializedActivity(BaseModel):
     suffix will be generated."""
     type: Optional[str] = None
     "According to Brightway, can be production, technosphere, or biosphere."
-    exchanges: List[SerializedExchange] = []
+    exchanges: List[SerializedExchange]
     "Emissions or consumptions generated when a unit of the activity is used."
     location: Optional[str] = "GLO"
     "Location of the activity. Default value is GLO for global."  # TODO comment c'est utilisé ?
@@ -123,6 +126,14 @@ class SerializedActivity(BaseModel):
                 as_a_dict.pop("uuid")
             yaml.dump(as_a_dict, stream)
 
+    @field_validator("parameters", mode="after")
+    @classmethod
+    def check_name(cls, parameters: List[str]) -> List[str]:
+        for param in parameters:
+            if param in dir(math) or param in dir(numpy):
+                raise PydanticCustomError("reserved_name", "", {"name": param})
+        return parameters
+
 
 class SerializedExchange(BaseModel):
     """
@@ -133,7 +144,7 @@ class SerializedExchange(BaseModel):
     the calling Activity.
     """
 
-    database: str = None
+    database: str
     "Name of the user database."
     name: str
     "Name of the exchange. Can be used to dynamically name ImpactModel node."
@@ -151,7 +162,7 @@ class SerializedExchange(BaseModel):
     set the parameter to a fixed value, str will update parameter's name or affect it to
     a formula, and dict is used to fix value of a categorical parameter.
     """
-    use_exchange_name: bool = False
+    use_exchange_name: Optional[bool] = False
     """Replace input's name by exchange's name. Useful if an Activity is used several
     times as a node for ImpactModel tree."""
     comment: Optional[str] = None

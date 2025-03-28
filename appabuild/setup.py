@@ -1,18 +1,18 @@
 """
 Setup everything required to build an ImpactModel
 """
-
 from typing import Optional
 
 import brightway2 as bw
-import yaml
 
+from appabuild.config.appa_lca import AppaLCAConfig
 from appabuild.database.databases import (
     BiosphereDatabase,
     EcoInventDatabase,
     ForegroundDatabase,
     ImpactProxiesDatabase,
 )
+from appabuild.logger import logger
 from appabuild.model.builder import ImpactModelBuilder
 
 
@@ -24,27 +24,34 @@ def initialize(appabuild_config_path: str) -> ForegroundDatabase:
     remain the same for all your LCAs.
     :return: the initialized foreground database
     """
-    with open(appabuild_config_path, "r") as stream:
-        appabuild_config = yaml.safe_load(stream)
+
+    appabuild_config = AppaLCAConfig.from_yaml(appabuild_config_path)
 
     ecoinvent_name = (
-        appabuild_config["databases"]["ecoinvent"]["name"]
-        if "ecoinvent" in appabuild_config["databases"]
+        appabuild_config.databases["ecoinvent"].name
+        if "ecoinvent" in appabuild_config.databases
         else None
     )
 
     ecoinvent_path = (
-        appabuild_config["databases"]["ecoinvent"]["path"]
-        if "ecoinvent" in appabuild_config["databases"]
+        appabuild_config.databases["ecoinvent"].path
+        if "ecoinvent" in appabuild_config.databases
         else None
     )
 
+    if ecoinvent_path is None:
+        logger.warning(
+            "No path given for ecoinvent databases, building the impact model will be done without"
+        )
+    else:
+        logger.info(f"Loading EcoInvent database from {ecoinvent_path}")
+
     return project_setup(
-        project_name=appabuild_config["project_name"],
+        project_name=appabuild_config.project_name,
         ecoinvent_name=ecoinvent_name,
         ecoinvent_path=ecoinvent_path,
-        foreground_name=appabuild_config["databases"]["foreground"]["name"],
-        foreground_path=appabuild_config["databases"]["foreground"]["path"],
+        foreground_name=appabuild_config.databases["foreground"].name,
+        foreground_path=appabuild_config.databases["foreground"].path,
     )
 
 
@@ -61,7 +68,9 @@ def build(
 
     impact_model_builder = ImpactModelBuilder.from_yaml(lca_config_path)
 
+    logger.info("Start building the impact model")
     impact_model = impact_model_builder.build_impact_model(foreground_database)
+    logger.info("Impact model successfully built")
 
     impact_model.to_yaml(
         impact_model_builder.output_path, impact_model_builder.compile_models

@@ -1,7 +1,7 @@
 scope:
   fu:
     name: 'nvidia_ai_gpu_chip'
-    database: "test"
+    database: "user_database"
   methods:
     - "EFV3_CLIMATE_CHANGE"
 model:
@@ -31,13 +31,13 @@ model:
       pm_perc: 0.1
     - name: architecture
       type: enum
-      default: Maxwell
+      default: Lovelace
       weights:
         Maxwell: 1
         Pascal: 1
     - name: usage_location
       type: enum
-      default: EU
+      default: USA
       weights:
         FR: 1
         EU: 1
@@ -54,3 +54,5 @@ model:
       type: float
       default: 2
       pm_perc: 0.1
+      min: 0.01
+      max: 1.0

@@ -1,0 +1,5 @@
+project_name: 'valid_appa_lca_conf_without_ecoinvent'
+databases:
+  foreground:
+    name: user_database
+    path: '.'

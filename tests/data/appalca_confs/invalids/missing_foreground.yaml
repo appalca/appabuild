@@ -1,0 +1,5 @@
+project_name: 'missing_foreground_test'
+databases:
+  ecoinvent:
+    name: ecoinvent_3.9.1_cutoff
+    path: './placeholder'
