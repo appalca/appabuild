@@ -13,6 +13,7 @@ from appabuild.database.databases import (
     ForegroundDatabase,
     ImpactProxiesDatabase,
 )
+from appabuild.logger import logger
 from appabuild.model.builder import ImpactModelBuilder
 
 
@@ -24,8 +25,10 @@ def initialize(appabuild_config_path: str) -> ForegroundDatabase:
     remain the same for all your LCAs.
     :return: the initialized foreground database
     """
+
     with open(appabuild_config_path, "r") as stream:
         appabuild_config = yaml.safe_load(stream)
+    logger.info(f"Loaded config: {appabuild_config}")
 
     ecoinvent_name = (
         appabuild_config["databases"]["ecoinvent"]["name"]
@@ -38,6 +41,13 @@ def initialize(appabuild_config_path: str) -> ForegroundDatabase:
         if "ecoinvent" in appabuild_config["databases"]
         else None
     )
+
+    if ecoinvent_path is None:
+        logger.warning(
+            "No path given for ecoinvent databases, building the impact model will be done without"
+        )
+    else:
+        logger.info(f"Loading EcoInvent databases from {ecoinvent_path}")
 
     return project_setup(
         project_name=appabuild_config["project_name"],
@@ -61,7 +71,9 @@ def build(
 
     impact_model_builder = ImpactModelBuilder.from_yaml(lca_config_path)
 
+    logger.info("Start building the impact model")
     impact_model = impact_model_builder.build_impact_model(foreground_database)
+    logger.info("Impact model successfully built")
 
     impact_model.to_yaml(
         impact_model_builder.output_path, impact_model_builder.compile_models
@@ -100,6 +112,8 @@ def project_setup(
     if ecoinvent_path is not None:
         ecoinvent_database = EcoInventDatabase(name=ecoinvent_name, path=ecoinvent_path)
         databases.append(ecoinvent_database)
+
+    logger.info(f"Databases: {databases}")
 
     for external_database in databases:
         external_database.execute_at_startup()

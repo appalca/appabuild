@@ -2,6 +2,7 @@
 Module containing all required classes and methods to run LCA and build impact models.
 Majority of the code is copied and adapted from lca_algebraic package.
 """
+
 from __future__ import annotations
 
 import itertools
@@ -32,6 +33,7 @@ from sympy import Expr, simplify, symbols
 
 from appabuild.database.databases import ForegroundDatabase, parameters_registry
 from appabuild.exceptions import BwDatabaseError, BwMethodError
+from appabuild.logger import logger
 
 act_symbols = {}  # Cache of  act = > symbol
 
@@ -45,12 +47,17 @@ def to_bw_method(method_full_name: MethodFullName) -> Tuple[str, str, str]:
     matching_methods = [
         method for method in bw.methods if method_full_name in str(method)
     ]
-    if len(matching_methods) < 1:
-        raise BwMethodError(f"Cannot find method {method_full_name}.")
-    if len(matching_methods) > 1:
-        raise BwMethodError(
-            f"Too many methods matching {method_full_name}: {matching_methods}."
-        )
+    try:
+        if len(matching_methods) < 1:
+            raise BwMethodError(f"Cannot find method {method_full_name}.")
+        if len(matching_methods) > 1:
+            raise BwMethodError(
+                f"Too many methods matching {method_full_name}: {matching_methods}."
+            )
+    except BwMethodError:
+        logger.exception("BwMethodError")
+        raise
+
     return matching_methods[0]
 
 
@@ -145,15 +152,19 @@ class ImpactModelBuilder:
         functional_unit_bw = [
             i for i in self.bw_user_database if self.functional_unit == i["name"]
         ]
-        if len(functional_unit_bw) < 1:
-            raise BwDatabaseError(
-                f"Cannot find activity {self.functional_unit} for FU."
-            )
-        if len(functional_unit_bw) > 1:
-            raise BwDatabaseError(
-                f"Too many activities matching {self.functional_unit} for FU: "
-                f"{functional_unit_bw}."
-            )
+        try:
+            if len(functional_unit_bw) < 1:
+                raise BwDatabaseError(
+                    f"Cannot find activity {self.functional_unit} for FU."
+                )
+            if len(functional_unit_bw) > 1:
+                raise BwDatabaseError(
+                    f"Too many activities matching {self.functional_unit} for FU: "
+                    f"{functional_unit_bw}."
+                )
+        except BwDatabaseError:
+            logger.exception("BwDatabaseError")
+            raise
         functional_unit_bw = functional_unit_bw[0]
         return functional_unit_bw
 
@@ -216,11 +227,15 @@ class ImpactModelBuilder:
             )
         )
 
-        if len(forbidden_parameter_names) > 0:
-            raise ValueError(
-                f"Parameter names {forbidden_parameter_names} are forbidden as they "
-                f"correspond to background activities."
-            )
+        try:
+            if len(forbidden_parameter_names) > 0:
+                raise ValueError(
+                    f"Parameter names {forbidden_parameter_names} are forbidden as they "
+                    f"correspond to background activities."
+                )
+        except ValueError:
+            logger.exception("ValueError")
+            raise
 
         used_parameters = [
             known_parameters.find_corresponding_parameter(expected_parameter_symbol)
@@ -338,8 +353,13 @@ class ImpactModelBuilder:
                 if not _isForeground(input_db):
                     act_expr = act_to_symbol(sub_act)
                 else:
-                    if impact_model_tree_node.name_already_in_tree(sub_act["name"]):
-                        raise Exception(f"Found recursive activity: {sub_act['name']}")
+                    try:
+                        if impact_model_tree_node.name_already_in_tree(sub_act["name"]):
+                            raise Exception(
+                                f"Found recursive activity: {sub_act['name']}"
+                            )
+                    except Exception:
+                        logger.exception("Exception")
                     if sub_act.get("include_in_tree"):
                         # act_expr = act_to_symbol(sub_act, to_compile=False)
                         ImpactModelBuilder.actToExpression(

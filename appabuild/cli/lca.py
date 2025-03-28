@@ -3,6 +3,7 @@ from typing import Annotated, Optional
 import typer
 
 from appabuild import setup
+from appabuild.logger import logger
 
 app = typer.Typer()
 
@@ -28,6 +29,10 @@ def build(
         if not appabuild_config_path:
             print(
                 "AppaBuild configuration file and LCA configuration file are required for initialization"
+            )
+            logger.error(
+                "AppaBuild configuration file and LCA configuration file are required for initialization",
+                exc_info=True,
             )
             return
         foreground_database = setup.initialize(appabuild_config_path)
