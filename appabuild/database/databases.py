@@ -2,6 +2,7 @@
 Contains classes to import LCI databases in Brightway project.
 Initialize parameters_registry object which must be filled before Impact Model build.
 """
+
 from __future__ import annotations
 
 import abc
@@ -21,6 +22,7 @@ from appabuild.database.bw_databases import BwDatabase
 from appabuild.database.serialized_data import SerializedActivity, SerializedExchange
 from appabuild.database.user_database_elements import Activity, UserDatabaseContext
 from appabuild.exceptions import BwDatabaseError, SerializedDataError
+from appabuild.logger import logger
 
 parameters_registry = {}
 
@@ -187,7 +189,7 @@ class ForegroundDatabase(Database):
             serialized_activities=[], activities=[], database=BwDatabase(name=name)
         )
 
-    def set_functional_unit(self, fu_name:str, parameters: dict):
+    def set_functional_unit(self, fu_name: str, parameters: dict):
         self.fu_name = fu_name
         self.parameters = parameters
 
@@ -197,10 +199,12 @@ class ForegroundDatabase(Database):
         Results are stored in object's context.
         :return:
         """
+        logger.info("Loading foreground datasets")
         for root, dirs, files in os.walk(self.path):
             for filename in [
                 file for file in files if re.match(r".*\.(json|ya?ml)$", file)
             ]:
+                logger.info("Loading dataset %s", filename)
                 filepath = os.path.join(root, filename)
                 if filename.endswith(".json"):
                     dataset_file = open(filepath, "r", encoding="utf8")
@@ -210,13 +214,37 @@ class ForegroundDatabase(Database):
                         dataset = yaml.safe_load(stream)
                 uuid = re.sub(r"\.(json|ya?ml)", "", filename)
                 try:
+                    # Validation of the loaded dataset schema
+                    dataset.update({"database": self.name, "uuid": uuid})
+                    SerializedActivity.model_validate(dataset)
+
                     serialized_activity = SerializedActivity(
                         **{**dataset, **{"database": self.name, "uuid": uuid}}
                     )
-                except ValidationError as e:
-                    raise SerializedDataError(f"Cannot import dataset {uuid}: {e}")
 
+                    default_values = SerializedActivity(
+                        **{"database": "", "uuid": "", "name": "", "unit": ""}
+                    ).__dict__
+                    for key, value in serialized_activity.__dict__.items():
+                        if type(value) in [list, dict, tuple] and len(value) == 0:
+                            logger.warning("The field %s is empty", key)
+                        elif value == default_values[key]:
+                            logger.info(
+                                "The field %s has its default value %s", key, value
+                            )
+
+                except ValidationError as e:
+                    for err in e.errors():
+                        if err["type"] == "missing":
+                            logger.error(
+                                "Missing parameter %s in the file: %s",
+                                err["loc"][0],
+                                filepath,
+                            )
+                    exit(1)
                 self.context.serialized_activities.append(serialized_activity)
+                logger.info("Dataset %s successfully loaded", filename)
+        logger.info("End of loading foreground datasets")
 
     def execute_at_startup(self):
         if self.name in bw.databases:
@@ -225,11 +253,9 @@ class ForegroundDatabase(Database):
 
         self.find_activities_on_disk()
 
-
     def execute_at_build_time(self):
         self.declare_parameters()
         self.import_in_project()
-
 
     def import_in_project(self) -> None:
         """

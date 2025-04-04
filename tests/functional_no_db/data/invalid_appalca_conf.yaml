@@ -1,0 +1,5 @@
+databases:
+  foreground:
+    name: user_database
+    path: tests/functional_no_db/data/invalid_datasets/
+project_name: sample_project
