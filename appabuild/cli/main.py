@@ -12,5 +12,4 @@ cli_app.add_typer(lca_app, name="lca")
 
 
 if __name__ == "__main__":
-    # cli_app()
-    mermaid(sys.argv[1], sys.argv[2])
+    cli_app()

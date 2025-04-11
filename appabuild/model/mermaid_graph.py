@@ -2,6 +2,7 @@
 Module containing all required classes and methods to create a mermaid graph from impact models.
 """
 
+import re
 from typing import Dict
 
 import yaml
@@ -9,43 +10,53 @@ from apparun.impact_model import ImpactModel
 from apparun.impact_tree import ImpactTreeNode
 from mermaid.graph import Graph
 
-
-def build_worker(tree_node: ImpactTreeNode):
-    print(tree_node.name)
-    print("Models: ", tree_node.models)
-    print("Direct impact: ", tree_node.direct_impacts)
-    print("=" * 10)
-    node_str = ""
-    for sub_tree_node in tree_node.children:
-        node_str += sub_tree_node.name + " -->|test|" + tree_node.name + "\n"
-        node_str += build_worker(sub_tree_node)
-    return node_str
+from appabuild.database.databases import ForegroundDatabase
 
 
 def build_mermaid_graph(foreground_path: str, name: str):
-    def build_worker(database_uuid: str):
-        build_str = ""
-        try:
-            with open(foreground_path + database_uuid + ".yaml", "r") as stream:
-                foreground = yaml.safe_load(stream)
+    foreground_database = ForegroundDatabase(
+        name="",
+        path=foreground_path,
+    )
+    foreground_database.find_activities_on_disk()
+    activities = {
+        activity.uuid: activity
+        for activity in foreground_database.context.serialized_activities
+    }
 
-            for database in foreground["exchanges"]:
-                if "input" in database:
-                    uuid = database["input"]["uuid"]
+    def build_worker(parent_activity, activity, params_matching):
+        activity_str = ""
+        if parent_activity is not None:
+            params = []
+            for param in activity.parameters:
+                if param in params_matching:
+                    regex = "[a-zA-Z_]+"
+                    params.append(
+                        param
+                        + "=f("
+                        + ", ".join(re.findall(regex, params_matching[param]))
+                        + ")"
+                    )
+                else:
+                    params.append(param)
+            params = '|"' + ", ".join(params) + '"|' if len(params) > 0 else ""
+            activity_str += (
+                activity.uuid + " -->" + params + parent_activity.uuid + "\n"
+            )
 
-                    if uuid[0] != "(":
-                        params = ",".join(foreground["parameters"])
-                        if len(params) > 0:
-                            params = "|" + params + "|"
+        for exchange in activity.exchanges:
+            params_match = {}
+            for match in exchange.parameters_matching:
+                params_match[match] = exchange.parameters_matching[match]
 
-                        build_str += uuid + " -->" + params + " " + database_uuid + "\n"
-                        build_str += build_worker(uuid) + "\n"
-        except FileNotFoundError:
-            pass
-        return build_str
+            if exchange.input is not None and exchange.input.uuid in activities:
+                activity_str += build_worker(
+                    activity, activities[exchange.input.uuid], params_match
+                )
 
-    graph_str = "flowchart TD\n" + build_worker(name)
+        return activity_str
 
-    print(graph_str)
+    graph_str = "flowchart TD\n" + build_worker(None, activities[name], {})
+
     graph = Graph(name, graph_str)
     return graph
