@@ -45,6 +45,7 @@ dependencies = [
     "apparun==0.3.2",
     "typer==0.15.1",
     "ipython>=7.6.0,<=8.34.0",
+    "mermaid-py==0.7.1"
 ]
 
 [project.scripts]
