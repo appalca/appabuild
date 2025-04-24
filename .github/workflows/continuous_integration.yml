@@ -7,9 +7,6 @@ on:
       - synchronize
     branches:
       - dev
-  push:
-    branches:
-      - update/CI
         
 jobs:
   pre-commit:
