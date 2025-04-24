@@ -7,6 +7,9 @@ on:
       - synchronize
     branches:
       - dev
+  push:
+    branches:
+      - update/CI
         
 jobs:
   pre-commit:
@@ -22,7 +25,7 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install pre-commit flake8 black isort
+        run: pip install pre-commit
 
       - name: Inspect source code
         run: pre-commit run --all-files
