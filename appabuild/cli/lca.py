@@ -4,7 +4,6 @@ import mermaid as md
 import typer
 
 from appabuild import setup
-from appabuild.logger import logger
 from appabuild.model.mermaid_graph import build_mermaid_graph
 
 app = typer.Typer()
@@ -39,19 +38,19 @@ def build(
 
 
 @app.command()
-def mermaid_graph(
-    foreground_datasets_root: Annotated[
-        str, typer.Argument(help="Root path of foreground datasets")
-    ],
-    name: Annotated[
+def graph(
+    path: Annotated[str, typer.Argument(help="Root path of foreground datasets")],
+    fu_name: Annotated[
         str,
         typer.Argument(help="Name of the root dataset (without its file extension)"),
     ],
 ):
     """
     Generate a mermaid graph from a set of foreground datasets and export it in an image file (SVG format).
+    :param path: root path of the foreground datasets used to build the graph.
+    :param fu_name: name of the dataset that will be the root of the graph.
 
     """
-    graph = build_mermaid_graph(foreground_datasets_root, name)
-    render = md.Mermaid(graph)
-    render.to_svg(name + ".svg")
+    mermaid_graph = build_mermaid_graph(path, fu_name)
+    render = md.Mermaid(mermaid_graph)
+    render.to_svg(fu_name + ".svg")
