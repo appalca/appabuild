@@ -13,11 +13,12 @@ DATA_DIR = os.path.join(os.path.dirname(__file__), "data")
 def test_build_command():
     appaconf_file = os.path.join(DATA_DIR, "appalca_conf.yaml")
     conf_file = os.path.join(DATA_DIR, "nvidia_ai_gpu_chip_lca_conf.yaml")
-    expected_file = os.path.join(DATA_DIR, "nvidia_ai_gpu_chip_lca_conf.yaml")
+    expected_file = os.path.join(DATA_DIR, "nvidia_ai_gpu_chip_expected.yaml")
 
     result = subprocess.run(
         [
-            "appabuild",
+            "python",
+            "-m" "appabuild.cli.main",
             "lca",
             "build",
             appaconf_file,
@@ -37,4 +38,4 @@ def test_build_command():
 
     os.remove("nvidia_ai_gpu_chip.yaml")
 
-    assert f1_yaml != f2_yaml
+    assert f1_yaml == f2_yaml

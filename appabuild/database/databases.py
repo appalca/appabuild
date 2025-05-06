@@ -187,7 +187,7 @@ class ForegroundDatabase(Database):
             serialized_activities=[], activities=[], database=BwDatabase(name=name)
         )
 
-    def set_functional_unit(self, fu_name:str, parameters: dict):
+    def set_functional_unit(self, fu_name: str, parameters: dict):
         self.fu_name = fu_name
         self.parameters = parameters
 
@@ -225,11 +225,9 @@ class ForegroundDatabase(Database):
 
         self.find_activities_on_disk()
 
-
     def execute_at_build_time(self):
         self.declare_parameters()
         self.import_in_project()
-
 
     def import_in_project(self) -> None:
         """
