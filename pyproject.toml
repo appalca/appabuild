@@ -24,6 +24,7 @@ classifiers = [
 ]
 requires-python = ">=3.11,<3.12"
 dependencies = [
+    "click<=8.1.8",
     "numpy==1.26.4",
     "pandas==2.0.0",
     "brightway2==2.4.7",
@@ -31,10 +32,6 @@ dependencies = [
     "lca_algebraic==1.0.0",
     "fastapi",
     "uvicorn[standard]",
-    "flake8",
-    "black",
-    "isort",
-    "typer",
     "omegaconf",
     "pydantic",
     "scipy",
@@ -46,7 +43,6 @@ dependencies = [
     "tqdm",
     "ruamel.yaml",
     "apparun==0.3.2",
-    "pre-commit",
     "typer==0.15.1",
     "ipython>=7.6.0,<=8.34.0",
 ]
