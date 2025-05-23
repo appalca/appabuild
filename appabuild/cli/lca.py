@@ -4,7 +4,7 @@ import mermaid as md
 import typer
 
 from appabuild import setup
-from appabuild.model.mermaid_graph import build_mermaid_graph
+from appabuild.model.graph import build_mermaid_graph
 
 app = typer.Typer()
 
@@ -65,6 +65,9 @@ def graph(
     height: Annotated[
         int, typer.Option(help="Height of the output image", callback=validate_size)
     ] = 750,
+    sensitive: Annotated[
+        bool, typer.Option(help="If the data used to build the graph are sensitive")
+    ] = True,
 ):
     """
     Generate a mermaid graph from a set of foreground datasets and export it in an image file (SVG format).
@@ -73,8 +76,16 @@ def graph(
     :param type: type of the output image, can only be png or svg, the default value is png.
     :param width: width of the output image.
     :param height: height of the output image.
+    :param sensitive: if true, ask with a prompt if the data used to build the graph are sensitive.
 
     """
+    if sensitive:
+        agree = typer.prompt(
+            "The data used to build the graph will be send to a distant API, do you want to continue ?\n If you don't want to see this prompt use the option --no-sensitive "
+        )
+        if not agree:
+            exit(0)
+
     mermaid_graph = build_mermaid_graph(path, fu_name)
     render = md.Mermaid(mermaid_graph, width=width, height=height)
     if type == "svg":
