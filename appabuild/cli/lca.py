@@ -39,13 +39,13 @@ def build(
 
 def validate_type(type: str) -> str:
     if type not in ["png", "svg"]:
-        raise typer.BadParameter("Only png or svg allowed")
+        raise typer.BadParameter(f"Expected png or svg, got {type}")
     return type
 
 
 def validate_size(size: int) -> int:
     if size <= 0:
-        raise typer.BadParameter("must be superior to 0")
+        raise typer.BadParameter(f"Value expected to be superior to zero, got {size}")
     return size
 
 
@@ -79,16 +79,19 @@ def graph(
     :param sensitive: if true, ask with a prompt if the data used to build the graph are sensitive.
 
     """
-    if sensitive:
-        agree = typer.prompt(
-            "The data used to build the graph will be send to a distant API, do you want to continue ?\n If you don't want to see this prompt use the option --no-sensitive "
-        )
-        if not agree:
-            exit(0)
+    try:
+        if sensitive:
+            agree = typer.confirm(
+                "The data used to build the graph will be send to a distant API, do you want to continue ?\n If you don't want to see this prompt use the option --no-sensitive "
+            )
+            if not agree:
+                exit(0)
 
-    mermaid_graph = build_mermaid_graph(path, fu_name)
-    render = md.Mermaid(mermaid_graph, width=width, height=height)
-    if type == "svg":
-        render.to_svg(fu_name + ".svg")
-    elif type == "png":
-        render.to_png(fu_name + ".png")
+        mermaid_graph = build_mermaid_graph(path, fu_name)
+        render = md.Mermaid(mermaid_graph, width=width, height=height)
+        if type == "svg":
+            render.to_svg(fu_name + ".svg")
+        elif type == "png":
+            render.to_png(fu_name + ".png")
+    except Exception:
+        exit(1)

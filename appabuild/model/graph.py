@@ -2,24 +2,57 @@
 Module containing all required classes and methods to create a mermaid graph from a set of foreground datasets.
 """
 
+import os
+import re
 from typing import List
 
 import sympy
 from mermaid.graph import Graph
 
 from appabuild.database.databases import ForegroundDatabase
+from appabuild.database.serialized_data import SerializedExchange
 
 
-def extract_params_from_matching(matching: str) -> List[str]:
+def extract_params_from_matching(matching: str):
     """
     Extract the list of parameters from a parameter matching.
     A parameter matching is an expression used to replace a parameter,
     for example energy: time * power.
     :param matching: a parameter matching.
+    :return: the list of parameters used in the parameter matching.
     """
+    # values = re.findall("[a-zA-Z_]+", matching)
+    # return set(values)
     exp = sympy.simplify(matching)
     params = exp.atoms(sympy.Symbol)
-    return [str(param) for param in params]
+    return set([str(param) for param in params])
+
+
+def build_parameters_str(parameters: list[str], exchange: SerializedExchange) -> str:
+    params = []
+    matches = {}
+
+    for key, value in exchange.parameters_matching.items():
+        if type(value) in [str, dict]:
+            matches[key] = value
+
+    if exchange.switch is not None:
+        for option in exchange.switch.options:
+            for key, value in option.parameters_matching.items():
+                if type(value) in [str]:
+                    matches[key] = (
+                        (matches[key] + " + " if key in matches else "")
+                        + value
+                        + " * "
+                        + exchange.switch.name
+                    )
+                else:
+                    matches[key] = exchange.switch.name
+
+    params.extend(set(parameters).difference(matches.keys()))
+    for key, value in matches.items():
+        params.append(key + "=f(" + ",".join(extract_params_from_matching(value)) + ")")
+    return ",".join(sorted(params))
 
 
 def build_mermaid_graph(foreground_path: str, name: str) -> Graph:
@@ -29,6 +62,9 @@ def build_mermaid_graph(foreground_path: str, name: str) -> Graph:
     :param name: name of the root dataset.
     :return: a graph representing the set of foreground datasets and their dependencies.
     """
+    if not os.path.exists(foreground_path):
+        raise ValueError(f"No such directory {foreground_path}")
+
     foreground_database = ForegroundDatabase(
         name="",
         path=foreground_path,
@@ -38,6 +74,11 @@ def build_mermaid_graph(foreground_path: str, name: str) -> Graph:
         activity.uuid: activity
         for activity in foreground_database.context.serialized_activities
     }
+    if len(activities) == 0:
+        raise ValueError(f"No foreground datasets found at the path {foreground_path}")
+
+    if name not in activities:
+        raise ValueError(f"No such foreground dataset with the name {name}")
 
     nodes_and_links = []
     activities_to_process = [activities[name]]
@@ -50,23 +91,16 @@ def build_mermaid_graph(foreground_path: str, name: str) -> Graph:
                 dependency = activities[exchange.input.uuid]
                 activities_to_process.append(dependency)
 
-                params = []
-                for param in dependency.parameters:
-                    if param in exchange.parameters_matching.keys():
-                        matching = extract_params_from_matching(
-                            exchange.parameters_matching[param]
-                        )
-                        params.append(param + "=f(" + ", ".join(matching) + ")")
-                    else:
-                        params.append(param)
-
+                params = build_parameters_str(dependency.parameters, exchange)
                 link = (
                     dependency.uuid
                     + "-->"
-                    + ('|"' + ",".join(params) + '"|' if len(params) > 0 else "")
+                    + ('|"' + params + '"|' if len(params) > 0 else "")
                     + activity.uuid
                 )
                 nodes_and_links.append(link)
 
-    graph = Graph(name, "flowchart TD\n" + "\n".join(nodes_and_links))
+    s = "flowchart TD\n" + "\n".join(nodes_and_links)
+    print(s)
+    graph = Graph(name, s)
     return graph

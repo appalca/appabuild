@@ -1,0 +1,14 @@
+name: gold_extraction
+location: GLO
+type: process
+unit: kg # for a 300mm wafer
+amount: 1
+comment: "From Nuss, P., & Eckelman, M. J. (2014). Life cycle assessment of metals: a scientific synthesis. PloS one, 9(7), e101298."
+exchanges:
+- database: user_database
+  name: gold_extraction
+  type: technosphere
+  amount: 12500
+  input:
+    database: impact_proxies
+    uuid: "('EF v3.0', 'climate change', 'global warming potential (GWP100)')_technosphere_proxy"

@@ -1,0 +1,16 @@
+name: bga_package_manufacturing
+location: TW
+type: process
+unit: unit
+amount: 1
+parameters:
+- leads
+comment: "We follow the strong assumption that impacts of a BGA package is essentially driven by its quantity of gold, and that this quantity of gold is correlated with the number of leads (cf. Kuo et al. (2020). Life cycle impact assessment of semiconductor packaging technologies with emphasis on ball grid array.) We model the quantity of gold function of the number of leads using STM32 BoM."
+exchanges:
+- database: user_database
+  name: gold_for_leads
+  type: technosphere
+  amount: leads*0.0000098 / 1000 # should be in grams
+  input:
+    database: user_database
+    uuid: gold_extraction
