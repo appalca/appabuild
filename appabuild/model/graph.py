@@ -93,10 +93,10 @@ def build_mermaid_graph(foreground_path: str, name: str) -> Graph:
 
                 params = build_parameters_str(dependency.parameters, exchange)
                 link = (
-                    dependency.uuid
+                    activity.uuid
                     + "-->"
                     + ('|"' + params + '"|' if len(params) > 0 else "")
-                    + activity.uuid
+                    + dependency.uuid
                 )
                 nodes_and_links.append(link)
 

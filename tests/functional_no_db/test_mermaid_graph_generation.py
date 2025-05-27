@@ -102,8 +102,8 @@ def test_valid_graph():
 
     assert len(expected_graph) == len(graph)
 
-    expected_graph = sorted(expected_graph, key=lambda e: e["begin"])
-    graph = sorted(graph, key=lambda e: e["begin"])
+    expected_graph = sorted(expected_graph, key=lambda e: e["begin"] + e["end"])
+    graph = sorted(graph, key=lambda e: e["begin"] + e["end"])
 
     for expected, elem in zip(expected_graph, graph):
         assert elem["begin"] == expected["begin"]
