@@ -57,7 +57,11 @@ def graph(
         typer.Argument(help="Name of the root dataset (without its file extension)"),
     ],
     type: Annotated[
-        str, typer.Option(help="Output an image in PNG format", callback=validate_type)
+        str,
+        typer.Option(
+            help="Type of the output image, can only be png or svg, the default type is png",
+            callback=validate_type,
+        ),
     ] = "png",
     width: Annotated[
         int, typer.Option(help="Width of the output image", callback=validate_size)
@@ -70,10 +74,10 @@ def graph(
     ] = True,
 ):
     """
-    Generate a mermaid graph from a set of foreground datasets and export it in an image file (SVG format).
+    Generate a mermaid graph from a set of foreground datasets and export it in an image file (PNG or SVG format).
     :param path: root path of the foreground datasets used to build the graph.
     :param fu_name: name of the dataset that will be the root of the graph.
-    :param type: type of the output image, can only be png or svg, the default value is png.
+    :param type: type of the output image, can only be png or svg.
     :param width: width of the output image.
     :param height: height of the output image.
     :param sensitive: if true, ask with a prompt if the data used to build the graph are sensitive.
@@ -82,7 +86,7 @@ def graph(
     try:
         if sensitive:
             agree = typer.confirm(
-                "The data used to build the graph will be send to a distant API, do you want to continue ?\n If you don't want to see this prompt use the option --no-sensitive "
+                "The data used to build the graph will be sent to a distant API, do you want to continue ?\n If you don't want to see this prompt, use the option --no-sensitive "
             )
             if not agree:
                 exit(0)
