@@ -1,3 +1,5 @@
+import sys
+
 import typer
 
 from appabuild.cli.database import app as database_app

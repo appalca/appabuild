@@ -1,0 +1,18 @@
+name: logic_die_manufacturing
+location: GLO
+type: process
+unit: mm2
+amount: 1
+parameters:
+- area
+- fab_location
+- masks
+comment: "Area must be in mm². Takes edge loss into account (based on https://anysilicon.com/die-per-wafer-formula-free-calculators/). Dies may not be functional (no die yield)."
+exchanges:
+- database: user_database
+  name: cmos_die_production
+  type: technosphere
+  amount: "1/(300*3.14159*((300/(4*area))-(1/(sqrt(2*area)))))"
+  input:
+    database: user_database
+    uuid: logic_wafer_manufacturing

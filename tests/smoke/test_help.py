@@ -4,9 +4,13 @@ This test ensure that appabuild --help works
 
 import subprocess
 
+from typer.testing import CliRunner
+
+from appabuild.cli.main import cli_app
+
+runner = CliRunner()
+
 
 def test_help_command():
-    result = subprocess.run(
-        ["python", "-m", "appabuild.cli.main", "--help"], capture_output=True, text=True
-    )
-    assert result.returncode == 0
+    result = runner.invoke(cli_app, ["--help"])
+    assert result.exit_code == 0

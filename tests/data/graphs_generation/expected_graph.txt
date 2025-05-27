@@ -1,0 +1,10 @@
+flowchart TD
+nvidia_ai_gpu_chip -->|usage_location,inference=f(inference_per_day,lifespan),energy_per_inference| ai_use_phase
+nvidia_ai_gpu_chip -->|cuda_core,architecture| nvidia_gpu_chip_manufacturing
+ai_use_phase -->|usage_location| electricity_no_ei
+nvidia_gpu_chip_manufacturing -->|leads=f(architecture,cuda_core)| bga_package_manufacturing
+bga_package_manufacturing -->|| gold_extraction
+nvidia_gpu_chip_manufacturing -->|cuda_core,architecture| nvidia_gpu_die_manufacturing
+nvidia_gpu_die_manufacturing -->|area=f(architecture,cuda_core),defect_density=f(architecture),fab_location=f(architecture),technology_node=f(architecture)| functional_logic_die_manufacturing
+functional_logic_die_manufacturing -->|area,fab_location,masks=f(technology_node)| logic_die_manufacturing
+logic_die_manufacturing -->|fab_location,masks| logic_wafer_manufacturing
