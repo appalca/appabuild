@@ -1,0 +1,19 @@
+name: ai_use_phase
+location: RER
+type: process
+unit: unit
+amount: 1
+parameters:
+- usage_location # Only FR or RER supported
+- inference
+- energy_per_inference
+include_in_tree: True
+comment: "Use phase for AI inference."
+exchanges:
+- database: user_database
+  name: electricity
+  type: technosphere
+  amount: "inference * energy_per_inference / 1000000"
+  input:
+    uuid: "electricity_no_ei"
+    database: user_database

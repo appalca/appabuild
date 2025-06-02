@@ -1,0 +1,5 @@
+project_name: cmd_build_ete_test2
+databases:
+  foreground:
+    name: user_database
+    path: './tests/data/cmd_build/foreground_datasets'

@@ -13,7 +13,7 @@ def generate_eime_v6(
     eime_v6_impacts_export_path: str, datasets_description_path: str, output_path: str
 ):
     """
-    Generate yaml datasets readily usable by Appa Build from configuration file and
+    Generate yaml datasets readily usable by Appa Build from config file and
     Eime V6 impact exports. To generate the adequate export file, create a new Eime V6
     project, add a single phase (no particular phase name required), and add a copy of
     every dataset you want to export. Then, go to analysis page, tick all required PEF

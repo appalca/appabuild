@@ -2,6 +2,7 @@
 Contains classes to import LCI databases in Brightway project.
 Initialize parameters_registry object which must be filled before Impact Model build.
 """
+
 from __future__ import annotations
 
 import abc
@@ -15,12 +16,14 @@ import brightway2 as bw
 import yaml
 from apparun.parameters import ImpactModelParam
 from lca_algebraic import resetParams, setForeground
+from lxml.etree import XMLSyntaxError
 from pydantic_core import ValidationError
 
 from appabuild.database.bw_databases import BwDatabase
 from appabuild.database.serialized_data import SerializedActivity, SerializedExchange
 from appabuild.database.user_database_elements import Activity, UserDatabaseContext
 from appabuild.exceptions import BwDatabaseError, SerializedDataError
+from appabuild.logger import log_validation_error, logger
 
 parameters_registry = {}
 
@@ -75,8 +78,10 @@ class BiosphereDatabase(Database):
         self.import_in_project()
 
     def import_in_project(self) -> None:
+        logger.info("Loading biosphere database...")
         bw.bw2setup()
         bw.add_ecoinvent_39_biosphere_flows()
+        logger.info("Biosphere database successfully loaded")
 
 
 class ImpactProxiesDatabase(Database):
@@ -111,6 +116,7 @@ class ImpactProxiesDatabase(Database):
         corresponding proxy.
         :return:
         """
+        logger.info("Loading impact proxies...")
         bw_database = bw.Database(self.name)
         datasets = {}
         for method in bw.methods:
@@ -149,6 +155,7 @@ class ImpactProxiesDatabase(Database):
             ):
                 characterisation_factors.append(((self.name, f"{method}_proxy"), 1))
                 bw.Method(method).write(characterisation_factors)
+        logger.info("Impact proxies successfully loaded")
 
 
 class EcoInventDatabase(Database):
@@ -156,12 +163,42 @@ class EcoInventDatabase(Database):
         Database.__init__(self, name, path)
 
     def import_in_project(self):
-        importer = bw.SingleOutputEcospold2Importer(
-            dirpath=self.path, db_name=self.name, use_mp=False
-        )
-        importer.apply_strategies()
-        importer.statistics()
-        importer.write_database()
+        logger.info("Loading Eco Invent database...")
+        self.validate()
+        try:
+            importer = bw.SingleOutputEcospold2Importer(
+                dirpath=self.path, db_name=self.name, use_mp=False
+            )
+            importer.apply_strategies()
+            importer.statistics()
+            importer.write_database()
+        except XMLSyntaxError as e:
+            # At least one dataset is invalid
+            msg = "{} in file {}".format(e.msg, e.filename)
+            logger.error(msg)
+            raise BwDatabaseError(msg, exception_type="eco_invent_invalid_dataset")
+        except UnicodeDecodeError:
+            # At least one dataset is not in UTF-8 format
+            msg = "One of the file in the Eco Invent database is not in UTF-8 format"
+            logger.error(msg)
+            raise BwDatabaseError(msg, exception_type="eco_invent_invalid_dataset")
+        except AttributeError as e:
+            # Missing field
+            msg = "Missing field {} in file {}".format(e.name, e.obj.base)
+            logger.error(msg)
+            raise BwDatabaseError(msg, exception_type="eco_invent_invalid_dataset")
+        else:
+            logger.info("Eco Invent database successfully loaded")
+
+    def validate(self):
+        """
+        Checks the eco invent database exists and is valid.
+        If not the program exits with the exit code 1.
+        """
+        if not os.path.exists(self.path) or len(os.listdir(self.path)) == 0:
+            msg = "No EcoInvent database found at the given path {}".format(self.path)
+            logger.error(msg)
+            raise BwDatabaseError(msg, exception_type="eco_invent_invalid_path")
 
 
 class ForegroundDatabase(Database):
@@ -197,10 +234,12 @@ class ForegroundDatabase(Database):
         Results are stored in object's context.
         :return:
         """
+        logger.info("Loading foreground datasets...")
         for root, dirs, files in os.walk(self.path):
             for filename in [
                 file for file in files if re.match(r".*\.(json|ya?ml)$", file)
             ]:
+                logger.info("Loading dataset %s", filename)
                 filepath = os.path.join(root, filename)
                 if filename.endswith(".json"):
                     dataset_file = open(filepath, "r", encoding="utf8")
@@ -213,10 +252,23 @@ class ForegroundDatabase(Database):
                     serialized_activity = SerializedActivity(
                         **{**dataset, **{"database": self.name, "uuid": uuid}}
                     )
-                except ValidationError as e:
-                    raise SerializedDataError(f"Cannot import dataset {uuid}: {e}")
 
+                    # Add warnings about empty fields and
+                    # infos about fields with their default value
+                    for key, value in serialized_activity.__dict__.items():
+                        if type(value) in [list, dict, tuple] and len(value) == 0:
+                            logger.warning("The field %s is empty", key)
+                        elif key not in dataset:
+                            logger.info(
+                                "The field %s has its default value %s", key, value
+                            )
+
+                except ValidationError as e:
+                    log_validation_error(e)
+                    raise e
                 self.context.serialized_activities.append(serialized_activity)
+                logger.info("Dataset %s successfully loaded", filename)
+        logger.info("Foreground datasets successfully loaded")
 
     def execute_at_startup(self):
         if self.name in bw.databases:

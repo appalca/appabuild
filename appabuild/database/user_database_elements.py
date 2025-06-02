@@ -5,6 +5,7 @@ nodes, Activity producing the reference flow being the root node, Exchanges bein
 edges) to ease LCA scope-dependent features such as parameter propagation or Activity
 duplication.
 """
+
 from __future__ import annotations
 
 import itertools
@@ -172,12 +173,16 @@ class Exchange(DatabaseElement):
                     type=solved_serialized_exchange.type,
                     input=exchange_input,
                     output=exchange_output,
-                    formula=solved_serialized_exchange.amount
-                    if isinstance(solved_serialized_exchange.amount, str)
-                    else None,
-                    amount=solved_serialized_exchange.amount
-                    if not isinstance(solved_serialized_exchange.amount, str)
-                    else 0,
+                    formula=(
+                        solved_serialized_exchange.amount
+                        if isinstance(solved_serialized_exchange.amount, str)
+                        else None
+                    ),
+                    amount=(
+                        solved_serialized_exchange.amount
+                        if not isinstance(solved_serialized_exchange.amount, str)
+                        else 0
+                    ),
                     parameters_matching=solved_serialized_exchange.parameters_matching,
                     context=context,
                 )
@@ -429,6 +434,7 @@ class Activity(DatabaseElement):
         ]
         exchanges = list(itertools.chain.from_iterable(exchanges))
         new_activity.exchanges = exchanges
+
         # If new activity is already present in activities, make a copy. New
         # code will be old one with a suffix incremented for each copy.
         return new_activity

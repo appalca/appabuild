@@ -2,6 +2,7 @@
 Module containing all required classes and methods to run LCA and build impact models.
 Majority of the code is copied and adapted from lca_algebraic package.
 """
+
 from __future__ import annotations
 
 import itertools
@@ -28,10 +29,13 @@ from lca_algebraic.lca import (
     _replace_fixed_params,
 )
 from lca_algebraic.params import _fixed_params, newEnumParam, newFloatParam
+from pydantic import ValidationError
 from sympy import Expr, simplify, symbols
 
+from appabuild.config.lca import LCAConfig
 from appabuild.database.databases import ForegroundDatabase, parameters_registry
 from appabuild.exceptions import BwDatabaseError, BwMethodError
+from appabuild.logger import logger
 
 act_symbols = {}  # Cache of  act = > symbol
 
@@ -45,12 +49,17 @@ def to_bw_method(method_full_name: MethodFullName) -> Tuple[str, str, str]:
     matching_methods = [
         method for method in bw.methods if method_full_name in str(method)
     ]
-    if len(matching_methods) < 1:
-        raise BwMethodError(f"Cannot find method {method_full_name}.")
-    if len(matching_methods) > 1:
-        raise BwMethodError(
-            f"Too many methods matching {method_full_name}: {matching_methods}."
-        )
+    try:
+        if len(matching_methods) < 1:
+            raise BwMethodError(f"Cannot find method {method_full_name}.")
+        if len(matching_methods) > 1:
+            raise BwMethodError(
+                f"Too many methods matching {method_full_name}: {matching_methods}."
+            )
+    except BwMethodError:
+        logger.exception("BwMethodError")
+        raise
+
     return matching_methods[0]
 
 
@@ -94,24 +103,27 @@ class ImpactModelBuilder:
     @staticmethod
     def from_yaml(lca_config_path: str) -> ImpactModelBuilder:
         """
-        Initializes a build with information contained in a YAML configuration file
-        :param lca_config_path: path to the file holding the configuration.
+        Initializes a build with information contained in a YAML config file
+        :param lca_config_path: path to the file holding the config.
         :return: the Impact Model Builder
         """
-        with open(lca_config_path, "r") as stream:
-            lca_config = yaml.safe_load(stream)
+        lca_config = LCAConfig.from_yaml(lca_config_path)
 
         builder = ImpactModelBuilder(
-            lca_config["scope"]["fu"]["database"],
-            lca_config["scope"]["fu"]["name"],
-            lca_config["scope"]["methods"],
+            lca_config.scope.fu.database,  # lca_config["scope"]["fu"]["database"],
+            lca_config.scope.fu.name,  # lca_config["scope"]["fu"]["name"],
+            lca_config.scope.methods,  # lca_config["scope"]["methods"],
+            # os.path.join(
+            #     lca_config["outputs"]["model"]["path"],
+            #     f"{lca_config['outputs']['model']['name']}.yaml",
+            # ),
             os.path.join(
-                lca_config["outputs"]["model"]["path"],
-                f"{lca_config['outputs']['model']['name']}.yaml",
+                lca_config.model.path,
+                lca_config.model.name + ".yaml",
             ),
-            lca_config["outputs"]["model"]["metadata"],
-            lca_config["outputs"]["model"]["compile"],
-            lca_config["outputs"]["model"]["parameters"],
+            lca_config.model.metadata,  # lca_config["outputs"]["model"]["metadata"],
+            lca_config.model.compile,  # lca_config["outputs"]["model"]["compile"],
+            lca_config.model.dump_parameters(),  # lca_config["outputs"]["model"]["parameters"],
         )
         return builder
 
@@ -145,15 +157,19 @@ class ImpactModelBuilder:
         functional_unit_bw = [
             i for i in self.bw_user_database if self.functional_unit == i["name"]
         ]
-        if len(functional_unit_bw) < 1:
-            raise BwDatabaseError(
-                f"Cannot find activity {self.functional_unit} for FU."
-            )
-        if len(functional_unit_bw) > 1:
-            raise BwDatabaseError(
-                f"Too many activities matching {self.functional_unit} for FU: "
-                f"{functional_unit_bw}."
-            )
+        try:
+            if len(functional_unit_bw) < 1:
+                raise BwDatabaseError(
+                    f"Cannot find activity {self.functional_unit} for FU."
+                )
+            if len(functional_unit_bw) > 1:
+                raise BwDatabaseError(
+                    f"Too many activities matching {self.functional_unit} for FU: "
+                    f"{functional_unit_bw}."
+                )
+        except BwDatabaseError:
+            logger.exception("BwDatabaseError")
+            raise
         functional_unit_bw = functional_unit_bw[0]
         return functional_unit_bw
 
@@ -216,11 +232,15 @@ class ImpactModelBuilder:
             )
         )
 
-        if len(forbidden_parameter_names) > 0:
-            raise ValueError(
-                f"Parameter names {forbidden_parameter_names} are forbidden as they "
-                f"correspond to background activities."
-            )
+        try:
+            if len(forbidden_parameter_names) > 0:
+                raise ValueError(
+                    f"Parameter names {forbidden_parameter_names} are forbidden as they "
+                    f"correspond to background activities."
+                )
+        except ValueError:
+            logger.exception("ValueError")
+            raise
 
         used_parameters = [
             known_parameters.find_corresponding_parameter(expected_parameter_symbol)
@@ -233,19 +253,26 @@ class ImpactModelBuilder:
             if i not in unique_used_parameters
         ]
         unique_used_parameters = ImpactModelParams.from_list(unique_used_parameters)
+
         # Declare used parameters in conf file as a lca_algebraic parameter to enable
         # model building (will not be used afterwards)
         for parameter in unique_used_parameters:
             if isinstance(parameter, FloatParam):
                 newFloatParam(
-                    name=parameter.name, default=parameter.default, save=False
+                    name=parameter.name,
+                    default=parameter.default,
+                    save=False,
+                    dbname="",
+                    min=0.0,
                 )
             if isinstance(parameter, EnumParam):
                 newEnumParam(
                     name=parameter.name,
                     values=parameter.weights,
                     default=parameter.default,
+                    dbname="",
                 )
+
         # Create dummy reference to biosphere
         # We cannot run LCA to biosphere activities
         # We create a technosphere activity mapping exactly to 1 biosphere item
@@ -338,8 +365,13 @@ class ImpactModelBuilder:
                 if not _isForeground(input_db):
                     act_expr = act_to_symbol(sub_act)
                 else:
-                    if impact_model_tree_node.name_already_in_tree(sub_act["name"]):
-                        raise Exception(f"Found recursive activity: {sub_act['name']}")
+                    try:
+                        if impact_model_tree_node.name_already_in_tree(sub_act["name"]):
+                            raise Exception(
+                                f"Found recursive activity: {sub_act['name']}"
+                            )
+                    except Exception:
+                        logger.exception("Exception")
                     if sub_act.get("include_in_tree"):
                         # act_expr = act_to_symbol(sub_act, to_compile=False)
                         ImpactModelBuilder.actToExpression(

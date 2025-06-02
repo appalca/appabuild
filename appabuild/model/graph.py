@@ -3,14 +3,13 @@ Module containing all required classes and methods to create a mermaid graph fro
 """
 
 import os
-import re
-from typing import List
 
 import sympy
 from mermaid.graph import Graph
 
 from appabuild.database.databases import ForegroundDatabase
 from appabuild.database.serialized_data import SerializedExchange
+from appabuild.logger import logger
 
 
 def extract_params_from_matching(matching: str):
@@ -63,7 +62,9 @@ def build_mermaid_graph(foreground_path: str, name: str) -> Graph:
     :return: a graph representing the set of foreground datasets and their dependencies.
     """
     if not os.path.exists(foreground_path):
-        raise ValueError(f"No such directory {foreground_path}")
+        msg = f"No such directory {foreground_path}"
+        logger.error(msg)
+        raise ValueError(msg)
 
     foreground_database = ForegroundDatabase(
         name="",
@@ -75,10 +76,14 @@ def build_mermaid_graph(foreground_path: str, name: str) -> Graph:
         for activity in foreground_database.context.serialized_activities
     }
     if len(activities) == 0:
-        raise ValueError(f"No foreground datasets found at the path {foreground_path}")
+        msg = f"No foreground datasets found at the path {foreground_path}"
+        logger.error(msg)
+        raise ValueError(msg)
 
     if name not in activities:
-        raise ValueError(f"No such foreground dataset with the name {name}")
+        msg = f"No such foreground dataset with the name {name}"
+        logger.error(msg)
+        raise ValueError(msg)
 
     nodes_and_links = []
     activities_to_process = [activities[name]]
@@ -100,7 +105,5 @@ def build_mermaid_graph(foreground_path: str, name: str) -> Graph:
                 )
                 nodes_and_links.append(link)
 
-    s = "flowchart TD\n" + "\n".join(nodes_and_links)
-    print(s)
-    graph = Graph(name, s)
+    graph = Graph(name, "flowchart TD\n" + "\n".join(nodes_and_links))
     return graph

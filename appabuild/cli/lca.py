@@ -1,9 +1,16 @@
+import os
+import sys
 from typing import Annotated, Optional
 
 import mermaid as md
 import typer
+import yaml
+from pydantic import ValidationError
 
 from appabuild import setup
+from appabuild.database.serialized_data import SerializedActivity
+from appabuild.exceptions import BwDatabaseError
+from appabuild.logger import log_validation_error, logger
 from appabuild.model.graph import build_mermaid_graph
 
 app = typer.Typer()
@@ -25,16 +32,61 @@ def build(
     An AppaBuild environment is initialized (background and foreground databases), unless --no-init is specified.
 
     """
-    foreground_database = None
-    if init:
-        if not appabuild_config_path:
-            print(
-                "AppaBuild configuration file and LCA configuration file are required for initialization"
-            )
-            return
-        foreground_database = setup.initialize(appabuild_config_path)
+    try:
+        foreground_database = None
+        if init:
+            if not appabuild_config_path:
+                logger.error(
+                    "AppaBuild configuration file and LCA config file are required for initialization",
+                    exc_info=True,
+                )
+                raise ValueError()
+            foreground_database = setup.initialize(appabuild_config_path)
 
-    setup.build(lca_config_path, foreground_database)
+        setup.build(lca_config_path, foreground_database)
+    except (ValueError, ValidationError, BwDatabaseError):
+        sys.exit(1)
+    except Exception as e:
+        logger.error(str(e))
+        sys.exit(1)
+
+
+@app.command()
+def validate_foreground_datasets(
+    datasets_root: Annotated[
+        str, typer.Argument(help="Root path of a set of foreground datasets.")
+    ]
+):
+    """
+    Validates a folder of foreground datasets. Show an error message for each invalid dataset.
+    :param datasets_root: Root path of a set of foreground datasets.
+
+    """
+    files = os.listdir(datasets_root)
+    total = len(files)
+    nb_correct = 0
+
+    logger.info("%d datasets at the root %s", total, datasets_root)
+    for filename in files:
+        logger.info("Validating dataset %s", filename)
+        try:
+            filepath = os.path.join(datasets_root, filename)
+            with open(filepath, "r") as yaml_file:
+                dataset = yaml.safe_load(yaml_file)
+
+            dataset.update({"database": "", "uuid": ""})
+            SerializedActivity.model_validate(dataset)
+
+            nb_correct += 1
+        except ValidationError as e:
+            log_validation_error(e)
+            logger.error("Dataset %s invalid", filename)
+        else:
+            logger.info("Dataset %s valid", filename)
+    if nb_correct == total:
+        logger.info("All the datasets have been validated")
+    else:
+        logger.info("%d/%s foreground datasets validated", nb_correct, total)
 
 
 def validate_type(type: str) -> str:
@@ -97,5 +149,8 @@ def graph(
             render.to_svg(fu_name + ".svg")
         elif type == "png":
             render.to_png(fu_name + ".png")
-    except Exception:
+    except ValueError:
+        exit(1)
+    except Exception as e:
+        logger.error(str(e))
         exit(1)

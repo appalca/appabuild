@@ -1,0 +1,5 @@
+project_name: 'not_existing_foreground_path'
+databases:
+  foreground:
+    name: user_database
+    path: './inexisting_path'

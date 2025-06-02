@@ -1,0 +1,34 @@
+name: nvidia_gpu_die_manufacturing
+location: TW
+type: process
+unit: unit
+amount: 1
+parameters:
+- cuda_core
+- architecture
+comment: "NVIDIA GPU die for Pascal and Maxwell architectures. Number of CUDA cores is used to estimate die area and technology node. Information for modelisation can be found on techpowerup.com (https://www.techpowerup.com/gpu-specs/nvidia-gp108.g808 for example). We assume dies are manufactured in Taiwan. We assume (arbitrarily) a defect density of ?"
+exchanges:
+- database: user_database
+  name: logic_die
+  type: technosphere
+  amount: 1
+  switch:
+    name: architecture
+    options:
+    - name: Pascal
+      parameters_matching:
+        defect_density: 0.05
+        technology_node: 16 # is actually 14 for 2 chips, and 16 for 4 chips.
+        fab_location:
+          TW: 1
+        area: 0.13184623155305694*cuda_core + 21.707425626610416
+    - name: Maxwell # also includes Maxwell 2.0
+      parameters_matching:
+        defect_density: 0.02
+        technology_node: 28
+        fab_location:
+          TW: 1
+        area: 0.1889809692866578*cuda_core + 19.47688243064738
+  input:
+    database: user_database
+    uuid: functional_logic_die_manufacturing

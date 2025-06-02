@@ -1,0 +1,21 @@
+name: logic_wafer_manufacturing
+location: GLO
+type: process
+unit: unit # for a 300mm wafer
+amount: 1
+parameters:
+- fab_location
+- masks
+comment: "Modelled from Négaoctet data published in 'Pirson et al. (2022). The Environmental Footprint of IC Production: Review, Analysis, and Lessons From Historical Trends' supplementary materials."
+exchanges:
+- database: user_database
+  name: cmos_wafer_production
+  type: technosphere
+  switch:
+    name: fab_location
+    options:
+    - name: TW
+      amount: "(0.049*masks + 0.3623) * 3.14159 * pow(15, 2)" # impact originally is per cm², and we want it per 300 mm wafer
+  input:
+    database: impact_proxies
+    uuid: "('EF v3.0', 'climate change', 'global warming potential (GWP100)')_technosphere_proxy"

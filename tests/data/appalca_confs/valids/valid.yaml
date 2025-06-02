@@ -1,0 +1,8 @@
+project_name: 'valid_appa_lca_conf'
+databases:
+  ecoinvent:
+    name: ecoinvent_3.9.1_cutoff
+    path: '.'
+  foreground:
+    name: user_database
+    path: '.'
