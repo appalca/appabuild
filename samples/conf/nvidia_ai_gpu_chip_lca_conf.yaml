@@ -1,7 +1,7 @@
 scope:
   fu:
     name: 'nvidia_ai_gpu_chip'
-    database: "test"
+    database: "user_database"
   methods:
     - "EFV3_CLIMATE_CHANGE"
 model:
@@ -28,7 +28,8 @@ model:
     - name: cuda_core
       type: float
       default: 512
-      pm_perc: 0.1
+      min: 256
+      max: 4096
     - name: architecture
       type: enum
       default: Maxwell
@@ -37,20 +38,19 @@ model:
         Pascal: 1
     - name: usage_location
       type: enum
-      default: EU
+      default: FR
       weights:
         FR: 1
         EU: 1
     - name: energy_per_inference
       type: float
-      default: 0.05
-      min: 0.01
-      max: 0.1
-    - name: inference_per_day
-      type: float
-      default: 3600
-      pm_perc: 0.1
+      default: 110.0
+      pm_perc: 0.2
     - name: lifespan
       type: float
-      default: 2
-      pm_perc: 0.1
+      default: 2.0
+      pm: 1
+    - name: inference_per_day
+      type: float
+      default: 86400000
+      pm_perc: 0

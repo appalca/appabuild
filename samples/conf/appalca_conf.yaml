@@ -2,4 +2,4 @@ project_name: 'sample_project'
 databases:
   foreground:
     name: user_database
-    path: './samples/datasets/user_database/'
+    path: './samples/datasets/user_database/nvidia_ai_gpu'

@@ -47,7 +47,7 @@ def build(
     except (ValueError, ValidationError, BwDatabaseError):
         sys.exit(1)
     except Exception as e:
-        logger.error(str(e))
+        logger.exception(str(e))
         sys.exit(1)
 
 
