@@ -7,7 +7,7 @@ packages = ["appabuild"]
 
 [project]
 name = "appabuild"
-version = "0.3.4"
+version = "0.3.5"
 authors = [{ name = "Maxime Peralta", email = "maxime.peralta@cea.fr"}]
 maintainers= [{name = "Maxime Peralta", email = "maxime.peralta@cea.fr"}]
 description = "Appa Build is a package to build impact models"
@@ -42,7 +42,7 @@ dependencies = [
     "kaleido",
     "tqdm",
     "ruamel.yaml",
-    "apparun==0.3.3",
+    "apparun==0.3.4",
     "typer==0.15.1",
     "ipython>=7.6.0,<=8.34.0",
     "mermaid-py==0.7.1"
