@@ -89,3 +89,17 @@ jobs:
           verbose: true
           packages-dir: dist
           password: ${{ secrets.PYPI_TOKEN }}
+
+  update-doc:
+    name: update-doc
+    needs: publish
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - name: Send notification to update the documentation
+        uses: peter-evans/repository-dispatch@v3
+        with:
+          token: ${{ secrets.DOC_PAT }}
+          repository: appalca/appalca.github.io
+          event-type: update_documentation
