@@ -25,3 +25,4 @@ ipython>=7.6.0,<=8.34.0
 pre-commit
 hatchling
 click==8.1.8
+mermaid-py==0.7.1
