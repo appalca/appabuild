@@ -4,7 +4,7 @@ from typing import Tuple
 
 from pydantic import ValidationError
 
-logger = logging.getLogger("appabuild")
+logger = logging.getLogger(__name__)
 logger.setLevel(level=logging.DEBUG)
 
 # Format the message in the logs
