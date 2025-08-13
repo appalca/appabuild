@@ -1,12 +1,12 @@
 scope:
   fu:
     name: 'nvidia_ai_gpu_chip'
-    database: "test"
+    database: "user_database"
   methods:
     - "EFV3_CLIMATE_CHANGE"
 model:
   path: "."
-  name: "nvidia_ai_gpu_chip"
+  name: "nvidia_ai_gpu_chip_bw25_ei_matriciel"
   compile: True
   metadata:
     author:

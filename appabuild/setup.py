@@ -3,11 +3,10 @@ Setup everything required to build an ImpactModel
 """
 from typing import Optional
 
-import brightway2 as bw
+import bw2data as bd
 
 from appabuild.config.appa_lca import AppaLCAConfig
 from appabuild.database.databases import (
-    BiosphereDatabase,
     EcoInventDatabase,
     ForegroundDatabase,
     ImpactProxiesDatabase,
@@ -27,29 +26,8 @@ def initialize(appabuild_config_path: str) -> ForegroundDatabase:
 
     appabuild_config = AppaLCAConfig.from_yaml(appabuild_config_path)
 
-    ecoinvent_name = (
-        appabuild_config.databases["ecoinvent"].name
-        if "ecoinvent" in appabuild_config.databases
-        else None
-    )
-
-    ecoinvent_path = (
-        appabuild_config.databases["ecoinvent"].path
-        if "ecoinvent" in appabuild_config.databases
-        else None
-    )
-
-    if ecoinvent_path is None:
-        logger.warning(
-            "No path given for ecoinvent databases, building the impact model will be done without"
-        )
-    else:
-        logger.info(f"Loading EcoInvent database from {ecoinvent_path}")
-
     return project_setup(
         project_name=appabuild_config.project_name,
-        ecoinvent_name=ecoinvent_name,
-        ecoinvent_path=ecoinvent_path,
         foreground_name=appabuild_config.databases["foreground"].name,
         foreground_path=appabuild_config.databases["foreground"].path,
     )
@@ -83,8 +61,6 @@ def project_setup(
     project_name: str,
     foreground_name: str,
     foreground_path: str,
-    ecoinvent_name: Optional[str] = None,
-    ecoinvent_path: Optional[str] = None,
 ) -> ForegroundDatabase:
     """
     Triggers all Brightway functions and database import necessary to build an Impact
@@ -95,21 +71,16 @@ def project_setup(
     :param foreground_name: how user database is referred to.
     :param foreground_path: path to folder containing user datasets.
     """
-    bw.projects.set_current(project_name)
+    bd.projects.set_current(project_name)
     foreground_database = ForegroundDatabase(
         name=foreground_name,
         path=foreground_path,
     )
     databases = [
-        BiosphereDatabase(),
+        EcoInventDatabase(),
         ImpactProxiesDatabase(),
         foreground_database,
     ]
-
-    if ecoinvent_path is not None:
-        ecoinvent_database = EcoInventDatabase(name=ecoinvent_name, path=ecoinvent_path)
-        databases.append(ecoinvent_database)
-
     for external_database in databases:
         external_database.execute_at_startup()
 

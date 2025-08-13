@@ -432,6 +432,7 @@ class Activity(DatabaseElement):
             Exchange.from_serialized_exchange(exchange, context, new_activity)
             for exchange in serialized_activity.exchanges
         ]
+
         exchanges = list(itertools.chain.from_iterable(exchanges))
         new_activity.exchanges = exchanges
 
