@@ -1,4 +1,4 @@
-project_name: 'sample_project'
+project_name: 'bw25_ecoinvent'
 databases:
   foreground:
     name: user_database

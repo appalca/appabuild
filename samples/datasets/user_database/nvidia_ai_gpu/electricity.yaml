@@ -18,9 +18,9 @@ exchanges:
       input:
         name: "market (group )?for electricity, low voltage"
         location: "RER"
-        database: ecoinvent_3.9.1_cutoff
+        database: ecoinvent-3.9.1-cutoff
     - name: FR
       input:
         name: "market (group )?for electricity, low voltage"
         location: "FR"
-        database: ecoinvent_3.9.1_cutoff
+        database: ecoinvent-3.9.1-cutoff

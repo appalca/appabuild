@@ -11,31 +11,42 @@ import types
 from collections import OrderedDict
 from typing import List, Optional, Tuple
 
-import brightway2 as bw
+import bw2data as bd
 import lca_algebraic as lcaa
-import yaml
 from apparun.impact_methods import MethodFullName
 from apparun.impact_model import ImpactModel, ModelMetadata
 from apparun.impact_tree import ImpactTreeNode
-from apparun.parameters import EnumParam, FloatParam, ImpactModelParams
+from apparun.parameters import (
+    EnumParam,
+    FloatParam,
+    ImpactModelParam,
+    ImpactModelParams,
+)
 from apparun.tree_node import NodeProperties
-from bw2data.backends.peewee import Activity
+from bw2data.backends import Activity
 from lca_algebraic import ActivityExtended, with_db_context
-from lca_algebraic.base_utils import _getAmountOrFormula, _getDb, debug
-from lca_algebraic.helpers import _isForeground
+from lca_algebraic.base_utils import _getDb
+from lca_algebraic.database import _isForeground
 from lca_algebraic.lca import (
     _createTechProxyForBio,
     _multiLCAWithCache,
     _replace_fixed_params,
 )
-from lca_algebraic.params import _fixed_params, newEnumParam, newFloatParam
-from pydantic import ValidationError
+from lca_algebraic.log import debug
+from lca_algebraic.params import (
+    _fixed_params,
+    _getAmountOrFormula,
+    newEnumParam,
+    newFloatParam,
+)
 from sympy import Expr, simplify, symbols
 
 from appabuild.config.lca import LCAConfig
 from appabuild.database.databases import ForegroundDatabase, parameters_registry
 from appabuild.exceptions import BwDatabaseError, BwMethodError
 from appabuild.logger import logger
+
+# from appabuild.temp_impact_methods import MethodFullName
 
 act_symbols = {}  # Cache of  act = > symbol
 
@@ -47,7 +58,7 @@ def to_bw_method(method_full_name: MethodFullName) -> Tuple[str, str, str]:
     :return: Brightway representation of the method.
     """
     matching_methods = [
-        method for method in bw.methods if method_full_name in str(method)
+        method for method in bd.methods if method_full_name in str(method)
     ]
     try:
         if len(matching_methods) < 1:
@@ -76,7 +87,7 @@ class ImpactModelBuilder:
         output_path: str,
         metadata: Optional[ModelMetadata] = ModelMetadata(),
         compile_models: bool = True,
-        parameters: Optional[dict] = None,
+        parameters: Optional[List[ImpactModelParam]] = None,
     ):
         """
         Initialize the model builder
@@ -98,7 +109,7 @@ class ImpactModelBuilder:
         self.metadata = metadata
         self.output_path = output_path
         self.compile_models = compile_models
-        self.bw_user_database = bw.Database(self.user_database_name)
+        self.bw_user_database = bd.Database(self.user_database_name)
 
     @staticmethod
     def from_yaml(lca_config_path: str) -> ImpactModelBuilder:
@@ -110,20 +121,16 @@ class ImpactModelBuilder:
         lca_config = LCAConfig.from_yaml(lca_config_path)
 
         builder = ImpactModelBuilder(
-            lca_config.scope.fu.database,  # lca_config["scope"]["fu"]["database"],
-            lca_config.scope.fu.name,  # lca_config["scope"]["fu"]["name"],
-            lca_config.scope.methods,  # lca_config["scope"]["methods"],
-            # os.path.join(
-            #     lca_config["outputs"]["model"]["path"],
-            #     f"{lca_config['outputs']['model']['name']}.yaml",
-            # ),
+            lca_config.scope.fu.database,
+            lca_config.scope.fu.name,
+            lca_config.scope.methods,
             os.path.join(
                 lca_config.model.path,
                 lca_config.model.name + ".yaml",
             ),
-            lca_config.model.metadata,  # lca_config["outputs"]["model"]["metadata"],
-            lca_config.model.compile,  # lca_config["outputs"]["model"]["compile"],
-            lca_config.model.dump_parameters(),  # lca_config["outputs"]["model"]["parameters"],
+            lca_config.model.metadata,
+            lca_config.model.compile,
+            lca_config.model.parameters,
         )
         return builder
 
@@ -302,7 +309,7 @@ class ImpactModelBuilder:
         return tree, unique_used_parameters
 
     @staticmethod
-    @with_db_context
+    @with_db_context(arg="act")
     def actToExpression(act: Activity, impact_model_tree_node: ImpactTreeNode):
         """
         Determines the arithmetic model corresponding to activity's impact function of
@@ -374,6 +381,7 @@ class ImpactModelBuilder:
                         logger.exception("Exception")
                     if sub_act.get("include_in_tree"):
                         # act_expr = act_to_symbol(sub_act, to_compile=False)
+                        print("Including in tree activity: " + act["name"])
                         ImpactModelBuilder.actToExpression(
                             sub_act,
                             impact_model_tree_node.new_child(

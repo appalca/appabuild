@@ -7,7 +7,7 @@ from __future__ import annotations
 import re
 from typing import List, Optional, Union
 
-import brightway2 as bw
+import bw2data as bd
 from pydantic import BaseModel
 
 from appabuild.database.serialized_data import ActivityIdentifier
@@ -27,7 +27,7 @@ class BwDatabase(BaseModel):
         Brightway database object
         :return:
         """
-        return bw.Database(self.name)
+        return bd.Database(self.name)
 
     def search_activity(
         self, regexes: dict, must_find_only_one: Optional[bool] = False

@@ -8,6 +8,7 @@ import yaml
 from pydantic import ValidationError
 
 from appabuild import setup
+from appabuild.compute_impacts import compute_impacts
 from appabuild.database.serialized_data import SerializedActivity
 from appabuild.exceptions import BwDatabaseError
 from appabuild.logger import log_validation_error, logger
@@ -44,7 +45,8 @@ def build(
             foreground_database = setup.initialize(appabuild_config_path)
 
         setup.build(lca_config_path, foreground_database)
-    except (ValueError, ValidationError, BwDatabaseError):
+    except (ValueError, ValidationError, BwDatabaseError) as e:
+        print(str(e))
         sys.exit(1)
     except Exception as e:
         logger.error(str(e))
@@ -154,3 +156,29 @@ def graph(
     except Exception as e:
         logger.error(str(e))
         exit(1)
+
+
+@app.command()
+def compute(
+    appabuild_config_path: Annotated[
+        Optional[str],
+        typer.Argument(
+            help="AppaBuild environment configuration file, required unless --no-init is specified"
+        ),
+    ],
+    lca_config_path: Annotated[str, typer.Argument(help="LCA configuration file")],
+    params_values_path: str,
+):
+    """
+    Build an impact model and save it to the disk.
+    An AppaBuild environment is initialized (background and foreground databases), unless --no-init is specified.
+
+    """
+    try:
+        compute_impacts(appabuild_config_path, lca_config_path, params_values_path)
+    except (ValueError, ValidationError, BwDatabaseError) as e:
+        print(str(e))
+        sys.exit(1)
+    except Exception as e:
+        logger.error(str(e))
+        sys.exit(1)

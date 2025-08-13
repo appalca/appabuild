@@ -1,0 +1,4 @@
+lifespan: 3
+architecture: Maxwell
+cuda_core: 512
+energy_per_inference: 0.05
