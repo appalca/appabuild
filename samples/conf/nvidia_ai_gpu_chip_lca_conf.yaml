@@ -53,4 +53,5 @@ model:
     - name: inference_per_day
       type: float
       default: 86400000
-      pm_perc: 0
+      min: 0
+      max: 86400000
