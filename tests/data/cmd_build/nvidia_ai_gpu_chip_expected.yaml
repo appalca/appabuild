@@ -47,10 +47,10 @@ parameters:
   pm: null
   pm_perc: 0.1
 - name: lifespan
-  default: 2.0
+  default: 3.6
   type: float
-  min: 1.8
-  max: 2.2
+  min: 3.24
+  max: 3.96
   distrib: linear
   pm: null
   pm_perc: 0.1

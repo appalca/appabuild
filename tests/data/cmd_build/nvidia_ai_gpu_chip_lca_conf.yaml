@@ -27,7 +27,10 @@ model:
   parameters:
     - name: cuda_core
       type: float
-      default: 512
+      default:
+        architecture:
+          Maxwell: 512
+          Pascal: 560
       pm_perc: 0.1
     - name: architecture
       type: enum
@@ -52,5 +55,5 @@ model:
       pm_perc: 0.1
     - name: lifespan
       type: float
-      default: 2
+      default: inference_per_day / 1000
       pm_perc: 0.1

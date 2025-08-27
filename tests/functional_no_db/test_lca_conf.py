@@ -30,14 +30,10 @@ def test_missing_required_fields():
         pytest.fail("An LCA config with missing fields is not a valid config")
     except ValidationError as e:
         for error in e.errors():
-            assert error["type"] == "missing" or error["type"] == "key_error"
+            assert error["type"] == "missing"
             if error["type"] == "missing":
                 assert error["loc"] in missing_fields_locs
                 missing_fields_locs.remove(error["loc"])
-            else:
-                loc = error["loc"] + (error["ctx"]["field"],)
-                assert loc in missing_fields_locs
-                missing_fields_locs.remove(loc)
     assert len(missing_fields_locs) == 0
 
 

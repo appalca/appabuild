@@ -79,3 +79,5 @@ def log_validation_error(e: ValidationError):
                     error["ctx"]["name"],
                     loc_to_str(error["loc"]),
                 )
+            case _:
+                logger.error(error["msg"])

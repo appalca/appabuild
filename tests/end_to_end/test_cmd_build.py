@@ -34,11 +34,11 @@ def test_build_command():
 
     # Check the generated impact model is the same as expected
     with open(expected_file, "r") as stream:
-        f1_yaml = yaml.safe_load(stream)
+        expected = yaml.safe_load(stream)
 
     with open("nvidia_ai_gpu_chip.yaml", "r") as stream:
-        f2_yaml = yaml.safe_load(stream)
+        value = yaml.safe_load(stream)
 
     os.remove("nvidia_ai_gpu_chip.yaml")
 
-    assert f1_yaml == f2_yaml, "result file not the same as expected file "
+    assert expected == value, "result file not the same as expected file "

@@ -30,7 +30,7 @@ from lca_algebraic.lca import (
 )
 from lca_algebraic.params import _fixed_params, newEnumParam, newFloatParam
 from pydantic import ValidationError
-from sympy import Expr, simplify, symbols
+from sympy import Expr, simplify, symbols, sympify
 
 from appabuild.config.lca import LCAConfig
 from appabuild.database.databases import ForegroundDatabase, parameters_registry
