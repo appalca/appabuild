@@ -23,6 +23,10 @@ def parse_param(param: dict) -> ImpactModelParam:
     :param param: dict containing the elements needed to build an ImpactModelParam.
     :return: constructed ImpactModelParam.
     """
+    if "default" not in param:
+        raise PydanticCustomError(
+            "key_error", "Missing field type for a parameter", {"field": "default"}
+        )
     try:
         return ImpactModelParam.from_dict(param)
     except KeyError:
