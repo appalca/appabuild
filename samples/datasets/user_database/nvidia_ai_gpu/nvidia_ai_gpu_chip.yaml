@@ -7,7 +7,7 @@ parameters:
 - cuda_core
 - architecture # Only Maxwell or Pascal supported
 - usage_location # Only FR or EU supported
-- energy_per_inference # In mW
+- energy_per_inference # In mWh
 - inference_per_day 
 - lifespan # in years
 include_in_tree: True

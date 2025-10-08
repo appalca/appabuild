@@ -1,4 +1,4 @@
-project_name: cmd_build_ete_test2
+project_name: cmd_build_ete_test
 databases:
   foreground:
     name: user_database
