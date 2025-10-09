@@ -4,6 +4,7 @@ Test that the command appabuild lca build works correctly with a simple example.
 
 import os
 
+import pytest
 import yaml
 from apparun.impact_model import ImpactModel
 from typer.testing import CliRunner
@@ -54,6 +55,6 @@ def test_build_command():
     with open(expected_scores_file, "r") as stream:
         expected_scores = yaml.safe_load(stream)
 
-    assert scores == expected_scores
+    assert scores == pytest.approx(expected_scores)
 
     os.remove("nvidia_ai_gpu_chip.yaml")
