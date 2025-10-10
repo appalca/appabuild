@@ -117,22 +117,16 @@ class ImpactModelBuilder:
         lca_config = LCAConfig.from_yaml(lca_config_path)
 
         builder = ImpactModelBuilder(
-            lca_config.scope.fu.database,  # lca_config["scope"]["fu"]["database"],
-            lca_config.scope.fu.name,  # lca_config["scope"]["fu"]["name"],
-            lca_config.scope.methods,  # lca_config["scope"]["methods"],
-            # os.path.join(
-            #     lca_config["outputs"]["model"]["path"],
-            #     f"{lca_config['outputs']['model']['name']}.yaml",
-            # ),
+            lca_config.scope.fu.database,
+            lca_config.scope.fu.name,
+            lca_config.scope.methods,
             os.path.join(
                 lca_config.model.path,
                 lca_config.model.name + ".yaml",
             ),
-            lca_config.model.metadata,  # lca_config["outputs"]["model"]["metadata"],
-            lca_config.model.compile,  # lca_config["outputs"]["model"]["compile"],
-            ImpactModelParams.from_list(
-                lca_config.model.parameters
-            ),  # lca_config["outputs"]["model"]["parameters"],
+            lca_config.model.metadata,
+            lca_config.model.compile,
+            ImpactModelParams.from_list(lca_config.model.parameters),
         )
         return builder
 
