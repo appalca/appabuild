@@ -1,0 +1,50 @@
+scope:
+  fu:
+    name: 'ai_use_phase'
+    database: "user_database"
+  methods:
+    - "EFV3_CLIMATE_CHANGE"
+model:
+  path: "."
+  name: "ai_use_phase"
+  compile: True
+  metadata:
+    author:
+      name: Maxime PERALTA
+      organization: CEA
+      mail: maxime.peralta@cea.fr
+    reviewer:
+      name: Mathias TORCASO
+      organization: CEA
+      mail:
+    report:
+      link: https://appalca.github.io/
+      description: "A mock example of Appa LCA's impact model corresponding to a fictive AI chip accelerator based on NVIDIA GPU."
+      date: 03/11/2023
+      version: "1"
+      license: proprietary
+      appabuild_version: "0.2"
+  parameters:
+    - name: energy_per_inference
+      type: float
+      default: 0.05*inference
+      min: 0.01
+      max: 0.1
+    - name: inference
+      type: float
+      default:
+        usage_location:
+          FR: inference_per_day*365.25*lifetime
+          EU: inference_per_day*365.25*lifetime
+      pm_perc: 0.1
+    - name: usage_location
+      type: enum
+      default: EU
+      weights:
+        FR: 1
+        EU: 1
+    - name: lifetime
+      type: float
+      default: 2
+      min: 0
+      max: 3

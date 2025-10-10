@@ -1,0 +1,25 @@
+name: electricity_no_ei
+location: GLO
+type: process
+unit: kwh
+amount: 1
+parameters:
+- usage_location # Only FR or RER supported
+comment: "Low voltage electricity using 2023 https://www.eea.europa.eu/ data."
+exchanges:
+- database: user_database
+  name: electricity
+  type: technosphere
+  switch:
+    name: usage_location
+    options:
+    - name: EU
+      amount: 0.005
+      input:
+        database: impact_proxies
+        uuid: "('EF v3.0', 'climate change', 'global warming potential (GWP100)')_technosphere_proxy"
+    - name: FR
+      amount: 0.021
+      input:
+        database: impact_proxies
+        uuid: "('EF v3.0', 'climate change', 'global warming potential (GWP100)')_technosphere_proxy"

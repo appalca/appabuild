@@ -1,6 +1,6 @@
 """
 Contains classes to import LCI databases in Brightway project.
-Initialize parameters_registry object which must be filled before Impact Model build.
+#Initialize parameters_registry object which must be filled before Impact Model build.
 """
 
 from __future__ import annotations
@@ -14,7 +14,7 @@ from typing import Dict, List, Optional
 
 import brightway2 as bw
 import yaml
-from apparun.parameters import ImpactModelParam
+from apparun.parameters import ImpactModelParam, ImpactModelParams
 from lca_algebraic import resetParams, setForeground
 from lxml.etree import XMLSyntaxError
 from pydantic_core import ValidationError
@@ -25,7 +25,7 @@ from appabuild.database.user_database_elements import Activity, UserDatabaseCont
 from appabuild.exceptions import BwDatabaseError, SerializedDataError
 from appabuild.logger import log_validation_error, logger
 
-parameters_registry = {}
+# parameters_registry = {}
 
 
 class Database:
@@ -219,12 +219,12 @@ class ForegroundDatabase(Database):
         """
         Database.__init__(self, name, path)
         self.fu_name = ""
-        self.parameters = {}
+        self.parameters = None
         self.context = UserDatabaseContext(
             serialized_activities=[], activities=[], database=BwDatabase(name=name)
         )
 
-    def set_functional_unit(self, fu_name: str, parameters: dict):
+    def set_functional_unit(self, fu_name: str, parameters: ImpactModelParams):
         self.fu_name = fu_name
         self.parameters = parameters
 
@@ -278,7 +278,7 @@ class ForegroundDatabase(Database):
         self.find_activities_on_disk()
 
     def execute_at_build_time(self):
-        self.declare_parameters()
+        # self.declare_parameters()
         self.import_in_project()
 
     def import_in_project(self) -> None:
@@ -314,6 +314,8 @@ class ForegroundDatabase(Database):
         bw_database.write(dict(to_write_activities))
         setForeground(self.name)
 
+
+'''
     def declare_parameters(self) -> None:
         """
         Initialize each object's parameter as a ImpactModelParam and store it in
@@ -325,3 +327,4 @@ class ForegroundDatabase(Database):
             parameters_registry[parameter["name"]] = ImpactModelParam.from_dict(
                 parameter
             )
+'''
