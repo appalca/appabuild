@@ -20,14 +20,17 @@ model:
     report:
       link: https://appalca.github.io/
       description: "A mock example of Appa LCA's impact model corresponding to a fictive AI chip accelerator based on NVIDIA GPU."
-      date: 03/11/2023
+      date: 07/10/2025
       version: "1"
       license: proprietary
-      appabuild_version: "0.2"
+      appabuild_version: "0.3.6"
   parameters:
     - name: cuda_core
       type: float
-      default: 512
+      default:
+        architecture:
+          Maxwell: 1344
+          Pascal: 1280
       min: 256
       max: 4096
     - name: architecture
@@ -44,7 +47,10 @@ model:
         EU: 1
     - name: energy_per_inference
       type: float
-      default: 110.0
+      default:
+        architecture: #we model energy by inference using a model of the TDP function of the number of cuda cores. We suppose that TDP power corresponds to running inferences at 90fps.
+          Maxwell: "0.0878*cuda_core*1000/(90*3600)"
+          Pascal: "0.0679*cuda_core*1000/(90*3600)"
       pm_perc: 0.2
     - name: lifespan
       type: float
@@ -52,6 +58,6 @@ model:
       pm: 1
     - name: inference_per_day
       type: float
-      default: 86400000
+      default: "30*3600*8" #30fps 8 hours a day
       min: 0
       max: 86400000

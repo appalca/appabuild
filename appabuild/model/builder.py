@@ -6,6 +6,7 @@ Majority of the code is copied and adapted from lca_algebraic package.
 from __future__ import annotations
 
 import itertools
+import logging
 import os
 import types
 from collections import OrderedDict
@@ -28,13 +29,19 @@ from lca_algebraic.lca import (
     _multiLCAWithCache,
     _replace_fixed_params,
 )
-from lca_algebraic.params import _fixed_params, newEnumParam, newFloatParam
+from lca_algebraic.params import (
+    _fixed_params,
+    _param_registry,
+    newEnumParam,
+    newFloatParam,
+)
 from pydantic import ValidationError
 from sympy import Expr, simplify, symbols, sympify
+from sympy.parsing.sympy_parser import parse_expr
 
 from appabuild.config.lca import LCAConfig
-from appabuild.database.databases import ForegroundDatabase, parameters_registry
-from appabuild.exceptions import BwDatabaseError, BwMethodError
+from appabuild.database.databases import ForegroundDatabase
+from appabuild.exceptions import BwDatabaseError, BwMethodError, ParameterError
 from appabuild.logger import logger
 
 act_symbols = {}  # Cache of  act = > symbol
@@ -76,7 +83,7 @@ class ImpactModelBuilder:
         output_path: str,
         metadata: Optional[ModelMetadata] = ModelMetadata(),
         compile_models: bool = True,
-        parameters: Optional[dict] = None,
+        parameters: Optional[ImpactModelParams] = None,
     ):
         """
         Initialize the model builder
@@ -110,20 +117,16 @@ class ImpactModelBuilder:
         lca_config = LCAConfig.from_yaml(lca_config_path)
 
         builder = ImpactModelBuilder(
-            lca_config.scope.fu.database,  # lca_config["scope"]["fu"]["database"],
-            lca_config.scope.fu.name,  # lca_config["scope"]["fu"]["name"],
-            lca_config.scope.methods,  # lca_config["scope"]["methods"],
-            # os.path.join(
-            #     lca_config["outputs"]["model"]["path"],
-            #     f"{lca_config['outputs']['model']['name']}.yaml",
-            # ),
+            lca_config.scope.fu.database,
+            lca_config.scope.fu.name,
+            lca_config.scope.methods,
             os.path.join(
                 lca_config.model.path,
                 lca_config.model.name + ".yaml",
             ),
-            lca_config.model.metadata,  # lca_config["outputs"]["model"]["metadata"],
-            lca_config.model.compile,  # lca_config["outputs"]["model"]["compile"],
-            lca_config.model.dump_parameters(),  # lca_config["outputs"]["model"]["parameters"],
+            lca_config.model.metadata,
+            lca_config.model.compile,
+            ImpactModelParams.from_list(lca_config.model.parameters),
         )
         return builder
 
@@ -183,6 +186,9 @@ class ImpactModelBuilder:
         method format is Appa Run method keys.
         :return: root node (corresponding to the reference flow) and used parameters.
         """
+        # lcaa param registry can be populated if a model has already been built
+        _param_registry().clear()
+
         methods_bw = [to_bw_method(MethodFullName[method]) for method in methods]
         tree = ImpactTreeNode(
             name=functional_unit_bw["name"],
@@ -192,7 +198,45 @@ class ImpactModelBuilder:
         # print("computing model to expression for %s" % model)
         self.actToExpression(functional_unit_bw, tree)
 
-        # Find required parameters by inspecting symbols
+        # Check if each symbol corresponds to a known parameter
+
+        # TODO move that in a FloatParam method
+        params_in_default = [
+            parameter.default
+            for parameter in self.parameters
+            if parameter.type == "float"
+            and (
+                isinstance(parameter.default, str)
+                or isinstance(parameter.default, dict)
+            )
+        ]
+        while (
+            len(
+                [
+                    parameter
+                    for parameter in params_in_default
+                    if isinstance(parameter, dict)
+                ]
+            )
+            > 0
+        ):
+            params_in_default_str = [
+                parameter
+                for parameter in params_in_default
+                if isinstance(parameter, str)
+            ]
+            params_in_default_dict = [
+                [value for value in parameter.values()]
+                for parameter in params_in_default
+                if isinstance(parameter, dict)
+            ]
+            params_in_default = (
+                list(itertools.chain.from_iterable(params_in_default_dict))
+                + params_in_default_str
+            )
+        params_in_default = [
+            parameter for parameter in params_in_default if isinstance(parameter, str)
+        ]  # there can be int params at this point
         free_symbols = set(
             list(
                 itertools.chain.from_iterable(
@@ -211,19 +255,29 @@ class ImpactModelBuilder:
                     ]
                 )
             )
+            + [
+                str(symb)
+                for symb in list(
+                    itertools.chain.from_iterable(
+                        [
+                            parse_expr(params_in_default).free_symbols
+                            for params_in_default in params_in_default
+                        ]
+                    )
+                )
+            ]
         )
+
         activity_symbols = set([str(symb["symbol"]) for _, symb in act_symbols.items()])
 
         expected_parameter_symbols = free_symbols - activity_symbols
-
-        known_parameters = ImpactModelParams.from_list(parameters_registry.values())
 
         forbidden_parameter_names = list(
             itertools.chain(
                 *[
                     [
                         elem.name
-                        for elem in known_parameters.find_corresponding_parameter(
+                        for elem in self.parameters.find_corresponding_parameter(
                             activity_symbol, must_find_one=False
                         )
                     ]
@@ -234,35 +288,39 @@ class ImpactModelBuilder:
 
         try:
             if len(forbidden_parameter_names) > 0:
-                raise ValueError(
+                raise ParameterError(
                     f"Parameter names {forbidden_parameter_names} are forbidden as they "
                     f"correspond to background activities."
                 )
-        except ValueError:
-            logger.exception("ValueError")
-            raise
-
-        used_parameters = [
-            known_parameters.find_corresponding_parameter(expected_parameter_symbol)
-            for expected_parameter_symbol in expected_parameter_symbols
-        ]
-        unique_used_parameters = []
-        [
-            unique_used_parameters.append(i)
-            for i in used_parameters
-            if i not in unique_used_parameters
-        ]
-        unique_used_parameters = ImpactModelParams.from_list(unique_used_parameters)
+        except ParameterError as e:
+            logger.exception(e)
+            raise ParameterError(e)
+        for expected_parameter_symbol in expected_parameter_symbols:
+            try:
+                self.parameters.find_corresponding_parameter(expected_parameter_symbol)
+            except ValueError:
+                e = (
+                    f"ValueError : {expected_parameter_symbol} is required in the impact"
+                    f" model but is unknown in the config. Please check in the LCA "
+                    f"config."
+                )
+                logger.error(e)
+                raise ParameterError(e)
 
         # Declare used parameters in conf file as a lca_algebraic parameter to enable
         # model building (will not be used afterwards)
-        for parameter in unique_used_parameters:
+
+        for parameter in self.parameters:
+            if parameter.name in _param_registry().keys():
+                e = f"Parameter {parameter.name} already in lcaa registry."
+                logging.error(e)
+                raise ParameterError(e)
             if isinstance(parameter, FloatParam):
                 newFloatParam(
                     name=parameter.name,
                     default=parameter.default,
                     save=False,
-                    dbname="",
+                    dbname=self.user_database_name,
                     min=0.0,
                 )
             if isinstance(parameter, EnumParam):
@@ -270,7 +328,7 @@ class ImpactModelBuilder:
                     name=parameter.name,
                     values=parameter.weights,
                     default=parameter.default,
-                    dbname="",
+                    dbname=self.user_database_name,
                 )
 
         # Create dummy reference to biosphere
@@ -299,7 +357,7 @@ class ImpactModelBuilder:
                     }
                 )
                 node.direct_impacts[method] = model_expr.xreplace(sub)
-        return tree, unique_used_parameters
+        return tree, self.parameters
 
     @staticmethod
     @with_db_context

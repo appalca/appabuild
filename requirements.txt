@@ -20,7 +20,7 @@ aenum
 kaleido
 tqdm
 ruamel.yaml
-apparun==0.3.6
+apparun==0.3.7
 ipython>=7.6.0,<=8.34.0
 pre-commit
 hatchling

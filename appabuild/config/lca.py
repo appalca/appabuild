@@ -99,20 +99,6 @@ class Model(BaseModel):
 
         return parsed_parameters
 
-    @field_validator("parameters", mode="after")
-    @classmethod
-    def eval_exprs(cls, parameters: List[ImpactModelParam]) -> List[ImpactModelParam]:
-        exprs_set = ParamsValuesSet.build(
-            {param.name: param.default for param in parameters},
-            ImpactModelParams.from_list(parameters),
-        )
-
-        values = exprs_set.evaluate()
-        for param in parameters:
-            param.update_default(values[param.name])
-
-        return parameters
-
     def dump_parameters(self) -> List[dict]:
         return list(map(lambda p: p.model_dump(), self.parameters))
 

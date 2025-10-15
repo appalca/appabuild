@@ -17,14 +17,14 @@ exchanges:
     options:
     - name: Pascal
       parameters_matching:
-        defect_density: 0.05
+        defect_density: 0.0005
         technology_node: 16 # is actually 14 for 2 chips, and 16 for 4 chips.
         fab_location:
           TW: 1
         area: 0.13184623155305694*cuda_core + 21.707425626610416
     - name: Maxwell # also includes Maxwell 2.0
       parameters_matching:
-        defect_density: 0.02
+        defect_density: 0.0001
         technology_node: 28
         fab_location:
           TW: 1
