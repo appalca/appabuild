@@ -1,6 +1,5 @@
 """
 Contains classes to import LCI databases in Brightway project.
-Initialize parameters_registry object which must be filled before Impact Model build.
 """
 
 from __future__ import annotations
@@ -9,12 +8,11 @@ import abc
 import json
 import os
 import re
-from collections import ChainMap
-from typing import Dict, List, Optional
+from typing import Optional
 
 import brightway2 as bw
 import yaml
-from apparun.parameters import ImpactModelParam
+from apparun.parameters import ImpactModelParams
 from lca_algebraic import resetParams, setForeground
 from lxml.etree import XMLSyntaxError
 from pydantic_core import ValidationError
@@ -24,8 +22,6 @@ from appabuild.database.serialized_data import SerializedActivity, SerializedExc
 from appabuild.database.user_database_elements import Activity, UserDatabaseContext
 from appabuild.exceptions import BwDatabaseError, SerializedDataError
 from appabuild.logger import log_validation_error, logger
-
-parameters_registry = {}
 
 
 class Database:
@@ -219,12 +215,12 @@ class ForegroundDatabase(Database):
         """
         Database.__init__(self, name, path)
         self.fu_name = ""
-        self.parameters = {}
+        self.parameters = None
         self.context = UserDatabaseContext(
             serialized_activities=[], activities=[], database=BwDatabase(name=name)
         )
 
-    def set_functional_unit(self, fu_name: str, parameters: dict):
+    def set_functional_unit(self, fu_name: str, parameters: ImpactModelParams):
         self.fu_name = fu_name
         self.parameters = parameters
 
@@ -278,7 +274,6 @@ class ForegroundDatabase(Database):
         self.find_activities_on_disk()
 
     def execute_at_build_time(self):
-        self.declare_parameters()
         self.import_in_project()
 
     def import_in_project(self) -> None:
@@ -313,15 +308,3 @@ class ForegroundDatabase(Database):
         ]
         bw_database.write(dict(to_write_activities))
         setForeground(self.name)
-
-    def declare_parameters(self) -> None:
-        """
-        Initialize each object's parameter as a ImpactModelParam and store it in
-        parameters_registry object. parameters_registry is used to build Impact Model's
-        parameters section.
-        :return:
-        """
-        for parameter in self.parameters:
-            parameters_registry[parameter["name"]] = ImpactModelParam.from_dict(
-                parameter
-            )

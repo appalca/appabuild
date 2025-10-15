@@ -17,3 +17,9 @@ class SerializedDataError(Exception):
     """Raised when any problem concerning yaml/json dataset is encountered."""
 
     pass
+
+
+class ParameterError(Exception):
+    """Raised when any problem concerning impact model parameterization is encountered."""
+
+    pass

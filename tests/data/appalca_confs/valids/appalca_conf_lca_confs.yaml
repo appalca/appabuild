@@ -1,0 +1,5 @@
+project_name: cmd_build_lca_confs_test
+databases:
+  foreground:
+    name: user_database
+    path: './tests/data/foreground_datasets/valids/'
