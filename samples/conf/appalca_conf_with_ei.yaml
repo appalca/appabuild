@@ -1,5 +1,8 @@
-project_name: 'sample_project25'
+project_name: 'sample_project25_3'
 databases:
   foreground:
     name: user_database
     path: './samples/datasets/user_database/nvidia_ai_gpu'
+  ecoinvent:
+    version: "3.11"
+    system_model: "cutoff"

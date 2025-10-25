@@ -5,7 +5,7 @@ Module containing all the classes and methods to load and validate Appa LCA conf
 from __future__ import annotations
 
 import os
-from typing import Dict
+from typing import Dict, Optional, Union
 
 import yaml
 from pydantic import BaseModel, ValidationError, field_validator
@@ -14,7 +14,13 @@ from pydantic_core import PydanticCustomError
 from appabuild.logger import log_validation_error, logger
 
 
-class DatabaseConfig(BaseModel):
+class EcoInventDatabaseConfig(BaseModel):
+    version: str
+    system_model: str
+    replace: Optional[bool] = False
+
+
+class ForegroundDatabaseConfig(BaseModel):
     """
     Database entry in an Appa LCA configuration.
 
@@ -45,7 +51,7 @@ class AppaLCAConfig(BaseModel):
     """
 
     project_name: str
-    databases: Dict[str, DatabaseConfig]
+    databases: Dict[str, Union[EcoInventDatabaseConfig, ForegroundDatabaseConfig]]
 
     @field_validator("databases", mode="before")
     @classmethod

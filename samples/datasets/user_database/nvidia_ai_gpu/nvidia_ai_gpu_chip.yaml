@@ -18,7 +18,7 @@ exchanges:
   type: technosphere
   parameters_matching:
     inference: inference_per_day * lifespan * 365.25
-  amount: 1
+  amount: cuda_core
   input:
     database: user_database
     uuid: ai_use_phase
