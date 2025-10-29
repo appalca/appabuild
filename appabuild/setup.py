@@ -98,14 +98,17 @@ def project_setup(
             system_model=ecoinvent_system_model,
             replace=ecoinvent_replace,
         )
-        databases.append(ecoinvent_database)
+        proxy_database = ImpactProxiesDatabase(
+            f"ecoinvent-{ecoinvent_database.version}-biosphere",
+            replace=ecoinvent_replace,
+        )
+        databases += [ecoinvent_database, proxy_database]
 
     foreground_database = ForegroundDatabase(
         name=foreground_name,
         path=foreground_path,
     )
     databases += [
-        ImpactProxiesDatabase(),
         foreground_database,
     ]
 

@@ -45,7 +45,7 @@ def to_bw_method(method_full_name: MethodFullName) -> Tuple[str, str, str]:
     :return: Brightway representation of the method.
     """
     matching_methods = [
-        method for method in bd.methods if method_full_name in str(method)
+        method for method in bd.methods if method_full_name in str(method[1:])
     ]
     try:
         if len(matching_methods) < 1:
@@ -252,7 +252,8 @@ class ImpactModelBuilder:
         act = self.find_activity_in_bw(tree_node.name)
         for exch in act.exchanges():
             input_db, input_code = exch["input"]
-            if input_db == self.user_database_name:
+            _, output_code = exch["output"]
+            if input_db == self.user_database_name and output_code != input_code:
                 sub_act = _getDb(input_db).get(input_code)
                 if tree_node.name_already_in_tree(sub_act.get("name")):
                     e = f"Found recursive activity: {sub_act.get('name')}"
@@ -271,15 +272,10 @@ class ImpactModelBuilder:
         self, tree_node: ImpactTreeNode, methods, free_symbols: Set
     ):
         act = self.find_activity_in_bw(tree_node.name)
-        models, param_symbols = lcaa.lca._modelToExpr(
-            act, methods=list(methods.values())
-        )
-        param_symbols = [
-            param_symbol
-            for param_symbol in param_symbols
-            if not param_symbol.endswith("_default")
-        ]
-        free_symbols.update(set(param_symbols))
+        models = lcaa.lca._modelToExpr(act, methods=list(methods.values()))
+        all_param_symbols = [model.free_symbols for model in models]
+        for param_symbols in all_param_symbols:
+            free_symbols.update({str(param_symbol) for param_symbol in param_symbols})
         tree_node.models = {
             list(methods.keys())[i]: tree_node.combined_amount * models[i]
             for i in range(len(methods.keys()))

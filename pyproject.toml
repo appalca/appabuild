@@ -24,10 +24,20 @@ classifiers = [
 ]
 requires-python = ">=3.11,<3.12"
 dependencies = [
+    "apparun==0.3.7",
     "click<=8.1.8",
     "numpy==1.26.4",
+    "pyarrow==22.0.0",
     "pandas==2.3.3",
     "brightway25==1.1.0",
+    "bw-migrations==0.2",
+    "bw-processing==1.0",
+    "bw-simapro-csv==0.4.3",
+    "bw2analyzer==0.11.8",
+    "bw2calc==2.2.1",
+    "bw2data==4.5.1",
+    "bw2io==0.9.11",
+    "bw2parameters==1.1.0",
     "lca-algebraic-bw25==1.3.1",
     "fastapi",
     "uvicorn[standard]",

@@ -32,23 +32,26 @@ def build(
     An AppaBuild environment is initialized (background and foreground databases), unless --no-init is specified.
 
     """
-    try:
-        foreground_database = None
-        if init:
-            if not appabuild_config_path:
-                logger.error(
-                    "AppaBuild configuration file and LCA config file are required for initialization",
-                    exc_info=True,
-                )
-                raise ValueError()
-            foreground_database = setup.initialize(appabuild_config_path)
+    # try:
+    foreground_database = None
+    if init:
+        if not appabuild_config_path:
+            logger.error(
+                "AppaBuild configuration file and LCA config file are required for initialization",
+                exc_info=True,
+            )
+            raise ValueError()
+        foreground_database = setup.initialize(appabuild_config_path)
 
-        setup.build(lca_config_path, foreground_database)
-    except (ValueError, ValidationError, BwDatabaseError):
+    setup.build(lca_config_path, foreground_database)
+
+    """
+    except (ValueError, ValidationError, BwDatabaseError) as e:
         sys.exit(1)
     except Exception as e:
         logger.exception(str(e))
         sys.exit(1)
+    """
 
 
 @app.command()

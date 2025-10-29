@@ -1,4 +1,4 @@
-project_name: 'sample_project25'
+project_name: 'sample_project_bw25'
 databases:
   foreground:
     name: user_database

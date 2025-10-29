@@ -67,15 +67,17 @@ class ImpactProxiesDatabase(Database):
     "{bw_method_name}_technosphere_proxy".
     """
 
-    def __init__(self):
+    def __init__(self, biosphere_name: str, replace: Optional[bool] = False):
         Database.__init__(self, name="impact_proxies")
+        self.biosphere_name = biosphere_name
+        self.replace = replace
 
     def execute_at_startup(self):
         super().execute_at_startup()
-        if self.name in bd.databases:
-            resetParams(self.name)
-            del bd.databases[self.name]
-        self.import_in_project()
+        if self.name not in bd.databases or self.replace:
+            if self.name in bd.databases:
+                del bd.databases[self.name]
+            self.import_in_project()
 
     def import_in_project(self) -> None:
         """
@@ -89,18 +91,21 @@ class ImpactProxiesDatabase(Database):
         :return:
         """
         logger.info("Loading impact proxies...")
-        bw_database = bd.Database(self.name)
-        datasets = {}
+        proxy_tech_database = bd.Database(self.name)
+        tech_datasets = {}
+        ei_bio_database = bd.Database(self.biosphere_name)
         for method in bd.methods:
-            datasets[self.name, f"{method}_proxy"] = {
-                "name": f"Impact proxy for {method}",
+            bio_dataset = {
+                "code": f"{method[1:]}_proxy",
+                "name": f"Impact proxy for {method[1:]}",
                 "unit": "unit",
                 "exchanges": [],
-                "type": "biosphere",
-                "location": "GLO",
+                "type": "emission",
             }
-            datasets[self.name, f"{method}_technosphere_proxy"] = {
-                "name": f"Technosphere proxy for {method}",
+            bio_node = ei_bio_database.new_node(**bio_dataset)
+            bio_node.save()
+            tech_datasets[self.name, f"{method[1:]}_technosphere_proxy"] = {
+                "name": f"Technosphere proxy for {method[1:]}",
                 "unit": "unit",
                 "location": "GLO",
                 "production amount": 1,
@@ -108,24 +113,25 @@ class ImpactProxiesDatabase(Database):
                     {
                         "type": "biosphere",
                         "amount": 1,
-                        "input": [self.name, f"{method}_proxy"],
+                        "input": [self.biosphere_name, f"{method[1:]}_proxy"],
                     }
                 ],
             }
-        bw_database.write(datasets)
+        proxy_tech_database.write(tech_datasets)
         for method in bd.methods:
             characterisation_factors = bd.Method(method).load()
+            biosphere_method_proxy_id = ei_bio_database.get(f"{method[1:]}_proxy").id
             if (
                 len(
                     [
                         cf
                         for cf in characterisation_factors
-                        if cf[0] == (self.name, f"{method}_proxy")
+                        if cf[0] == biosphere_method_proxy_id
                     ]
                 )
                 != 1
             ):
-                characterisation_factors.append(((self.name, f"{method}_proxy"), 1))
+                characterisation_factors.append((biosphere_method_proxy_id, 1))
                 bd.Method(method).write(characterisation_factors)
         logger.info("Impact proxies successfully loaded")
 
@@ -142,6 +148,8 @@ class EcoInventDatabase(Database):
         if self.name not in bd.databases or self.replace:
             if self.name in bd.databases:
                 del bd.databases[self.name]
+            if f"ecoinvent-{self.version}-biosphere" in bd.databases:
+                del bd.databases[f"ecoinvent-{self.version}-biosphere"]
             self.import_in_project()
         else:
             logger.info(
