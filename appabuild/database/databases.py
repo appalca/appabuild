@@ -5,6 +5,7 @@ Contains classes to import LCI databases in Brightway project.
 from __future__ import annotations
 
 import abc
+import csv
 import json
 import os
 import re
@@ -23,6 +24,8 @@ from appabuild.database.serialized_data import SerializedActivity, SerializedExc
 from appabuild.database.user_database_elements import Activity, UserDatabaseContext
 from appabuild.exceptions import BwDatabaseError, SerializedDataError
 from appabuild.logger import log_validation_error, logger
+
+PATH_TO_METHODS = "data/methods/ecoinvent_3.11_methods.csv"
 
 
 class Database:
@@ -67,9 +70,14 @@ class ImpactProxiesDatabase(Database):
     "{bw_method_name}_technosphere_proxy".
     """
 
-    def __init__(self, biosphere_name: str, replace: Optional[bool] = False):
+    def __init__(
+        self, biosphere_name: Optional[str] = None, replace: Optional[bool] = False
+    ):
         Database.__init__(self, name="impact_proxies")
-        self.biosphere_name = biosphere_name
+        self.biosphere_name = (
+            biosphere_name if biosphere_name is not None else self.name
+        )
+        self.with_ecoinvent = biosphere_name is not None
         self.replace = replace
 
     def execute_at_startup(self):
@@ -93,17 +101,39 @@ class ImpactProxiesDatabase(Database):
         logger.info("Loading impact proxies...")
         proxy_tech_database = bd.Database(self.name)
         tech_datasets = {}
+        bio_datasets = {}
         ei_bio_database = bd.Database(self.biosphere_name)
+
+        if not self.with_ecoinvent:
+            with open(PATH_TO_METHODS, newline="") as csvfile:
+                reader = csv.reader(csvfile, delimiter=";")
+                for row in reader:
+                    method, category, indicator, unit = row
+                    key = self.name, method, category, indicator
+                    # todo add all empty methods
+                    # key = self.name = tuple csv
+                    if key not in bd.methods:
+                        method = bd.Method(key)
+                        method.register(
+                            unit=unit,
+                            filepath=PATH_TO_METHODS,
+                            ecoinvent_version="3.11",
+                            database=self.name,
+                        )
+
         for method in bd.methods:
             bio_dataset = {
-                "code": f"{method[1:]}_proxy",
                 "name": f"Impact proxy for {method[1:]}",
                 "unit": "unit",
                 "exchanges": [],
                 "type": "emission",
             }
-            bio_node = ei_bio_database.new_node(**bio_dataset)
-            bio_node.save()
+            if not self.with_ecoinvent:
+                bio_datasets[self.name, f"{method[1:]}_proxy"] = bio_dataset
+            else:
+                bio_dataset["code"] = f"{method[1:]}_proxy"
+                bio_node = ei_bio_database.new_node(**bio_dataset)
+                bio_node.save()
             tech_datasets[self.name, f"{method[1:]}_technosphere_proxy"] = {
                 "name": f"Technosphere proxy for {method[1:]}",
                 "unit": "unit",
@@ -117,9 +147,15 @@ class ImpactProxiesDatabase(Database):
                     }
                 ],
             }
-        proxy_tech_database.write(tech_datasets)
+        if not self.with_ecoinvent:
+            proxy_tech_database.write({**bio_datasets, **tech_datasets})
+        else:
+            proxy_tech_database.write(tech_datasets)
         for method in bd.methods:
-            characterisation_factors = bd.Method(method).load()
+            if self.with_ecoinvent:
+                characterisation_factors = bd.Method(method).load()
+            else:
+                characterisation_factors = []
             biosphere_method_proxy_id = ei_bio_database.get(f"{method[1:]}_proxy").id
             if (
                 len(
@@ -137,7 +173,9 @@ class ImpactProxiesDatabase(Database):
 
 
 class EcoInventDatabase(Database):
-    def __init__(self, version, system_model, replace: Optional[bool] = False):
+    def __init__(
+        self, version: str, system_model: str, replace: Optional[bool] = False
+    ):
         self.version = version
         self.system_model = system_model
         self.replace = replace
@@ -150,6 +188,11 @@ class EcoInventDatabase(Database):
                 del bd.databases[self.name]
             if f"ecoinvent-{self.version}-biosphere" in bd.databases:
                 del bd.databases[f"ecoinvent-{self.version}-biosphere"]
+            if "impact_proxies" in bd.databases:
+                del bd.databases["impact_proxies"]
+            method_names = [method for method in bd.methods]
+            for method in method_names:
+                del bd.methods[method]
             self.import_in_project()
         else:
             logger.info(

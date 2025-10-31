@@ -1,4 +1,4 @@
-name: electricity_no_ei
+name: electricity_wo_ei
 location: GLO
 type: process
 unit: kwh
@@ -14,12 +14,12 @@ exchanges:
     name: usage_location
     options:
     - name: EU
-      amount: 0.005
+      amount: 0.207
       input:
         database: impact_proxies
         uuid: "('EF v3.0', 'climate change', 'global warming potential (GWP100)')_technosphere_proxy"
     - name: FR
-      amount: 0.021
+      amount: 0.048
       input:
         database: impact_proxies
         uuid: "('EF v3.0', 'climate change', 'global warming potential (GWP100)')_technosphere_proxy"

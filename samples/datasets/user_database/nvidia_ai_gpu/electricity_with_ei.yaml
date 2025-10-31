@@ -1,4 +1,4 @@
-name: electricity
+name: electricity_with_ei
 location: GLO
 type: process
 unit: kwh

@@ -27,26 +27,23 @@ def initialize(appabuild_config_path: str) -> ForegroundDatabase:
 
     appabuild_config = AppaLCAConfig.from_yaml(appabuild_config_path)
 
-    if "ecoinvent" in appabuild_config.databases:
-        ecoinvent_version = appabuild_config.databases["ecoinvent"].version
-
-        ecoinvent_system_model = appabuild_config.databases["ecoinvent"].system_model
-        ecoinvent_replace = appabuild_config.databases["ecoinvent"].replace
+    if appabuild_config.databases.ecoinvent is not None:
+        ecoinvent_version = appabuild_config.databases.ecoinvent.version
+        ecoinvent_system_model = appabuild_config.databases.ecoinvent.system_model
         logger.info(
             f"Loading EcoInvent database {ecoinvent_version}-{ecoinvent_system_model}..."
         )
     else:
         ecoinvent_version = None
         ecoinvent_system_model = None
-        ecoinvent_replace = None
         logger.warning("No EcoInvent database in LCA conf.")
     return project_setup(
         project_name=appabuild_config.project_name,
         ecoinvent_version=ecoinvent_version,
         ecoinvent_system_model=ecoinvent_system_model,
-        ecoinvent_replace=ecoinvent_replace,
-        foreground_name=appabuild_config.databases["foreground"].name,
-        foreground_path=appabuild_config.databases["foreground"].path,
+        replace_bg=appabuild_config.replace_bg,
+        foreground_name=appabuild_config.databases.foreground.name,
+        foreground_path=appabuild_config.databases.foreground.path,
     )
 
 
@@ -78,7 +75,7 @@ def project_setup(
     foreground_path: str,
     ecoinvent_version: Optional[str] = None,
     ecoinvent_system_model: Optional[str] = None,
-    ecoinvent_replace: Optional[bool] = False,
+    replace_bg: Optional[bool] = False,
 ) -> ForegroundDatabase:
     """
     Triggers all Brightway functions and database import necessary to build an Impact
@@ -88,7 +85,8 @@ def project_setup(
     :param foreground_path: path to folder containing user datasets.
     :param ecoinvent_version: #TODO
     :param ecoinvent_system_model: #TODO
-    :param ecoinvent_replace: if set to True, EcoInvent and Biosphere DB will be recreated
+    :param replace_bg: if set to True, LCIA methods, biosphere DB and EcoInvent DB will
+    be recreated.
     """
     bd.projects.set_current(project_name)
     databases = []
@@ -96,14 +94,19 @@ def project_setup(
         ecoinvent_database = EcoInventDatabase(
             version=ecoinvent_version,
             system_model=ecoinvent_system_model,
-            replace=ecoinvent_replace,
+            replace=replace_bg,
         )
         proxy_database = ImpactProxiesDatabase(
             f"ecoinvent-{ecoinvent_database.version}-biosphere",
-            replace=ecoinvent_replace,
+            replace=replace_bg,
         )
         databases += [ecoinvent_database, proxy_database]
-
+    else:
+        proxy_database = ImpactProxiesDatabase(
+            biosphere_name=None,
+            replace=replace_bg,
+        )
+        databases += [proxy_database]
     foreground_database = ForegroundDatabase(
         name=foreground_name,
         path=foreground_path,

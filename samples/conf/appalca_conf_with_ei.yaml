@@ -1,4 +1,5 @@
-project_name: 'sample_project_bw25'
+project_name: 'sample_project_with_ei_bw25'
+replace_bg: False
 databases:
   foreground:
     name: user_database
@@ -6,4 +7,3 @@ databases:
   ecoinvent:
     version: "3.11"
     system_model: "cutoff"
-    replace: False

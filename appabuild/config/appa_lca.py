@@ -14,10 +14,14 @@ from pydantic_core import PydanticCustomError
 from appabuild.logger import log_validation_error, logger
 
 
+class DatabasesConfig(BaseModel):
+    foreground: ForegroundDatabaseConfig
+    ecoinvent: Optional[EcoInventDatabaseConfig] = None
+
+
 class EcoInventDatabaseConfig(BaseModel):
     version: str
     system_model: str
-    replace: Optional[bool] = False
 
 
 class ForegroundDatabaseConfig(BaseModel):
@@ -51,7 +55,8 @@ class AppaLCAConfig(BaseModel):
     """
 
     project_name: str
-    databases: Dict[str, Union[EcoInventDatabaseConfig, ForegroundDatabaseConfig]]
+    replace_bg: Optional[bool] = False
+    databases: DatabasesConfig
 
     @field_validator("databases", mode="before")
     @classmethod
