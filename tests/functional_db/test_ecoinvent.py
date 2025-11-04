@@ -4,67 +4,52 @@ Tests for eco invent validity
 import os
 
 import pytest
+from requests import HTTPError
 
 from appabuild.database.databases import EcoInventDatabase
-from appabuild.exceptions import BwDatabaseError
-from tests import DATA_DIR
 
 
-def test_not_existing_path():
+def test_no_ecoinvent_version():
     """
-    Check an exception is raised when the path for the eco invent datasets doesn't exist.
+    Check an exception is raised when no ecoinvent version is provided.
     """
-    path = os.path.join(DATA_DIR, "imaginary_path")
-
+    os.environ["BW_USER"] = "test"
+    os.environ["BW_PASS"] = "test"
     try:
-        db = EcoInventDatabase(path=path, name="name")
+        db = EcoInventDatabase(system_model="cutoff")
         db.execute_at_startup()
-        pytest.fail("An eco invent database can't be loaded from an non-existing path")
-    except BwDatabaseError as e:
-        assert e.exception_type == "eco_invent_invalid_path"
-
-
-def test_empty_dataset():
-    """
-    Check an exception is raised when there is no dataset to load.
-    """
-    path = os.path.join(DATA_DIR, "eco_invent", "invalids", "no_datasets")
-
-    try:
-        db = EcoInventDatabase(path=path, name="name")
-        db.execute_at_startup()
-        pytest.fail("An eco invent database can't be loaded if there is no datasets")
-    except BwDatabaseError as e:
-        assert e.exception_type == "eco_invent_invalid_path"
-
-
-def test_invalid_dataset():
-    """
-    Check an exception is raised when one of the dataset is invalid.
-    """
-    path = os.path.join(DATA_DIR, "eco_invent", "invalids", "invalid_datasets")
-
-    try:
-        db = EcoInventDatabase(path=path, name="name")
-        db.execute_at_startup()
-        pytest.fail(
-            "An eco invent database can't be loaded if at least one dataset is invalid"
+        pytest.fail("EcoInvent database requires a version")
+    except TypeError as e:
+        assert (
+            str(e)
+            == "EcoInventDatabase.__init__() missing 1 required positional argument: 'version'"
         )
-    except BwDatabaseError as e:
-        assert e.exception_type == "eco_invent_invalid_dataset"
 
 
-def test_incomplete_dataset():
+def test_no_ecoinvent_system_model():
     """
-    Check an exception is raised when one of the dataset is incomplete.
+    Check an exception is raised when no ecoinvent version is provided.
     """
-    path = os.path.join(DATA_DIR, "eco_invent", "invalids", "incomplete_datasets")
-
+    os.environ["BW_USER"] = "test"
+    os.environ["BW_PASS"] = "test"
     try:
-        db = EcoInventDatabase(path=path, name="name")
+        db = EcoInventDatabase(version="3.11")
         db.execute_at_startup()
-        pytest.fail(
-            "An eco invent database can't be loaded if at least one dataset is incomplete"
+        pytest.fail("EcoInvent database requires a system model")
+    except TypeError as e:
+        assert (
+            str(e)
+            == "EcoInventDatabase.__init__() missing 1 required positional argument: 'system_model'"
         )
-    except BwDatabaseError as e:
-        assert e.exception_type == "eco_invent_invalid_dataset"
+
+
+def test_no_ecoinvent_credentials():
+    """
+    Check an exception is raised when no ecoinvent version is provided.
+    """
+    try:
+        db = EcoInventDatabase(version="3.11", system_model="cutoff")
+        db.execute_at_startup()
+        pytest.fail("EcoInvent database requires credentials as environment variables")
+    except HTTPError as e:
+        assert e.response.reason == "Unauthorized"

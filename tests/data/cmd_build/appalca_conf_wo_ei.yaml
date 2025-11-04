@@ -1,4 +1,5 @@
 project_name: cmd_build_ete_test
+replace_bg: True
 databases:
   foreground:
     name: user_database

@@ -1,0 +1,639 @@
+CML v4.8 2016 no LT;acidification no LT;acidification (incl. fate, average Europe total, A&B) no LT;kg SO2-Eq
+CML v4.8 2016 no LT;climate change no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+CML v4.8 2016 no LT;ecotoxicity: freshwater no LT;freshwater aquatic ecotoxicity (FAETP inf) no LT;kg 1,4-DCB-Eq
+CML v4.8 2016 no LT;ecotoxicity: marine no LT;marine aquatic ecotoxicity (MAETP inf) no LT;kg 1,4-DCB-Eq
+CML v4.8 2016 no LT;ecotoxicity: terrestrial no LT;terrestrial ecotoxicity (TETP inf) no LT;kg 1,4-DCB-Eq
+CML v4.8 2016 no LT;energy resources: non-renewable no LT;abiotic depletion potential (ADP): fossil fuels no LT;MJ
+CML v4.8 2016 no LT;eutrophication no LT;eutrophication (fate not incl.) no LT;kg PO4-Eq
+CML v4.8 2016 no LT;human toxicity no LT;human toxicity (HTP inf) no LT;kg 1,4-DCB-Eq
+CML v4.8 2016 no LT;material resources: metals/minerals no LT;abiotic depletion potential (ADP): elements (ultimate reserves) no LT;kg Sb-Eq
+CML v4.8 2016 no LT;ozone depletion no LT;ozone layer depletion (ODP steady state) no LT;kg CFC-11-Eq
+CML v4.8 2016 no LT;photochemical oxidant formation no LT;photochemical oxidation (high NOx) no LT;kg ethylene-Eq
+CML v4.8 2016;acidification;acidification (incl. fate, average Europe total, A&B);kg SO2-Eq
+CML v4.8 2016;climate change;global warming potential (GWP100);kg CO2-Eq
+CML v4.8 2016;ecotoxicity: freshwater;freshwater aquatic ecotoxicity (FAETP inf);kg 1,4-DCB-Eq
+CML v4.8 2016;ecotoxicity: marine;marine aquatic ecotoxicity (MAETP inf);kg 1,4-DCB-Eq
+CML v4.8 2016;ecotoxicity: terrestrial;terrestrial ecotoxicity (TETP inf);kg 1,4-DCB-Eq
+CML v4.8 2016;energy resources: non-renewable;abiotic depletion potential (ADP): fossil fuels;MJ
+CML v4.8 2016;eutrophication;eutrophication (fate not incl.);kg PO4-Eq
+CML v4.8 2016;human toxicity;human toxicity (HTP inf);kg 1,4-DCB-Eq
+CML v4.8 2016;material resources: metals/minerals;abiotic depletion potential (ADP): elements (ultimate reserves);kg Sb-Eq
+CML v4.8 2016;ozone depletion;ozone layer depletion (ODP steady state);kg CFC-11-Eq
+CML v4.8 2016;photochemical oxidant formation;photochemical oxidation (high NOx);kg ethylene-Eq
+Crustal Scarcity Indicator 2020;material resources: metals/minerals;crustal scarcity potential (CSP);kg Si-Eq
+Cumulative Energy Demand (CED);energy resources: non-renewable;energy content (HHV);MJ-Eq
+Cumulative Energy Demand (CED);energy resources: non-renewable, biomass;energy content (HHV);MJ-Eq
+Cumulative Energy Demand (CED);energy resources: non-renewable, fossil;energy content (HHV);MJ-Eq
+Cumulative Energy Demand (CED);energy resources: non-renewable, nuclear;energy content (HHV);MJ-Eq
+Cumulative Energy Demand (CED);energy resources: renewable;energy content (HHV);MJ-Eq
+Cumulative Energy Demand (CED);energy resources: renewable, biomass;energy content (HHV);MJ-Eq
+Cumulative Energy Demand (CED);energy resources: renewable, geothermal;energy content (HHV);MJ-Eq
+Cumulative Energy Demand (CED);energy resources: renewable, geothermal, solar, wind;energy content (HHV);MJ-Eq
+Cumulative Energy Demand (CED);energy resources: renewable, solar;energy content (HHV);MJ-Eq
+Cumulative Energy Demand (CED);energy resources: renewable, water;energy content (HHV);MJ-Eq
+Cumulative Energy Demand (CED);energy resources: renewable, wind;energy content (HHV);MJ-Eq
+Cumulative Energy Demand (CED);total;energy content (HHV);MJ-Eq
+Cumulative Exergy Demand (CExD);energy resources: non-renewable;exergy content;MJ-Eq
+Cumulative Exergy Demand (CExD);energy resources: non-renewable, biomass;exergy content;MJ-Eq
+Cumulative Exergy Demand (CExD);energy resources: non-renewable, fossil;exergy content;MJ-Eq
+Cumulative Exergy Demand (CExD);energy resources: non-renewable, nuclear;exergy content;MJ-Eq
+Cumulative Exergy Demand (CExD);energy resources: renewable;exergy content;MJ-Eq
+Cumulative Exergy Demand (CExD);energy resources: renewable, biomass;exergy content;MJ-Eq
+Cumulative Exergy Demand (CExD);energy resources: renewable, solar;exergy content;MJ-Eq
+Cumulative Exergy Demand (CExD);energy resources: renewable, water;exergy content;MJ-Eq
+Cumulative Exergy Demand (CExD);energy resources: renewable, wind;exergy content;MJ-Eq
+Cumulative Exergy Demand (CExD);material resources;exergy content;MJ-Eq
+Cumulative Exergy Demand (CExD);material resources: metals;exergy content;MJ-Eq
+Cumulative Exergy Demand (CExD);material resources: minerals;exergy content;MJ-Eq
+Cumulative Exergy Demand (CExD);material resources: water;exergy content;MJ-Eq
+Cumulative Exergy Demand (CExD);total;exergy content;MJ-Eq
+Ecological Footprint;CO2;global hectares;m2a
+Ecological Footprint;land occupation;global hectares;m2a
+Ecological Footprint;nuclear;global hectares;m2a
+Ecological Footprint;total;global hectares;m2a
+Ecological Scarcity 2021 no LT;climate change no LT;global warming potential (GWP100) no LT;UBP
+Ecological Scarcity 2021 no LT;emissions to air no LT;air pollutants and PM no LT;UBP
+Ecological Scarcity 2021 no LT;emissions to air no LT;carcinogenic substances into air no LT;UBP
+Ecological Scarcity 2021 no LT;emissions to air no LT;heavy metals into air no LT;UBP
+Ecological Scarcity 2021 no LT;emissions to air no LT;radioactive substances into air no LT;UBP
+Ecological Scarcity 2021 no LT;emissions to soil no LT;heavy metals into soil no LT;UBP
+Ecological Scarcity 2021 no LT;emissions to soil no LT;pesticides into soil no LT;UBP
+Ecological Scarcity 2021 no LT;emissions to water no LT;heavy metals into water no LT;UBP
+Ecological Scarcity 2021 no LT;emissions to water no LT;POP into water no LT;UBP
+Ecological Scarcity 2021 no LT;emissions to water no LT;radioactive substances into water no LT;UBP
+Ecological Scarcity 2021 no LT;emissions to water no LT;water pollutants no LT;UBP
+Ecological Scarcity 2021 no LT;energy resources no LT;energy resources no LT;UBP
+Ecological Scarcity 2021 no LT;land use no LT;land use no LT;UBP
+Ecological Scarcity 2021 no LT;mineral resources no LT;mineral resources no LT;UBP
+Ecological Scarcity 2021 no LT;natural resources no LT;biotic resources no LT;UBP
+Ecological Scarcity 2021 no LT;ozone depletion no LT;ozone depletion no LT;UBP
+Ecological Scarcity 2021 no LT;total no LT;UBP no LT;UBP
+Ecological Scarcity 2021 no LT;waste disposal no LT;radioactive waste to deposit no LT;UBP
+Ecological Scarcity 2021 no LT;waste disposal no LT;waste, non radioactive no LT;UBP
+Ecological Scarcity 2021 no LT;water use no LT;water resources, evaporated no LT;UBP
+Ecological Scarcity 2021;climate change;global warming potential (GWP100);UBP
+Ecological Scarcity 2021;emissions to air;air pollutants and PM;UBP
+Ecological Scarcity 2021;emissions to air;carcinogenic substances into air;UBP
+Ecological Scarcity 2021;emissions to air;heavy metals into air;UBP
+Ecological Scarcity 2021;emissions to air;radioactive substances into air;UBP
+Ecological Scarcity 2021;emissions to soil;heavy metals into soil;UBP
+Ecological Scarcity 2021;emissions to soil;pesticides into soil;UBP
+Ecological Scarcity 2021;emissions to water;heavy metals into water;UBP
+Ecological Scarcity 2021;emissions to water;POP into water;UBP
+Ecological Scarcity 2021;emissions to water;radioactive substances into water;UBP
+Ecological Scarcity 2021;emissions to water;water pollutants;UBP
+Ecological Scarcity 2021;energy resources;energy resources;UBP
+Ecological Scarcity 2021;land use;land use;UBP
+Ecological Scarcity 2021;mineral resources;mineral resources;UBP
+Ecological Scarcity 2021;natural resources;biotic resources;UBP
+Ecological Scarcity 2021;ozone depletion;ozone depletion;UBP
+Ecological Scarcity 2021;total;UBP;UBP
+Ecological Scarcity 2021;waste disposal;radioactive waste to deposit;UBP
+Ecological Scarcity 2021;waste disposal;waste, non radioactive;UBP
+Ecological Scarcity 2021;water use;water resources, evaporated;UBP
+Ecosystem Damage Potential;land occupation;ecosystem damage potential;points
+Ecosystem Damage Potential;land transformation;ecosystem damage potential;points
+Ecosystem Damage Potential;total;ecosystem damage potential;points
+EF v3.0 no LT;acidification no LT;accumulated exceedance (AE) no LT;mol H+-Eq
+EF v3.0 no LT;climate change no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+EF v3.0 no LT;climate change: biogenic no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+EF v3.0 no LT;climate change: fossil no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+EF v3.0 no LT;climate change: land use and land use change no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+EF v3.0 no LT;ecotoxicity: freshwater no LT;comparative toxic unit for ecosystems (CTUe) no LT;CTUe
+EF v3.0 no LT;ecotoxicity: freshwater, inorganics no LT;comparative toxic unit for ecosystems (CTUe) no LT;CTUe
+EF v3.0 no LT;ecotoxicity: freshwater, metals no LT;comparative toxic unit for ecosystems (CTUe) no LT;CTUe
+EF v3.0 no LT;ecotoxicity: freshwater, organics no LT;comparative toxic unit for ecosystems (CTUe) no LT;CTUe
+EF v3.0 no LT;energy resources: non-renewable no LT;abiotic depletion potential (ADP): fossil fuels no LT;MJ, net calorific value
+EF v3.0 no LT;eutrophication: freshwater no LT;fraction of nutrients reaching freshwater end compartment (P) no LT;kg P-Eq
+EF v3.0 no LT;eutrophication: marine no LT;fraction of nutrients reaching marine end compartment (N) no LT;kg N-Eq
+EF v3.0 no LT;eutrophication: terrestrial no LT;accumulated exceedance (AE) no LT;mol N-Eq
+EF v3.0 no LT;human toxicity: carcinogenic no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.0 no LT;human toxicity: carcinogenic, inorganics no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.0 no LT;human toxicity: carcinogenic, metals no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.0 no LT;human toxicity: carcinogenic, organics no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.0 no LT;human toxicity: non-carcinogenic no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.0 no LT;human toxicity: non-carcinogenic, inorganics no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.0 no LT;human toxicity: non-carcinogenic, metals no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.0 no LT;human toxicity: non-carcinogenic, organics no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.0 no LT;ionising radiation: human health no LT;human exposure efficiency relative to u235 no LT;kBq U235-Eq
+EF v3.0 no LT;land use no LT;soil quality index no LT;dimensionless
+EF v3.0 no LT;material resources: metals/minerals no LT;abiotic depletion potential (ADP): elements (ultimate reserves) no LT;kg Sb-Eq
+EF v3.0 no LT;ozone depletion no LT;ozone depletion potential (ODP) no LT;kg CFC-11-Eq
+EF v3.0 no LT;particulate matter formation no LT;impact on human health no LT;disease incidence
+EF v3.0 no LT;photochemical oxidant formation: human health no LT;tropospheric ozone concentration increase no LT;kg NMVOC-Eq
+EF v3.0 no LT;water use no LT;user deprivation potential (deprivation-weighted water consumption) no LT;m3 world Eq deprived
+EF v3.0;acidification;accumulated exceedance (AE);mol H+-Eq
+EF v3.0;climate change;global warming potential (GWP100);kg CO2-Eq
+EF v3.0;climate change: biogenic;global warming potential (GWP100);kg CO2-Eq
+EF v3.0;climate change: fossil;global warming potential (GWP100);kg CO2-Eq
+EF v3.0;climate change: land use and land use change;global warming potential (GWP100);kg CO2-Eq
+EF v3.0;ecotoxicity: freshwater;comparative toxic unit for ecosystems (CTUe);CTUe
+EF v3.0;ecotoxicity: freshwater, inorganics;comparative toxic unit for ecosystems (CTUe);CTUe
+EF v3.0;ecotoxicity: freshwater, metals;comparative toxic unit for ecosystems (CTUe);CTUe
+EF v3.0;ecotoxicity: freshwater, organics;comparative toxic unit for ecosystems (CTUe);CTUe
+EF v3.0;energy resources: non-renewable;abiotic depletion potential (ADP): fossil fuels;MJ, net calorific value
+EF v3.0;eutrophication: freshwater;fraction of nutrients reaching freshwater end compartment (P);kg P-Eq
+EF v3.0;eutrophication: marine;fraction of nutrients reaching marine end compartment (N);kg N-Eq
+EF v3.0;eutrophication: terrestrial;accumulated exceedance (AE);mol N-Eq
+EF v3.0;human toxicity: carcinogenic;comparative toxic unit for human (CTUh);CTUh
+EF v3.0;human toxicity: carcinogenic, inorganics;comparative toxic unit for human (CTUh);CTUh
+EF v3.0;human toxicity: carcinogenic, metals;comparative toxic unit for human (CTUh);CTUh
+EF v3.0;human toxicity: carcinogenic, organics;comparative toxic unit for human (CTUh);CTUh
+EF v3.0;human toxicity: non-carcinogenic;comparative toxic unit for human (CTUh);CTUh
+EF v3.0;human toxicity: non-carcinogenic, inorganics;comparative toxic unit for human (CTUh);CTUh
+EF v3.0;human toxicity: non-carcinogenic, metals;comparative toxic unit for human (CTUh);CTUh
+EF v3.0;human toxicity: non-carcinogenic, organics;comparative toxic unit for human (CTUh);CTUh
+EF v3.0;ionising radiation: human health;human exposure efficiency relative to u235;kBq U235-Eq
+EF v3.0;land use;soil quality index;dimensionless
+EF v3.0;material resources: metals/minerals;abiotic depletion potential (ADP): elements (ultimate reserves);kg Sb-Eq
+EF v3.0;ozone depletion;ozone depletion potential (ODP);kg CFC-11-Eq
+EF v3.0;particulate matter formation;impact on human health;disease incidence
+EF v3.0;photochemical oxidant formation: human health;tropospheric ozone concentration increase;kg NMVOC-Eq
+EF v3.0;water use;user deprivation potential (deprivation-weighted water consumption);m3 world Eq deprived
+EF v3.1 no LT;acidification no LT;accumulated exceedance (AE) no LT;mol H+-Eq
+EF v3.1 no LT;climate change no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+EF v3.1 no LT;climate change: biogenic no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+EF v3.1 no LT;climate change: fossil no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+EF v3.1 no LT;climate change: land use and land use change no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+EF v3.1 no LT;ecotoxicity: freshwater no LT;comparative toxic unit for ecosystems (CTUe) no LT;CTUe
+EF v3.1 no LT;ecotoxicity: freshwater, inorganics no LT;comparative toxic unit for ecosystems (CTUe) no LT;CTUe
+EF v3.1 no LT;ecotoxicity: freshwater, organics no LT;comparative toxic unit for ecosystems (CTUe) no LT;CTUe
+EF v3.1 no LT;energy resources: non-renewable no LT;abiotic depletion potential (ADP): fossil fuels no LT;MJ, net calorific value
+EF v3.1 no LT;eutrophication: freshwater no LT;fraction of nutrients reaching freshwater end compartment (P) no LT;kg P-Eq
+EF v3.1 no LT;eutrophication: marine no LT;fraction of nutrients reaching marine end compartment (N) no LT;kg N-Eq
+EF v3.1 no LT;eutrophication: terrestrial no LT;accumulated exceedance (AE) no LT;mol N-Eq
+EF v3.1 no LT;human toxicity: carcinogenic no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.1 no LT;human toxicity: carcinogenic, inorganics no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.1 no LT;human toxicity: carcinogenic, organics no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.1 no LT;human toxicity: non-carcinogenic no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.1 no LT;human toxicity: non-carcinogenic, inorganics no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.1 no LT;human toxicity: non-carcinogenic, organics no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+EF v3.1 no LT;ionising radiation: human health no LT;human exposure efficiency relative to u235 no LT;kBq U235-Eq
+EF v3.1 no LT;land use no LT;soil quality index no LT;dimensionless
+EF v3.1 no LT;material resources: metals/minerals no LT;abiotic depletion potential (ADP): elements (ultimate reserves) no LT;kg Sb-Eq
+EF v3.1 no LT;ozone depletion no LT;ozone depletion potential (ODP) no LT;kg CFC-11-Eq
+EF v3.1 no LT;particulate matter formation no LT;impact on human health no LT;disease incidence
+EF v3.1 no LT;photochemical oxidant formation: human health no LT;tropospheric ozone concentration increase no LT;kg NMVOC-Eq
+EF v3.1 no LT;water use no LT;user deprivation potential (deprivation-weighted water consumption) no LT;m3 world Eq deprived
+EF v3.1;acidification;accumulated exceedance (AE);mol H+-Eq
+EF v3.1;climate change;global warming potential (GWP100);kg CO2-Eq
+EF v3.1;climate change: biogenic;global warming potential (GWP100);kg CO2-Eq
+EF v3.1;climate change: fossil;global warming potential (GWP100);kg CO2-Eq
+EF v3.1;climate change: land use and land use change;global warming potential (GWP100);kg CO2-Eq
+EF v3.1;ecotoxicity: freshwater;comparative toxic unit for ecosystems (CTUe);CTUe
+EF v3.1;ecotoxicity: freshwater, inorganics;comparative toxic unit for ecosystems (CTUe);CTUe
+EF v3.1;ecotoxicity: freshwater, organics;comparative toxic unit for ecosystems (CTUe);CTUe
+EF v3.1;energy resources: non-renewable;abiotic depletion potential (ADP): fossil fuels;MJ, net calorific value
+EF v3.1;eutrophication: freshwater;fraction of nutrients reaching freshwater end compartment (P);kg P-Eq
+EF v3.1;eutrophication: marine;fraction of nutrients reaching marine end compartment (N);kg N-Eq
+EF v3.1;eutrophication: terrestrial;accumulated exceedance (AE);mol N-Eq
+EF v3.1;human toxicity: carcinogenic;comparative toxic unit for human (CTUh);CTUh
+EF v3.1;human toxicity: carcinogenic, inorganics;comparative toxic unit for human (CTUh);CTUh
+EF v3.1;human toxicity: carcinogenic, organics;comparative toxic unit for human (CTUh);CTUh
+EF v3.1;human toxicity: non-carcinogenic;comparative toxic unit for human (CTUh);CTUh
+EF v3.1;human toxicity: non-carcinogenic, inorganics;comparative toxic unit for human (CTUh);CTUh
+EF v3.1;human toxicity: non-carcinogenic, organics;comparative toxic unit for human (CTUh);CTUh
+EF v3.1;ionising radiation: human health;human exposure efficiency relative to u235;kBq U235-Eq
+EF v3.1;land use;soil quality index;dimensionless
+EF v3.1;material resources: metals/minerals;abiotic depletion potential (ADP): elements (ultimate reserves);kg Sb-Eq
+EF v3.1;ozone depletion;ozone depletion potential (ODP);kg CFC-11-Eq
+EF v3.1;particulate matter formation;impact on human health;disease incidence
+EF v3.1;photochemical oxidant formation: human health;tropospheric ozone concentration increase;kg NMVOC-Eq
+EF v3.1;water use;user deprivation potential (deprivation-weighted water consumption);m3 world Eq deprived
+EN15804+A2 - Additional impact categories and indicators;particulate matter formation;impact on human health;disease incidence
+EN15804+A2 - Additional impact categories and indicators;ionising radiation: human health;human exposure efficiency relative to u235;kBq U235-Eq
+EN15804+A2 - Additional impact categories and indicators;ecotoxicity: freshwater (EF v3.0);comparative toxic unit for ecosystems (CTUe);CTUe
+EN15804+A2 - Additional impact categories and indicators;human toxicity: carcinogenic;comparative toxic unit for human (CTUh);CTUh
+EN15804+A2 - Additional impact categories and indicators;human toxicity: non-carcinogenic (EF v3.0);comparative toxic unit for human (CTUh);CTUh
+EN15804+A2 - Additional impact categories and indicators;land use;soil quality index;dimensionless
+EN15804+A2 - Additional impact categories and indicators;ecotoxicity: freshwater (EF v3.1);comparative toxic unit for ecosystems (CTUe);CTUe
+EN15804+A2 - Additional impact categories and indicators;human toxicity: non-carcinogenic (EF v3.1);comparative toxic unit for human (CTUh);CTUh
+EN15804+A2 - Core impact categories and indicators;climate change: total (EF v3.0 - IPCC 2013);global warming potential (GWP100);kg CO2-Eq
+EN15804+A2 - Core impact categories and indicators;climate change: fossil (EF v3.0 - IPCC 2013);global warming potential (GWP100);kg CO2-Eq
+EN15804+A2 - Core impact categories and indicators;climate change: biogenic (EF v3.0 - IPCC 2013);global warming potential (GWP100);kg CO2-Eq
+EN15804+A2 - Core impact categories and indicators;climate change: land use and land use change (EF v3.0 - IPCC 2013);global warming potential (GWP100);kg CO2-Eq
+EN15804+A2 - Core impact categories and indicators;ozone depletion;ozone depletion potential (ODP);kg CFC-11-Eq
+EN15804+A2 - Core impact categories and indicators;acidification;accumulated exceedance (AE);mol H+-Eq
+EN15804+A2 - Core impact categories and indicators;eutrophication: freshwater;fraction of nutrients reaching freshwater end compartment (P);kg P-Eq
+EN15804+A2 - Core impact categories and indicators;eutrophication: marine;fraction of nutrients reaching marine end compartment (N);kg N-Eq
+EN15804+A2 - Core impact categories and indicators;eutrophication: terrestrial;accumulated exceedance (AE);mol H+-Eq
+EN15804+A2 - Core impact categories and indicators;photochemical oxidant formation: human health;tropospheric ozone concentration increase;kg NMVOC-Eq
+EN15804+A2 - Core impact categories and indicators;material resources: metals/minerals;abiotic depletion potential (ADP): elements (ultimate reserves);kg Sb-Eq
+EN15804+A2 - Core impact categories and indicators;energy resources: non-renewable;abiotic depletion potential (ADP): fossil fuels;MJ, net calorific value
+EN15804+A2 - Core impact categories and indicators;water use;user deprivation potential (deprivation-weighted water consumption);m3 world Eq deprived
+EN15804+A2 - Core impact categories and indicators;climate change: total (EF v3.1 - IPCC 2021);global warming potential (GWP100);kg CO2-Eq
+EN15804+A2 - Core impact categories and indicators;climate change: fossil (EF v3.1 - IPCC 2021);global warming potential (GWP100);kg CO2-Eq
+EN15804+A2 - Core impact categories and indicators;climate change: biogenic (EF v3.1 - IPCC 2021);global warming potential (GWP100);kg CO2-Eq
+EN15804+A2 - Core impact categories and indicators;climate change: land use and land use change (EF v3.1 - IPCC 2021);global warming potential (GWP100);kg CO2-Eq
+EN15804+A2 - Indicators describing output flows;exported energy - electricity;EEE;MJ
+EN15804+A2 - Indicators describing output flows;exported energy - heat;EET;MJ
+EN15804+A2 - Indicators describing output flows;materials for energy recovery;MER;kg
+EN15804+A2 - Indicators describing output flows;materials for recycling;MFR;kg
+EN15804+A2 - Indicators describing output flows;exported energy;EE;MJ
+EN15804+A2 - Indicators describing output flows;components for re-use;CRU;kg
+EN15804+A2 - Indicators describing resource use;net use of fresh water;FW;m3
+EN15804+A2 - Indicators describing resource use;use of renewable secondary fuels;RSF;MJ
+EN15804+A2 - Indicators describing resource use;use of non-renewable secondary fuels;NRSF;MJ
+EN15804+A2 - Indicators describing resource use;use of secondary material;SM;kg
+EN15804+A2 - Indicators describing resource use;total use of renewable primary energy resources (primary energy and primary energy resources used as raw materials);PERT;MJ
+EN15804+A2 - Indicators describing resource use;total use of non-renewable primary energy resources (primary energy and primary energy resources used as raw materials);PENRT;MJ
+EN15804+A2 - Indicators describing waste categories;hazardous waste disposed;HWD;kg
+EN15804+A2 - Indicators describing waste categories;high-level radioactive waste disposed;HLRW;kg
+EN15804+A2 - Indicators describing waste categories;intermediate and low-level radioactive waste disposed;ILLRW;kg
+EN15804+A2 - Indicators describing waste categories;non-hazardous waste disposed;NHWD;kg
+EN15804+A2 - Indicators describing biogenic carbon content at factory gate;biogenic carbon content in accompanying packaging;BCCAP;kg C
+EN15804+A2 - Indicators describing biogenic carbon content at factory gate;biogenic carbon content in product;BCCP;kg C
+EN15804+A2 - Indicators describing resource use;use of non-renewable primary energy excluding non-renewable primary energy resources used as raw materials;PENRE;MJ
+EN15804+A2 - Indicators describing resource use;use of non-renewable primary energy resources used as raw materials;PENRM;MJ
+EN15804+A2 - Indicators describing resource use;use of renewable primary energy excluding renewable primary energy resources used as raw materials;PERE;MJ
+EN15804+A2 - Indicators describing resource use;use of renewable primary energy resources used as raw materials;PERM;MJ
+EPS 2020d no LT;emissions to air no LT;monetary impact value no LT;EUR 2018
+EPS 2020d no LT;emissions to soil no LT;monetary impact value no LT;EUR 2018
+EPS 2020d no LT;emissions to water no LT;monetary impact value no LT;EUR 2018
+EPS 2020d no LT;energy resources: non-renewable, fossil no LT;monetary impact value no LT;EUR 2018
+EPS 2020d no LT;land use no LT;monetary impact value no LT;EUR 2018
+EPS 2020d no LT;material resources: metals no LT;monetary impact value no LT;EUR 2018
+EPS 2020d no LT;total no LT;monetary impact value no LT;EUR 2018
+EPS 2020d;emissions to air;monetary impact value;EUR 2018
+EPS 2020d;emissions to soil;monetary impact value;EUR 2018
+EPS 2020d;emissions to water;monetary impact value;EUR 2018
+EPS 2020d;energy resources: non-renewable, fossil;monetary impact value;EUR 2018
+EPS 2020d;land use;monetary impact value;EUR 2018
+EPS 2020d;material resources: metals;monetary impact value;EUR 2018
+EPS 2020d;total;monetary impact value;EUR 2018
+IMPACT World+ v2.1, footprint version;climate change;carbon footprint;kg CO2-Eq
+IMPACT World+ v2.1, footprint version;ecosystem quality;remaining ecosystem quality damage;PDF.m2.yr
+IMPACT World+ v2.1, footprint version;energy resources: non-renewable;fossil and nuclear energy use;MJ deprived
+IMPACT World+ v2.1, footprint version;human health;remaining human health damage;DALYs
+IMPACT World+ v2.1, footprint version;water use;water scarcity footprint;m3 world Eq deprived
+Inventory results and indicators;emissions to air;total particulate matter;kg
+Inventory results and indicators;emissions to air;particulate matter, < 2.5 um;kg
+Inventory results and indicators;emissions to air;particulate matter, >2.5 um and <10;kg
+Inventory results and indicators;emissions to air;particulate matter >10 um;kg
+Inventory results and indicators;emissions to air;carbon dioxide, fossil and land use;kg
+Inventory results and indicators;emissions to air;total carbon monoxide;kg
+Inventory results and indicators;emissions to air;total methane;kg
+Inventory results and indicators;emissions to air;carbon, non-fossil, fixed;kg
+Inventory results and indicators;emissions to air;NMVOCs;kg
+Inventory results and indicators;emissions to air;N2O;kg
+Inventory results and indicators;emissions to air;NOx;kg
+Inventory results and indicators;emissions to air;SOx;kg
+Inventory results and indicators;emissions to air;ammonia;kg
+Inventory results and indicators;emissions to air;lead;kg
+Inventory results and indicators;emissions to air;photochemical oxidants (including ozone);kg
+Inventory results and indicators;emissions to air;HAPs;kg
+Inventory results and indicators;emissions to air;total radioactive emissions;kg
+Inventory results and indicators;emissions to water;total radioactive emissions;kg
+Inventory results and indicators;resources;total surface occupation;m2a
+Inventory results and indicators;resources;land occupation;m2a
+Inventory results and indicators;resources;land occupation by flooding;m2a
+Inventory results and indicators;resources;seabed occupation;m2a
+Inventory results and indicators;resources;total water extraction;m3
+Inventory results and indicators;resources;total freshwater extraction;m3
+Inventory results and indicators;resources;freshwater extraction, surface water;m3
+Inventory results and indicators;resources;freshwater extraction, groundwater;m3
+Inventory results and indicators;resources;water extraction, saltwater;m3
+Inventory results and indicators;resources;water extraction, undefined;m3
+Inventory results and indicators;waste disposal;total area for dump sites;m2
+Inventory results and indicators;waste disposal;total volume of underground deposits;m3
+Inventory results and indicators;waste disposal;total volume of radioactive waste;m3
+Inventory results and indicators;waste disposal;total mass of waste;kg
+Inventory results and indicators;waste disposal;total mass for dump sites;kg
+Inventory results and indicators;waste disposal;total mass for underground deposits;kg
+Inventory results and indicators;waste disposal;total mass of radioactive waste;kg
+IPCC 2013 no LT;climate change no LT;global temperature change potential (GTP100) no LT;kg CO2-Eq
+IPCC 2013 no LT;climate change no LT;global temperature change potential (GTP20) no LT;kg CO2-Eq
+IPCC 2013 no LT;climate change no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2013 no LT;climate change no LT;global warming potential (GWP20) no LT;kg CO2-Eq
+IPCC 2013;climate change;global temperature change potential (GTP100);kg CO2-Eq
+IPCC 2013;climate change;global temperature change potential (GTP20);kg CO2-Eq
+IPCC 2013;climate change;global warming potential (GWP100);kg CO2-Eq
+IPCC 2013;climate change;global warming potential (GWP20);kg CO2-Eq
+IPCC 2021 (incl. biogenic CO2) no LT;climate change: biogenic (incl. CO2) no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 (incl. biogenic CO2) no LT;climate change: biogenic emissions (incl. CO2) no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 (incl. biogenic CO2) no LT;climate change: biogenic removals (incl. CO2) no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 (incl. biogenic CO2) no LT;climate change: total (incl. biogenic CO2) no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 (incl. biogenic CO2) no LT;climate change: total (incl. biogenic CO2, incl. SLCFs) no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 (incl. biogenic CO2);climate change: biogenic (incl. CO2);global warming potential (GWP100);kg CO2-Eq
+IPCC 2021 (incl. biogenic CO2);climate change: biogenic emissions (incl. CO2);global warming potential (GWP100);kg CO2-Eq
+IPCC 2021 (incl. biogenic CO2);climate change: biogenic removals (incl. CO2);global warming potential (GWP100);kg CO2-Eq
+IPCC 2021 (incl. biogenic CO2);climate change: total (incl. biogenic CO2);global warming potential (GWP100);kg CO2-Eq
+IPCC 2021 (incl. biogenic CO2);climate change: total (incl. biogenic CO2, incl. SLCFs);global warming potential (GWP100);kg CO2-Eq
+IPCC 2021 no LT;climate change: aircraft emissions no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: biogenic (excl. CO2) no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: direct land use change no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: emissions from direct land use change no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: fossil no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: fossil emissions (excl. aircraft emissions) no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: removals from direct land use change no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: total (excl. biogenic CO2) no LT;global warming potential (GWP500) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: total (excl. biogenic CO2) no LT;global warming potential (GWP20) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: total (excl. biogenic CO2) no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: total (excl. biogenic CO2) no LT;global temperature change potential (GTP50) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: total (excl. biogenic CO2) no LT;global temperature change potential (GTP100) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: total (excl. biogenic CO2, incl. SLCFs) no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: biogenic (excl. CO2, incl. SLCFs) no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: fossil (excl. biogenic CO2, incl. SLCFs) no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021 no LT;climate change: direct land use change (incl. SLCFs) no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+IPCC 2021;climate change: aircraft emissions;global warming potential (GWP100);kg CO2-Eq
+IPCC 2021;climate change: biogenic (excl. CO2);global warming potential (GWP100);kg CO2-Eq
+IPCC 2021;climate change: direct land use change;global warming potential (GWP100);kg CO2-Eq
+IPCC 2021;climate change: emissions from direct land use change;global warming potential (GWP100);kg CO2-Eq
+IPCC 2021;climate change: fossil;global warming potential (GWP100);kg CO2-Eq
+IPCC 2021;climate change: fossil emissions (excl. aircraft emissions);global warming potential (GWP100);kg CO2-Eq
+IPCC 2021;climate change: removals from direct land use change;global warming potential (GWP100);kg CO2-Eq
+IPCC 2021;climate change: total (excl. biogenic CO2);global warming potential (GWP500);kg CO2-Eq
+IPCC 2021;climate change: total (excl. biogenic CO2);global warming potential (GWP20);kg CO2-Eq
+IPCC 2021;climate change: total (excl. biogenic CO2);global warming potential (GWP100);kg CO2-Eq
+IPCC 2021;climate change: total (excl. biogenic CO2);global temperature change potential (GTP50);kg CO2-Eq
+IPCC 2021;climate change: total (excl. biogenic CO2);global temperature change potential (GTP100);kg CO2-Eq
+IPCC 2021;climate change: total (excl. biogenic CO2, incl. SLCFs);global warming potential (GWP100);kg CO2-Eq
+IPCC 2021;climate change: biogenic (excl. CO2, incl. SLCFs);global warming potential (GWP100);kg CO2-Eq
+IPCC 2021;climate change: fossil (excl. biogenic CO2, incl. SLCFs);global warming potential (GWP100);kg CO2-Eq
+IPCC 2021;climate change: direct land use change (incl. SLCFs);global warming potential (GWP100);kg CO2-Eq
+ReCiPe 2016 v1.03, endpoint (E) no LT;ecosystem quality no LT;acidification: terrestrial no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (E) no LT;ecosystem quality no LT;climate change: freshwater ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (E) no LT;ecosystem quality no LT;climate change: terrestrial ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (E) no LT;ecosystem quality no LT;ecotoxicity: freshwater no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (E) no LT;ecosystem quality no LT;ecotoxicity: marine no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (E) no LT;ecosystem quality no LT;ecotoxicity: terrestrial no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (E) no LT;ecosystem quality no LT;eutrophication: freshwater no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (E) no LT;ecosystem quality no LT;eutrophication: marine no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (E) no LT;ecosystem quality no LT;land use no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (E) no LT;ecosystem quality no LT;photochemical oxidant formation: terrestrial ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (E) no LT;ecosystem quality no LT;water use: aquatic ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (E) no LT;ecosystem quality no LT;water use: terrestrial ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (E) no LT;human health no LT;climate change: human health no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (E) no LT;human health no LT;human toxicity: carcinogenic no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (E) no LT;human health no LT;human toxicity: non-carcinogenic no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (E) no LT;human health no LT;ionising radiation no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (E) no LT;human health no LT;ozone depletion no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (E) no LT;human health no LT;particulate matter formation no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (E) no LT;human health no LT;photochemical oxidant formation: human health no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (E) no LT;human health no LT;water use: human health no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (E) no LT;natural resources no LT;energy resources: non-renewable, fossil no LT;USD 2013
+ReCiPe 2016 v1.03, endpoint (E) no LT;natural resources no LT;material resources: metals/minerals no LT;USD 2013
+ReCiPe 2016 v1.03, endpoint (E) no LT;total: ecosystem quality no LT;ecosystem quality no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (E) no LT;total: human health no LT;human health no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (E) no LT;total: natural resources no LT;natural resources no LT;USD 2013
+ReCiPe 2016 v1.03, endpoint (E);ecosystem quality;acidification: terrestrial;species.yr
+ReCiPe 2016 v1.03, endpoint (E);ecosystem quality;climate change: freshwater ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (E);ecosystem quality;climate change: terrestrial ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (E);ecosystem quality;ecotoxicity: freshwater;species.yr
+ReCiPe 2016 v1.03, endpoint (E);ecosystem quality;ecotoxicity: marine;species.yr
+ReCiPe 2016 v1.03, endpoint (E);ecosystem quality;ecotoxicity: terrestrial;species.yr
+ReCiPe 2016 v1.03, endpoint (E);ecosystem quality;eutrophication: freshwater;species.yr
+ReCiPe 2016 v1.03, endpoint (E);ecosystem quality;eutrophication: marine;species.yr
+ReCiPe 2016 v1.03, endpoint (E);ecosystem quality;land use;species.yr
+ReCiPe 2016 v1.03, endpoint (E);ecosystem quality;photochemical oxidant formation: terrestrial ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (E);ecosystem quality;water use: aquatic ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (E);ecosystem quality;water use: terrestrial ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (E);human health;climate change: human health;DALYs
+ReCiPe 2016 v1.03, endpoint (E);human health;human toxicity: carcinogenic;DALYs
+ReCiPe 2016 v1.03, endpoint (E);human health;human toxicity: non-carcinogenic;DALYs
+ReCiPe 2016 v1.03, endpoint (E);human health;ionising radiation;DALYs
+ReCiPe 2016 v1.03, endpoint (E);human health;ozone depletion;DALYs
+ReCiPe 2016 v1.03, endpoint (E);human health;particulate matter formation;DALYs
+ReCiPe 2016 v1.03, endpoint (E);human health;photochemical oxidant formation: human health;DALYs
+ReCiPe 2016 v1.03, endpoint (E);human health;water use: human health;DALYs
+ReCiPe 2016 v1.03, endpoint (E);natural resources;energy resources: non-renewable, fossil;USD 2013
+ReCiPe 2016 v1.03, endpoint (E);natural resources;material resources: metals/minerals;USD 2013
+ReCiPe 2016 v1.03, endpoint (E);total: ecosystem quality;ecosystem quality;species.yr
+ReCiPe 2016 v1.03, endpoint (E);total: human health;human health;DALYs
+ReCiPe 2016 v1.03, endpoint (E);total: natural resources;natural resources;USD 2013
+ReCiPe 2016 v1.03, endpoint (H) no LT;ecosystem quality no LT;acidification: terrestrial no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (H) no LT;ecosystem quality no LT;climate change: freshwater ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (H) no LT;ecosystem quality no LT;climate change: terrestrial ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (H) no LT;ecosystem quality no LT;ecotoxicity: freshwater no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (H) no LT;ecosystem quality no LT;ecotoxicity: marine no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (H) no LT;ecosystem quality no LT;ecotoxicity: terrestrial no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (H) no LT;ecosystem quality no LT;eutrophication: freshwater no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (H) no LT;ecosystem quality no LT;eutrophication: marine no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (H) no LT;ecosystem quality no LT;land use no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (H) no LT;ecosystem quality no LT;photochemical oxidant formation: terrestrial ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (H) no LT;ecosystem quality no LT;water use: aquatic ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (H) no LT;ecosystem quality no LT;water use: terrestrial ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (H) no LT;human health no LT;climate change: human health no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (H) no LT;human health no LT;human toxicity: carcinogenic no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (H) no LT;human health no LT;human toxicity: non-carcinogenic no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (H) no LT;human health no LT;ionising radiation no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (H) no LT;human health no LT;ozone depletion no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (H) no LT;human health no LT;particulate matter formation no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (H) no LT;human health no LT;photochemical oxidant formation: human health no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (H) no LT;human health no LT;water use: human health no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (H) no LT;natural resources no LT;energy resources: non-renewable, fossil no LT;USD 2013
+ReCiPe 2016 v1.03, endpoint (H) no LT;natural resources no LT;material resources: metals/minerals no LT;USD 2013
+ReCiPe 2016 v1.03, endpoint (H) no LT;total: ecosystem quality no LT;ecosystem quality no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (H) no LT;total: human health no LT;human health no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (H) no LT;total: natural resources no LT;natural resources no LT;USD 2013
+ReCiPe 2016 v1.03, endpoint (H);ecosystem quality;acidification: terrestrial;species.yr
+ReCiPe 2016 v1.03, endpoint (H);ecosystem quality;climate change: freshwater ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (H);ecosystem quality;climate change: terrestrial ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (H);ecosystem quality;ecotoxicity: freshwater;species.yr
+ReCiPe 2016 v1.03, endpoint (H);ecosystem quality;ecotoxicity: marine;species.yr
+ReCiPe 2016 v1.03, endpoint (H);ecosystem quality;ecotoxicity: terrestrial;species.yr
+ReCiPe 2016 v1.03, endpoint (H);ecosystem quality;eutrophication: freshwater;species.yr
+ReCiPe 2016 v1.03, endpoint (H);ecosystem quality;eutrophication: marine;species.yr
+ReCiPe 2016 v1.03, endpoint (H);ecosystem quality;land use;species.yr
+ReCiPe 2016 v1.03, endpoint (H);ecosystem quality;photochemical oxidant formation: terrestrial ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (H);ecosystem quality;water use: aquatic ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (H);ecosystem quality;water use: terrestrial ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (H);human health;climate change: human health;DALYs
+ReCiPe 2016 v1.03, endpoint (H);human health;human toxicity: carcinogenic;DALYs
+ReCiPe 2016 v1.03, endpoint (H);human health;human toxicity: non-carcinogenic;DALYs
+ReCiPe 2016 v1.03, endpoint (H);human health;ionising radiation;DALYs
+ReCiPe 2016 v1.03, endpoint (H);human health;ozone depletion;DALYs
+ReCiPe 2016 v1.03, endpoint (H);human health;particulate matter formation;DALYs
+ReCiPe 2016 v1.03, endpoint (H);human health;photochemical oxidant formation: human health;DALYs
+ReCiPe 2016 v1.03, endpoint (H);human health;water use: human health;DALYs
+ReCiPe 2016 v1.03, endpoint (H);natural resources;energy resources: non-renewable, fossil;USD 2013
+ReCiPe 2016 v1.03, endpoint (H);natural resources;material resources: metals/minerals;USD 2013
+ReCiPe 2016 v1.03, endpoint (H);total: ecosystem quality;ecosystem quality;species.yr
+ReCiPe 2016 v1.03, endpoint (H);total: human health;human health;DALYs
+ReCiPe 2016 v1.03, endpoint (H);total: natural resources;natural resources;USD 2013
+ReCiPe 2016 v1.03, endpoint (I) no LT;ecosystem quality no LT;acidification: terrestrial no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (I) no LT;ecosystem quality no LT;climate change: freshwater ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (I) no LT;ecosystem quality no LT;climate change: terrestrial ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (I) no LT;ecosystem quality no LT;ecotoxicity: freshwater no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (I) no LT;ecosystem quality no LT;ecotoxicity: marine no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (I) no LT;ecosystem quality no LT;ecotoxicity: terrestrial no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (I) no LT;ecosystem quality no LT;eutrophication: freshwater no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (I) no LT;ecosystem quality no LT;eutrophication: marine no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (I) no LT;ecosystem quality no LT;land use no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (I) no LT;ecosystem quality no LT;photochemical oxidant formation: terrestrial ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (I) no LT;ecosystem quality no LT;water use: aquatic ecosystems no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (I) no LT;human health no LT;climate change: human health no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (I) no LT;human health no LT;human toxicity: carcinogenic no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (I) no LT;human health no LT;human toxicity: non-carcinogenic no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (I) no LT;human health no LT;ionising radiation no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (I) no LT;human health no LT;ozone depletion no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (I) no LT;human health no LT;particulate matter formation no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (I) no LT;human health no LT;photochemical oxidant formation: human health no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (I) no LT;human health no LT;water use: human health no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (I) no LT;natural resources no LT;energy resources: non-renewable, fossil no LT;USD 2013
+ReCiPe 2016 v1.03, endpoint (I) no LT;natural resources no LT;material resources: metals/minerals no LT;USD 2013
+ReCiPe 2016 v1.03, endpoint (I) no LT;total: ecosystem quality no LT;ecosystem quality no LT;species.yr
+ReCiPe 2016 v1.03, endpoint (I) no LT;total: human health no LT;human health no LT;DALYs
+ReCiPe 2016 v1.03, endpoint (I) no LT;total: natural resources no LT;natural resources no LT;USD 2013
+ReCiPe 2016 v1.03, endpoint (I);ecosystem quality;acidification: terrestrial;species.yr
+ReCiPe 2016 v1.03, endpoint (I);ecosystem quality;climate change: freshwater ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (I);ecosystem quality;climate change: terrestrial ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (I);ecosystem quality;ecotoxicity: freshwater;species.yr
+ReCiPe 2016 v1.03, endpoint (I);ecosystem quality;ecotoxicity: marine;species.yr
+ReCiPe 2016 v1.03, endpoint (I);ecosystem quality;ecotoxicity: terrestrial;species.yr
+ReCiPe 2016 v1.03, endpoint (I);ecosystem quality;eutrophication: freshwater;species.yr
+ReCiPe 2016 v1.03, endpoint (I);ecosystem quality;eutrophication: marine;species.yr
+ReCiPe 2016 v1.03, endpoint (I);ecosystem quality;land use;species.yr
+ReCiPe 2016 v1.03, endpoint (I);ecosystem quality;photochemical oxidant formation: terrestrial ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (I);ecosystem quality;water use: aquatic ecosystems;species.yr
+ReCiPe 2016 v1.03, endpoint (I);human health;climate change: human health;DALYs
+ReCiPe 2016 v1.03, endpoint (I);human health;human toxicity: carcinogenic;DALYs
+ReCiPe 2016 v1.03, endpoint (I);human health;human toxicity: non-carcinogenic;DALYs
+ReCiPe 2016 v1.03, endpoint (I);human health;ionising radiation;DALYs
+ReCiPe 2016 v1.03, endpoint (I);human health;ozone depletion;DALYs
+ReCiPe 2016 v1.03, endpoint (I);human health;particulate matter formation;DALYs
+ReCiPe 2016 v1.03, endpoint (I);human health;photochemical oxidant formation: human health;DALYs
+ReCiPe 2016 v1.03, endpoint (I);human health;water use: human health;DALYs
+ReCiPe 2016 v1.03, endpoint (I);natural resources;energy resources: non-renewable, fossil;USD 2013
+ReCiPe 2016 v1.03, endpoint (I);natural resources;material resources: metals/minerals;USD 2013
+ReCiPe 2016 v1.03, endpoint (I);total: ecosystem quality;ecosystem quality;species.yr
+ReCiPe 2016 v1.03, endpoint (I);total: human health;human health;DALYs
+ReCiPe 2016 v1.03, endpoint (I);total: natural resources;natural resources;USD 2013
+ReCiPe 2016 v1.03, midpoint (E) no LT;acidification: terrestrial no LT;terrestrial acidification potential (TAP) no LT;kg SO2-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;climate change no LT;global warming potential (GWP1000) no LT;kg CO2-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;ecotoxicity: freshwater no LT;freshwater ecotoxicity potential (FETP) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;ecotoxicity: marine no LT;marine ecotoxicity potential (METP) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;ecotoxicity: terrestrial no LT;terrestrial ecotoxicity potential (TETP) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;energy resources: non-renewable, fossil no LT;fossil fuel potential (FFP) no LT;kg oil-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;eutrophication: freshwater no LT;freshwater eutrophication potential (FEP) no LT;kg P-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;eutrophication: marine no LT;marine eutrophication potential (MEP) no LT;kg N-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;human toxicity: carcinogenic no LT;human toxicity potential (HTPc) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;human toxicity: non-carcinogenic no LT;human toxicity potential (HTPnc) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;ionising radiation no LT;ionising radiation potential (IRP) no LT;kBq Co-60-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;land use no LT;agricultural land occupation (LOP) no LT;m2*a crop-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;material resources: metals/minerals no LT;surplus ore potential (SOP) no LT;kg Cu-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;ozone depletion no LT;ozone depletion potential (ODPinfinite) no LT;kg CFC-11-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;particulate matter formation no LT;particulate matter formation potential (PMFP) no LT;kg PM2.5-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;photochemical oxidant formation: human health no LT;photochemical oxidant formation potential: humans (HOFP) no LT;kg NOx-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;photochemical oxidant formation: terrestrial ecosystems no LT;photochemical oxidant formation potential: ecosystems (EOFP) no LT;kg NOx-Eq
+ReCiPe 2016 v1.03, midpoint (E) no LT;water use no LT;water consumption potential (WCP) no LT;m3
+ReCiPe 2016 v1.03, midpoint (E);acidification: terrestrial;terrestrial acidification potential (TAP);kg SO2-Eq
+ReCiPe 2016 v1.03, midpoint (E);climate change;global warming potential (GWP1000);kg CO2-Eq
+ReCiPe 2016 v1.03, midpoint (E);ecotoxicity: freshwater;freshwater ecotoxicity potential (FETP);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (E);ecotoxicity: marine;marine ecotoxicity potential (METP);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (E);ecotoxicity: terrestrial;terrestrial ecotoxicity potential (TETP);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (E);energy resources: non-renewable, fossil;fossil fuel potential (FFP);kg oil-Eq
+ReCiPe 2016 v1.03, midpoint (E);eutrophication: freshwater;freshwater eutrophication potential (FEP);kg P-Eq
+ReCiPe 2016 v1.03, midpoint (E);eutrophication: marine;marine eutrophication potential (MEP);kg N-Eq
+ReCiPe 2016 v1.03, midpoint (E);human toxicity: carcinogenic;human toxicity potential (HTPc);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (E);human toxicity: non-carcinogenic;human toxicity potential (HTPnc);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (E);ionising radiation;ionising radiation potential (IRP);kBq Co-60-Eq
+ReCiPe 2016 v1.03, midpoint (E);land use;agricultural land occupation (LOP);m2*a crop-Eq
+ReCiPe 2016 v1.03, midpoint (E);material resources: metals/minerals;surplus ore potential (SOP);kg Cu-Eq
+ReCiPe 2016 v1.03, midpoint (E);ozone depletion;ozone depletion potential (ODPinfinite);kg CFC-11-Eq
+ReCiPe 2016 v1.03, midpoint (E);particulate matter formation;particulate matter formation potential (PMFP);kg PM2.5-Eq
+ReCiPe 2016 v1.03, midpoint (E);photochemical oxidant formation: human health;photochemical oxidant formation potential: humans (HOFP);kg NOx-Eq
+ReCiPe 2016 v1.03, midpoint (E);photochemical oxidant formation: terrestrial ecosystems;photochemical oxidant formation potential: ecosystems (EOFP);kg NOx-Eq
+ReCiPe 2016 v1.03, midpoint (E);water use;water consumption potential (WCP);m3
+ReCiPe 2016 v1.03, midpoint (H) no LT;acidification: terrestrial no LT;terrestrial acidification potential (TAP) no LT;kg SO2-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;climate change no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;ecotoxicity: freshwater no LT;freshwater ecotoxicity potential (FETP) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;ecotoxicity: marine no LT;marine ecotoxicity potential (METP) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;ecotoxicity: terrestrial no LT;terrestrial ecotoxicity potential (TETP) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;energy resources: non-renewable, fossil no LT;fossil fuel potential (FFP) no LT;kg oil-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;eutrophication: freshwater no LT;freshwater eutrophication potential (FEP) no LT;kg P-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;eutrophication: marine no LT;marine eutrophication potential (MEP) no LT;kg N-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;human toxicity: carcinogenic no LT;human toxicity potential (HTPc) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;human toxicity: non-carcinogenic no LT;human toxicity potential (HTPnc) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;ionising radiation no LT;ionising radiation potential (IRP) no LT;kBq Co-60-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;land use no LT;agricultural land occupation (LOP) no LT;m2*a crop-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;material resources: metals/minerals no LT;surplus ore potential (SOP) no LT;kg Cu-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;ozone depletion no LT;ozone depletion potential (ODPinfinite) no LT;kg CFC-11-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;particulate matter formation no LT;particulate matter formation potential (PMFP) no LT;kg PM2.5-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;photochemical oxidant formation: human health no LT;photochemical oxidant formation potential: humans (HOFP) no LT;kg NOx-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;photochemical oxidant formation: terrestrial ecosystems no LT;photochemical oxidant formation potential: ecosystems (EOFP) no LT;kg NOx-Eq
+ReCiPe 2016 v1.03, midpoint (H) no LT;water use no LT;water consumption potential (WCP) no LT;m3
+ReCiPe 2016 v1.03, midpoint (H);acidification: terrestrial;terrestrial acidification potential (TAP);kg SO2-Eq
+ReCiPe 2016 v1.03, midpoint (H);climate change;global warming potential (GWP100);kg CO2-Eq
+ReCiPe 2016 v1.03, midpoint (H);ecotoxicity: freshwater;freshwater ecotoxicity potential (FETP);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (H);ecotoxicity: marine;marine ecotoxicity potential (METP);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (H);ecotoxicity: terrestrial;terrestrial ecotoxicity potential (TETP);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (H);energy resources: non-renewable, fossil;fossil fuel potential (FFP);kg oil-Eq
+ReCiPe 2016 v1.03, midpoint (H);eutrophication: freshwater;freshwater eutrophication potential (FEP);kg P-Eq
+ReCiPe 2016 v1.03, midpoint (H);eutrophication: marine;marine eutrophication potential (MEP);kg N-Eq
+ReCiPe 2016 v1.03, midpoint (H);human toxicity: carcinogenic;human toxicity potential (HTPc);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (H);human toxicity: non-carcinogenic;human toxicity potential (HTPnc);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (H);ionising radiation;ionising radiation potential (IRP);kBq Co-60-Eq
+ReCiPe 2016 v1.03, midpoint (H);land use;agricultural land occupation (LOP);m2*a crop-Eq
+ReCiPe 2016 v1.03, midpoint (H);material resources: metals/minerals;surplus ore potential (SOP);kg Cu-Eq
+ReCiPe 2016 v1.03, midpoint (H);ozone depletion;ozone depletion potential (ODPinfinite);kg CFC-11-Eq
+ReCiPe 2016 v1.03, midpoint (H);particulate matter formation;particulate matter formation potential (PMFP);kg PM2.5-Eq
+ReCiPe 2016 v1.03, midpoint (H);photochemical oxidant formation: human health;photochemical oxidant formation potential: humans (HOFP);kg NOx-Eq
+ReCiPe 2016 v1.03, midpoint (H);photochemical oxidant formation: terrestrial ecosystems;photochemical oxidant formation potential: ecosystems (EOFP);kg NOx-Eq
+ReCiPe 2016 v1.03, midpoint (H);water use;water consumption potential (WCP);m3
+ReCiPe 2016 v1.03, midpoint (I) no LT;acidification: terrestrial no LT;terrestrial acidification potential (TAP) no LT;kg SO2-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;climate change no LT;global warming potential (GWP20) no LT;kg CO2-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;ecotoxicity: freshwater no LT;freshwater ecotoxicity potential (FETP) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;ecotoxicity: marine no LT;marine ecotoxicity potential (METP) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;ecotoxicity: terrestrial no LT;terrestrial ecotoxicity potential (TETP) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;energy resources: non-renewable, fossil no LT;fossil fuel potential (FFP) no LT;kg oil-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;eutrophication: freshwater no LT;freshwater eutrophication potential (FEP) no LT;kg P-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;eutrophication: marine no LT;marine eutrophication potential (MEP) no LT;kg N-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;human toxicity: carcinogenic no LT;human toxicity potential (HTPc) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;human toxicity: non-carcinogenic no LT;human toxicity potential (HTPnc) no LT;kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;ionising radiation no LT;ionising radiation potential (IRP) no LT;kBq Co-60-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;land use no LT;agricultural land occupation (LOP) no LT;m2*a crop-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;material resources: metals/minerals no LT;surplus ore potential (SOP) no LT;kg Cu-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;ozone depletion no LT;ozone depletion potential (ODPinfinite) no LT;kg CFC-11-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;particulate matter formation no LT;particulate matter formation potential (PMFP) no LT;kg PM2.5-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;photochemical oxidant formation: human health no LT;photochemical oxidant formation potential: humans (HOFP) no LT;kg NOx-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;photochemical oxidant formation: terrestrial ecosystems no LT;photochemical oxidant formation potential: ecosystems (EOFP) no LT;kg NOx-Eq
+ReCiPe 2016 v1.03, midpoint (I) no LT;water use no LT;water consumption potential (WCP) no LT;m3
+ReCiPe 2016 v1.03, midpoint (I);acidification: terrestrial;terrestrial acidification potential (TAP);kg SO2-Eq
+ReCiPe 2016 v1.03, midpoint (I);climate change;global warming potential (GWP20);kg CO2-Eq
+ReCiPe 2016 v1.03, midpoint (I);ecotoxicity: freshwater;freshwater ecotoxicity potential (FETP);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (I);ecotoxicity: marine;marine ecotoxicity potential (METP);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (I);ecotoxicity: terrestrial;terrestrial ecotoxicity potential (TETP);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (I);energy resources: non-renewable, fossil;fossil fuel potential (FFP);kg oil-Eq
+ReCiPe 2016 v1.03, midpoint (I);eutrophication: freshwater;freshwater eutrophication potential (FEP);kg P-Eq
+ReCiPe 2016 v1.03, midpoint (I);eutrophication: marine;marine eutrophication potential (MEP);kg N-Eq
+ReCiPe 2016 v1.03, midpoint (I);human toxicity: carcinogenic;human toxicity potential (HTPc);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (I);human toxicity: non-carcinogenic;human toxicity potential (HTPnc);kg 1,4-DCB-Eq
+ReCiPe 2016 v1.03, midpoint (I);ionising radiation;ionising radiation potential (IRP);kBq Co-60-Eq
+ReCiPe 2016 v1.03, midpoint (I);land use;agricultural land occupation (LOP);m2*a crop-Eq
+ReCiPe 2016 v1.03, midpoint (I);material resources: metals/minerals;surplus ore potential (SOP);kg Cu-Eq
+ReCiPe 2016 v1.03, midpoint (I);ozone depletion;ozone depletion potential (ODPinfinite);kg CFC-11-Eq
+ReCiPe 2016 v1.03, midpoint (I);particulate matter formation;particulate matter formation potential (PMFP);kg PM2.5-Eq
+ReCiPe 2016 v1.03, midpoint (I);photochemical oxidant formation: human health;photochemical oxidant formation potential: humans (HOFP);kg NOx-Eq
+ReCiPe 2016 v1.03, midpoint (I);photochemical oxidant formation: terrestrial ecosystems;photochemical oxidant formation potential: ecosystems (EOFP);kg NOx-Eq
+ReCiPe 2016 v1.03, midpoint (I);water use;water consumption potential (WCP);m3
+TRACI v2.1 no LT;acidification no LT;acidification potential (AP) no LT;kg SO2-Eq
+TRACI v2.1 no LT;climate change no LT;global warming potential (GWP100) no LT;kg CO2-Eq
+TRACI v2.1 no LT;ecotoxicity: freshwater no LT;ecotoxicity: freshwater no LT;CTUe
+TRACI v2.1 no LT;eutrophication no LT;eutrophication potential no LT;kg N-Eq
+TRACI v2.1 no LT;human toxicity: carcinogenic no LT;human toxicity: carcinogenic no LT;CTUh
+TRACI v2.1 no LT;human toxicity: non-carcinogenic no LT;human toxicity: non-carcinogenic no LT;CTUh
+TRACI v2.1 no LT;ozone depletion no LT;ozone depletion potential (ODP) no LT;kg CFC-11-Eq
+TRACI v2.1 no LT;particulate matter formation no LT;particulate matter formation potential (PMFP) no LT;kg PM2.5-Eq
+TRACI v2.1 no LT;photochemical oxidant formation no LT;maximum incremental reactivity (MIR) no LT;kg O3-Eq
+TRACI v2.1;acidification;acidification potential (AP);kg SO2-Eq
+TRACI v2.1;climate change;global warming potential (GWP100);kg CO2-Eq
+TRACI v2.1;ecotoxicity: freshwater;ecotoxicity: freshwater;CTUe
+TRACI v2.1;eutrophication;eutrophication potential;kg N-Eq
+TRACI v2.1;human toxicity: carcinogenic;human toxicity: carcinogenic;CTUh
+TRACI v2.1;human toxicity: non-carcinogenic;human toxicity: non-carcinogenic;CTUh
+TRACI v2.1;ozone depletion;ozone depletion potential (ODP);kg CFC-11-Eq
+TRACI v2.1;particulate matter formation;particulate matter formation potential (PMFP);kg PM2.5-Eq
+TRACI v2.1;photochemical oxidant formation;maximum incremental reactivity (MIR);kg O3-Eq
+USEtox v2.13, endpoint no LT;ecosystem quality no LT;ecotoxicity: freshwater no LT;PDF.m3.yr
+USEtox v2.13, endpoint no LT;human health no LT;human toxicity: carcinogenic no LT;DALYs
+USEtox v2.13, endpoint no LT;human health no LT;human toxicity: non-carcinogenic no LT;DALYs
+USEtox v2.13, endpoint;ecosystem quality;ecotoxicity: freshwater;PDF.m3.yr
+USEtox v2.13, endpoint;human health;human toxicity: carcinogenic;DALYs
+USEtox v2.13, endpoint;human health;human toxicity: non-carcinogenic;DALYs
+USEtox v2.13, midpoint no LT;ecotoxicity: freshwater no LT;comparative toxic unit for ecosystems (CTUe) no LT;CTUe
+USEtox v2.13, midpoint no LT;human toxicity: carcinogenic no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+USEtox v2.13, midpoint no LT;human toxicity: non-carcinogenic no LT;comparative toxic unit for human (CTUh) no LT;CTUh
+USEtox v2.13, midpoint;ecotoxicity: freshwater;comparative toxic unit for ecosystems (CTUe);CTUe
+USEtox v2.13, midpoint;human toxicity: carcinogenic;comparative toxic unit for human (CTUh);CTUh
+USEtox v2.13, midpoint;human toxicity: non-carcinogenic;comparative toxic unit for human (CTUh);CTUh

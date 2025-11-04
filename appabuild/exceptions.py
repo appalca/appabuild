@@ -23,3 +23,7 @@ class ParameterError(Exception):
     """Raised when any problem concerning impact model parameterization is encountered."""
 
     pass
+
+
+class ForegroundDatabaseError(Exception):
+    """Raised when any problem concerning the foreground data is encountered."""

@@ -16,7 +16,7 @@ runner = CliRunner()
 
 
 def test_build_command():
-    appaconf_file = os.path.join(DATA_DIR, "cmd_build", "appalca_conf.yaml")
+    appaconf_file = os.path.join(DATA_DIR, "cmd_build", "appalca_conf_wo_ei.yaml")
     conf_file = os.path.join(DATA_DIR, "cmd_build", "nvidia_ai_gpu_chip_lca_conf.yaml")
     expected_file = os.path.join(
         DATA_DIR, "cmd_build", "nvidia_ai_gpu_chip_expected.yaml"

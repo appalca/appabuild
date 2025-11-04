@@ -15,5 +15,5 @@ exchanges:
   type: technosphere
   amount: "inference * energy_per_inference / 1000000"
   input:
-    uuid: "electricity_no_ei"
+    uuid: "electricity_wo_ei"
     database: user_database

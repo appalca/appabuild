@@ -7,11 +7,12 @@ from __future__ import annotations
 import re
 from typing import List, Optional, Union
 
-import brightway2 as bw
+import bw2data as bd
 from pydantic import BaseModel
 
 from appabuild.database.serialized_data import ActivityIdentifier
-from appabuild.exceptions import BwDatabaseError
+from appabuild.exceptions import BwDatabaseError, SerializedDataError
+from appabuild.logger import logger
 
 
 class BwDatabase(BaseModel):
@@ -27,7 +28,7 @@ class BwDatabase(BaseModel):
         Brightway database object
         :return:
         """
-        return bw.Database(self.name)
+        return bd.Database(self.name)
 
     def search_activity(
         self, regexes: dict, must_find_only_one: Optional[bool] = False
@@ -48,14 +49,13 @@ class BwDatabase(BaseModel):
             )
         matching_activities = list(set.intersection(*map(set, matching_acts)))
         if must_find_only_one and len(matching_activities) < 1:
-            raise BwDatabaseError(
-                f"Cannot find any activity resolving the following regexes: {regexes}."
-            )
+            e = f"Cannot find any activity resolving the following regexes: {regexes}."
+            logger.exception(e)
+            raise BwDatabaseError(e)
         if must_find_only_one and len(matching_activities) > 1:
-            raise BwDatabaseError(
-                f"Too many activity matching the following regexes {regexes}. Matches "
-                f"are {matching_activities}."
-            )
+            e = f"Too many activity matching the following regexes {regexes}. Matches are {matching_activities}."
+            logger.exception(e)
+            raise BwDatabaseError(e)
         if must_find_only_one:
             return ActivityIdentifier(
                 database=matching_activities[0][0], uuid=matching_activities[0][1]
@@ -79,10 +79,9 @@ class BwDatabase(BaseModel):
         regexes = unresolved_activity_identifier.model_dump()
         database = regexes.pop("database")
         if database != self.name:
-            raise ValueError(
-                f"Cannot search activity on a different database ({database} != "
-                f"{self.name})."
-            )
+            e = f"Cannot search activity on a different database ({database} != {self.name})."
+            logger.exception(e)
+            raise SerializedDataError(e)
         activity_identifier = self.search_activity(
             regexes=regexes, must_find_only_one=True
         )

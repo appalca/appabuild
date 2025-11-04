@@ -1,4 +1,5 @@
-project_name: 'sample_project'
+project_name: 'sample_project_wo_ei_bw25'
+replace_bg: False
 databases:
   foreground:
     name: user_database

@@ -69,65 +69,35 @@ parameters:
 tree:
   name: nvidia_ai_gpu_chip
   models:
-    EFV3_CLIMATE_CHANGE: 12500.0*architecture_Maxwell*(4.6212599075297227e-9*cuda_core
-      + 7.37132179656539e-6) + 0.007241940498277656*architecture_Maxwell*(0.009702834627645097*cuda_core
-      + 1)**2/((1 - 0.9980542072708582*exp(-1.889809692866578e-5*cuda_core))**2*(70685.775/(0.1889809692866578*cuda_core
-      + 19.47688243064738) - 106.7778184271516*sqrt(2)/sqrt(0.009702834627645097*cuda_core
-      + 1))) + 12500.0*architecture_Pascal*(4.6891975579761074e-9*cuda_core + 7.808281424221127e-6)
-      + 0.26268825584172803*architecture_Pascal*(0.0060737847877931227*cuda_core +
-      1)**2/((1 - 0.98920497620445418*exp(-6.5923115776528471e-5*cuda_core))**2*(70685.775/(0.13184623155305694*cuda_core
-      + 21.707425626610416) - 101.14318001667067*sqrt(2)/sqrt(0.0060737847877931227*cuda_core
-      + 1))) + 0.00036525*energy_per_inference*inference_per_day*lifespan*(0.005*usage_location_EU
-      + 0.021*usage_location_FR)
-  direct_impacts:
-    EFV3_CLIMATE_CHANGE: '0.0'
-  scaled_direct_impacts:
-    EFV3_CLIMATE_CHANGE: '0'
+    EFV3_CLIMATE_CHANGE: 1.0*energy_per_inference*inference_per_day*lifespan*(7.560675e-5*usage_location_EU
+      + 1.7532e-5*usage_location_FR) - 12500.0*architecture_Maxwell*(-4.6212599075297227e-9*cuda_core
+      - 7.37132179656539e-6) + 1.90904456522695e-5*architecture_Maxwell*(0.1889809692866578*cuda_core
+      + 19.47688243064738)**2/((1 - 0.9980542072708582*exp(-1.889809692866578e-5*cuda_core))**2*(70685.775/(0.1889809692866578*cuda_core
+      + 19.47688243064738) - 471.2385*sqrt(2)/sqrt(0.1889809692866578*cuda_core +
+      19.47688243064738))) - 12500.0*architecture_Pascal*(-4.6891975579761074e-9*cuda_core
+      - 7.808281424221127e-6) + 0.00055747322513291*architecture_Pascal*(0.13184623155305694*cuda_core
+      + 21.707425626610416)**2/((1 - 0.98920497620445418*exp(-6.5923115776528471e-5*cuda_core))**2*(70685.775/(0.13184623155305694*cuda_core
+      + 21.707425626610416) - 471.2385*sqrt(2)/sqrt(0.13184623155305694*cuda_core
+      + 21.707425626610416)))
   children:
   - name: ai_use_phase
     models:
-      EFV3_CLIMATE_CHANGE: 0.00036525*energy_per_inference*inference_per_day*lifespan*(0.005*usage_location_EU
-        + 0.021*usage_location_FR)
-    direct_impacts:
-      EFV3_CLIMATE_CHANGE: 0.00036525*energy_per_inference*inference_per_day*lifespan*(0.005*usage_location_EU
-        + 0.021*usage_location_FR)
-    scaled_direct_impacts:
-      EFV3_CLIMATE_CHANGE: 0.00036525*energy_per_inference*inference_per_day*lifespan*(0.005*usage_location_EU
-        + 0.021*usage_location_FR)
+      EFV3_CLIMATE_CHANGE: 1.0*energy_per_inference*inference_per_day*lifespan*(7.560675e-5*usage_location_EU
+        + 1.7532e-5*usage_location_FR)
     children: []
     properties: {}
     amount: '1.0'
   - name: nvidia_gpu_chip_manufacturing
     models:
-      EFV3_CLIMATE_CHANGE: 12500.0*architecture_Maxwell*(4.6212599075297227e-9*cuda_core
-        + 7.37132179656539e-6) + 0.007241940498277656*architecture_Maxwell*(0.009702834627645097*cuda_core
-        + 1)**2/((1 - 0.9980542072708582*exp(-1.889809692866578e-5*cuda_core))**2*(70685.775/(0.1889809692866578*cuda_core
-        + 19.47688243064738) - 106.7778184271516*sqrt(2)/sqrt(0.009702834627645097*cuda_core
-        + 1))) + 12500.0*architecture_Pascal*(4.6891975579761074e-9*cuda_core + 7.808281424221127e-6)
-        + 0.26268825584172803*architecture_Pascal*(0.0060737847877931227*cuda_core
-        + 1)**2/((1 - 0.98920497620445418*exp(-6.5923115776528471e-5*cuda_core))**2*(70685.775/(0.13184623155305694*cuda_core
-        + 21.707425626610416) - 101.14318001667067*sqrt(2)/sqrt(0.0060737847877931227*cuda_core
-        + 1)))
-    direct_impacts:
-      EFV3_CLIMATE_CHANGE: 12500.0*architecture_Maxwell*(4.6212599075297227e-9*cuda_core
-        + 7.37132179656539e-6) + 0.007241940498277656*architecture_Maxwell*(0.009702834627645097*cuda_core
-        + 1)**2/((1 - 0.9980542072708582*exp(-1.889809692866578e-5*cuda_core))**2*(70685.775/(0.1889809692866578*cuda_core
-        + 19.47688243064738) - 106.7778184271516*sqrt(2)/sqrt(0.009702834627645097*cuda_core
-        + 1))) + 12500.0*architecture_Pascal*(4.6891975579761074e-9*cuda_core + 7.808281424221127e-6)
-        + 0.26268825584172803*architecture_Pascal*(0.0060737847877931227*cuda_core
-        + 1)**2/((1 - 0.98920497620445418*exp(-6.5923115776528471e-5*cuda_core))**2*(70685.775/(0.13184623155305694*cuda_core
-        + 21.707425626610416) - 101.14318001667067*sqrt(2)/sqrt(0.0060737847877931227*cuda_core
-        + 1)))
-    scaled_direct_impacts:
-      EFV3_CLIMATE_CHANGE: 12500.0*architecture_Maxwell*(4.6212599075297227e-9*cuda_core
-        + 7.37132179656539e-6) + 0.007241940498277656*architecture_Maxwell*(0.009702834627645097*cuda_core
-        + 1)**2/((1 - 0.9980542072708582*exp(-1.889809692866578e-5*cuda_core))**2*(70685.775/(0.1889809692866578*cuda_core
-        + 19.47688243064738) - 106.7778184271516*sqrt(2)/sqrt(0.009702834627645097*cuda_core
-        + 1))) + 12500.0*architecture_Pascal*(4.6891975579761074e-9*cuda_core + 7.808281424221127e-6)
-        + 0.26268825584172803*architecture_Pascal*(0.0060737847877931227*cuda_core
-        + 1)**2/((1 - 0.98920497620445418*exp(-6.5923115776528471e-5*cuda_core))**2*(70685.775/(0.13184623155305694*cuda_core
-        + 21.707425626610416) - 101.14318001667067*sqrt(2)/sqrt(0.0060737847877931227*cuda_core
-        + 1)))
+      EFV3_CLIMATE_CHANGE: -12500.0*architecture_Maxwell*(-4.6212599075297227e-9*cuda_core
+        - 7.37132179656539e-6) + 1.90904456522695e-5*architecture_Maxwell*(0.1889809692866578*cuda_core
+        + 19.47688243064738)**2/((1 - 0.9980542072708582*exp(-1.889809692866578e-5*cuda_core))**2*(70685.775/(0.1889809692866578*cuda_core
+        + 19.47688243064738) - 471.2385*sqrt(2)/sqrt(0.1889809692866578*cuda_core
+        + 19.47688243064738))) - 12500.0*architecture_Pascal*(-4.6891975579761074e-9*cuda_core
+        - 7.808281424221127e-6) + 0.00055747322513291*architecture_Pascal*(0.13184623155305694*cuda_core
+        + 21.707425626610416)**2/((1 - 0.98920497620445418*exp(-6.5923115776528471e-5*cuda_core))**2*(70685.775/(0.13184623155305694*cuda_core
+        + 21.707425626610416) - 471.2385*sqrt(2)/sqrt(0.13184623155305694*cuda_core
+        + 21.707425626610416)))
     children: []
     properties: {}
     amount: '1.0'
