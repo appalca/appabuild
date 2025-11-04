@@ -43,15 +43,13 @@ def build(
             raise ValueError()
         foreground_database = setup.initialize(appabuild_config_path)
 
-    setup.build(lca_config_path, foreground_database)
-
-    """
-    except (ValueError, ValidationError, BwDatabaseError) as e:
+    try:
+        setup.build(lca_config_path, foreground_database)
+    except (ValueError, ValidationError, BwDatabaseError):
         sys.exit(1)
     except Exception as e:
         logger.exception(str(e))
         sys.exit(1)
-    """
 
 
 @app.command()
