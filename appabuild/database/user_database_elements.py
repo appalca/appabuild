@@ -14,6 +14,7 @@ from numbers import Number
 from typing import Dict, List, Optional, Tuple, Union
 
 import pydantic
+from lca_algebraic import STORE_FORMULA_KEY
 from sympy import parse_expr
 
 from appabuild.database.bw_databases import BwDatabase
@@ -21,8 +22,6 @@ from appabuild.database.serialized_data import (
     ActivityIdentifier,
     SerializedActivity,
     SerializedExchange,
-    Switch,
-    SwitchOption,
 )
 from appabuild.exceptions import SerializedDataError
 
@@ -101,7 +100,7 @@ class Exchange(DatabaseElement):
         }
         if self.formula is not None:
             # Handling formula separately otherwise None gets transformed into str
-            exchange["formula"] = self.formula
+            exchange[STORE_FORMULA_KEY] = self.formula
         return exchange
 
     @classmethod
@@ -154,11 +153,9 @@ class Exchange(DatabaseElement):
                         == solved_serialized_exchange.input.uuid
                     ]
                     if len(serialized_input) != 1:
-                        raise ValueError(
-                            f"Cannot find a unique serialized activity with uuid "
-                            f"{solved_serialized_exchange.input.uuid} (found "
-                            f"{len(serialized_input)})."
-                        )
+                        e = f"Cannot find a unique serialized activity with uuid {solved_serialized_exchange.input.uuid} (found {len(serialized_input)})."
+                        logger.exception(e)
+                        raise SerializedDataError(e)
                     serialized_input = serialized_input[0]
                     if solved_serialized_exchange.use_exchange_name:
                         serialized_input.name = solved_serialized_exchange.name
@@ -210,9 +207,9 @@ class Exchange(DatabaseElement):
             try:
                 formula = parse_expr(self.formula)
             except AttributeError as e:
-                raise SerializedDataError(
-                    f"Invalid amount for exchange {self.name}: {e}"
-                )
+                msg = f"Invalid amount for exchange {self.name}: {e}"
+                logger.exception(msg)
+                raise SerializedDataError(msg)
             for param_to_replace, param_replacing in parameters_matching.items():
                 if isinstance(param_replacing, dict):
                     all_oh_params = {
@@ -248,9 +245,9 @@ class Exchange(DatabaseElement):
                         try:
                             formula = formula.subs(param_to_replace, param_replacing)
                         except TypeError as e:
-                            raise SerializedDataError(
-                                f"Invalid amount for exchange {self.name}: {e}"
-                            )
+                            msg = f"Invalid amount for exchange {self.name}: {e}"
+                            logger.exception(msg)
+                            raise SerializedDataError(msg)
                         logger.info(
                             f"Parameters replacement; exchange {self.name}; replacing "
                             f"{param_to_replace} by {param_replacing} in formula."
@@ -338,7 +335,16 @@ class Activity(DatabaseElement):
             "comment": self.comment,
             "amount": self.amount,
             "include_in_tree": self.include_in_tree,
-            "exchanges": [exchange.to_bw_format() for exchange in self.exchanges],
+            "exchanges": [exchange.to_bw_format() for exchange in self.exchanges]
+            + [
+                {
+                    "input": (self.database, self.code),
+                    "output": (self.database, self.code),
+                    "name": self.name,
+                    "type": "production",
+                    "amount": 1,
+                }
+            ],
             "properties": self.properties,
         }
 
@@ -380,10 +386,9 @@ class Activity(DatabaseElement):
             )
             activity_code = f"{activity_code}_{amount_of_copies}"
             if activity_code in [activity.code for activity in context.activities]:
-                raise SerializedDataError(
-                    f"Cannot create a duplicate {serialized_activity.name} activity. "
-                    f"Code {activity_code} is not unique."
-                )
+                e = f"Cannot create a duplicate {serialized_activity.name} activity. Code {activity_code} is not unique."
+                logger.exception(e)
+                raise SerializedDataError(e)
         activity_name = serialized_activity.name
         if (
             len(
@@ -405,10 +410,9 @@ class Activity(DatabaseElement):
             )
             activity_name = f"{activity_name}_{amount_of_copies}"
             if activity_name in [activity.name for activity in context.activities]:
-                raise SerializedDataError(
-                    f"Cannot create a duplicate {serialized_activity.name} activity. "
-                    f"Name {activity_name} is not unique, and activity will be a node."
-                )
+                msg = f"Cannot create a duplicate {serialized_activity.name} activity. Name {activity_name} is not unique, and activity will be a node."
+                logger.exception(msg)
+                raise SerializedDataError(msg)
 
         new_activity = Activity(
             code=activity_code,

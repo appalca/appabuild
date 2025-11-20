@@ -5,12 +5,14 @@ Contains classes to import LCI databases in Brightway project.
 from __future__ import annotations
 
 import abc
+import csv
 import json
 import os
 import re
 from typing import Optional
 
-import brightway2 as bw
+import bw2data as bd
+import bw2io as bi
 import yaml
 from apparun.parameters import ImpactModelParams
 from lca_algebraic import resetParams, setForeground
@@ -23,21 +25,21 @@ from appabuild.database.user_database_elements import Activity, UserDatabaseCont
 from appabuild.exceptions import BwDatabaseError, SerializedDataError
 from appabuild.logger import log_validation_error, logger
 
+PATH_TO_METHODS = "data/methods/ecoinvent_3.11_methods.csv"
+
 
 class Database:
     """
     Abstract class of a Database. Defines two mandatory methods for import.
     """
 
-    def __init__(self, name: str, path: Optional[str]):
+    def __init__(self, name: str):
         """
         Initializes a Database from its name and optionally its path.
         :param name: name of the database. Should be consistent with the name used in
         datasets.
-        :param path: path of the database on disk.
         """
         self.name = name
-        self.path = path
 
     def execute_at_startup(self) -> None:
         """
@@ -47,8 +49,6 @@ class Database:
         :return:
         """
         resetParams(self.name)
-        if self.name not in bw.databases:
-            self.import_in_project()
 
     @abc.abstractmethod
     def import_in_project(self) -> None:
@@ -57,27 +57,6 @@ class Database:
         :return:
         """
         return
-
-
-class BiosphereDatabase(Database):
-    """
-    Class to import biosphere3 database, which is the Brightway database containing all
-    biosphere flows. Biosphere flows are used to compute impacts thanks to
-    characterization factors. This class currently works only with EcoInvent 3.9.
-    """
-
-    def __init__(self):
-        Database.__init__(self, name="biosphere3", path=None)
-
-    def execute_at_startup(self) -> None:
-        resetParams(self.name)
-        self.import_in_project()
-
-    def import_in_project(self) -> None:
-        logger.info("Loading biosphere database...")
-        bw.bw2setup()
-        bw.add_ecoinvent_39_biosphere_flows()
-        logger.info("Biosphere database successfully loaded")
 
 
 class ImpactProxiesDatabase(Database):
@@ -91,15 +70,22 @@ class ImpactProxiesDatabase(Database):
     "{bw_method_name}_technosphere_proxy".
     """
 
-    def __init__(self):
-        Database.__init__(self, name="impact_proxies", path=None)
+    def __init__(
+        self, biosphere_name: Optional[str] = None, replace: Optional[bool] = False
+    ):
+        Database.__init__(self, name="impact_proxies")
+        self.biosphere_name = (
+            biosphere_name if biosphere_name is not None else self.name
+        )
+        self.with_ecoinvent = biosphere_name is not None
+        self.replace = replace
 
     def execute_at_startup(self):
-        resetParams(self.name)
-        if self.name in bw.databases:
-            resetParams(self.name)
-            del bw.databases[self.name]
-        self.import_in_project()
+        super().execute_at_startup()
+        if self.name not in bd.databases or self.replace:
+            if self.name in bd.databases:
+                del bd.databases[self.name]
+            self.import_in_project()
 
     def import_in_project(self) -> None:
         """
@@ -113,18 +99,43 @@ class ImpactProxiesDatabase(Database):
         :return:
         """
         logger.info("Loading impact proxies...")
-        bw_database = bw.Database(self.name)
-        datasets = {}
-        for method in bw.methods:
-            datasets[self.name, f"{method}_proxy"] = {
-                "name": f"Impact proxy for {method}",
+        proxy_tech_database = bd.Database(self.name)
+        tech_datasets = {}
+        bio_datasets = {}
+        ei_bio_database = bd.Database(self.biosphere_name)
+
+        if not self.with_ecoinvent:
+            with open(PATH_TO_METHODS, newline="") as csvfile:
+                reader = csv.reader(csvfile, delimiter=";")
+                for row in reader:
+                    method, category, indicator, unit = row
+                    key = self.name, method, category, indicator
+                    # todo add all empty methods
+                    # key = self.name = tuple csv
+                    if key not in bd.methods:
+                        method = bd.Method(key)
+                        method.register(
+                            unit=unit,
+                            filepath=PATH_TO_METHODS,
+                            ecoinvent_version="3.11",
+                            database=self.name,
+                        )
+
+        for method in bd.methods:
+            bio_dataset = {
+                "name": f"Impact proxy for {method[1:]}",
                 "unit": "unit",
                 "exchanges": [],
-                "type": "biosphere",
-                "location": "GLO",
+                "type": "emission",
             }
-            datasets[self.name, f"{method}_technosphere_proxy"] = {
-                "name": f"Technosphere proxy for {method}",
+            if not self.with_ecoinvent:
+                bio_datasets[self.name, f"{method[1:]}_proxy"] = bio_dataset
+            else:
+                bio_dataset["code"] = f"{method[1:]}_proxy"
+                bio_node = ei_bio_database.new_node(**bio_dataset)
+                bio_node.save()
+            tech_datasets[self.name, f"{method[1:]}_technosphere_proxy"] = {
+                "name": f"Technosphere proxy for {method[1:]}",
                 "unit": "unit",
                 "location": "GLO",
                 "production amount": 1,
@@ -132,69 +143,73 @@ class ImpactProxiesDatabase(Database):
                     {
                         "type": "biosphere",
                         "amount": 1,
-                        "input": [self.name, f"{method}_proxy"],
+                        "input": [self.biosphere_name, f"{method[1:]}_proxy"],
                     }
                 ],
             }
-        bw_database.write(datasets)
-        for method in bw.methods:
-            characterisation_factors = bw.Method(method).load()
+        if not self.with_ecoinvent:
+            proxy_tech_database.write({**bio_datasets, **tech_datasets})
+        else:
+            proxy_tech_database.write(tech_datasets)
+        for method in bd.methods:
+            if self.with_ecoinvent:
+                characterisation_factors = bd.Method(method).load()
+            else:
+                characterisation_factors = []
+            biosphere_method_proxy_id = ei_bio_database.get(f"{method[1:]}_proxy").id
             if (
                 len(
                     [
                         cf
                         for cf in characterisation_factors
-                        if cf[0] == (self.name, f"{method}_proxy")
+                        if cf[0] == biosphere_method_proxy_id
                     ]
                 )
                 != 1
             ):
-                characterisation_factors.append(((self.name, f"{method}_proxy"), 1))
-                bw.Method(method).write(characterisation_factors)
+                characterisation_factors.append((biosphere_method_proxy_id, 1))
+                bd.Method(method).write(characterisation_factors)
         logger.info("Impact proxies successfully loaded")
 
 
 class EcoInventDatabase(Database):
-    def __init__(self, name, path):
-        Database.__init__(self, name, path)
+    def __init__(
+        self, version: str, system_model: str, replace: Optional[bool] = False
+    ):
+        self.version = version
+        self.system_model = system_model
+        self.replace = replace
+        Database.__init__(self, f"ecoinvent-{self.version}-{self.system_model}")
+
+    def execute_at_startup(self):
+        super().execute_at_startup()
+        if self.name not in bd.databases or self.replace:
+            if self.name in bd.databases:
+                del bd.databases[self.name]
+            if f"ecoinvent-{self.version}-biosphere" in bd.databases:
+                del bd.databases[f"ecoinvent-{self.version}-biosphere"]
+            if "impact_proxies" in bd.databases:
+                del bd.databases["impact_proxies"]
+            method_names = [method for method in bd.methods]
+            for method in method_names:
+                del bd.methods[method]
+            self.import_in_project()
+        else:
+            logger.info(
+                "EcoInvent and biosphere already imported in project. Use the replace "
+                "flag if you want to import it again."
+            )
 
     def import_in_project(self):
-        logger.info("Loading Eco Invent database...")
-        self.validate()
-        try:
-            importer = bw.SingleOutputEcospold2Importer(
-                dirpath=self.path, db_name=self.name, use_mp=False
-            )
-            importer.apply_strategies()
-            importer.statistics()
-            importer.write_database()
-        except XMLSyntaxError as e:
-            # At least one dataset is invalid
-            msg = "{} in file {}".format(e.msg, e.filename)
-            logger.error(msg)
-            raise BwDatabaseError(msg, exception_type="eco_invent_invalid_dataset")
-        except UnicodeDecodeError:
-            # At least one dataset is not in UTF-8 format
-            msg = "One of the file in the Eco Invent database is not in UTF-8 format"
-            logger.error(msg)
-            raise BwDatabaseError(msg, exception_type="eco_invent_invalid_dataset")
-        except AttributeError as e:
-            # Missing field
-            msg = "Missing field {} in file {}".format(e.name, e.obj.base)
-            logger.error(msg)
-            raise BwDatabaseError(msg, exception_type="eco_invent_invalid_dataset")
-        else:
-            logger.info("Eco Invent database successfully loaded")
-
-    def validate(self):
-        """
-        Checks the eco invent database exists and is valid.
-        If not the program exits with the exit code 1.
-        """
-        if not os.path.exists(self.path) or len(os.listdir(self.path)) == 0:
-            msg = "No EcoInvent database found at the given path {}".format(self.path)
-            logger.error(msg)
-            raise BwDatabaseError(msg, exception_type="eco_invent_invalid_path")
+        logger.info(f"Downloading EcoInvent under the name {self.name}...")
+        bi.import_ecoinvent_release(
+            version=self.version,
+            system_model=self.system_model,  # can be cutoff / apos / consequential / EN15804
+            username=os.environ["BW_USER"],
+            password=os.environ["BW_PASS"],
+            biosphere_write_mode="replace",
+            use_mp=False,
+        )
 
 
 class ForegroundDatabase(Database):
@@ -210,10 +225,11 @@ class ForegroundDatabase(Database):
         Reference flow has to be specified as import is done in a tree way with
         reference flow as a root.
         :param name: user database name
-        :param path: user datasets location
+        :param path: user datasets root location
 
         """
-        Database.__init__(self, name, path)
+        Database.__init__(self, name)
+        self.path = path
         self.fu_name = ""
         self.parameters = None
         self.context = UserDatabaseContext(
@@ -267,9 +283,9 @@ class ForegroundDatabase(Database):
         logger.info("Foreground datasets successfully loaded")
 
     def execute_at_startup(self):
-        if self.name in bw.databases:
+        if self.name in bd.databases:
             resetParams(self.name)
-            del bw.databases[self.name]
+            del bd.databases[self.name]
 
         self.find_activities_on_disk()
 
@@ -285,7 +301,7 @@ class ForegroundDatabase(Database):
         Parameters are then propagated from the reference flow to the leaf activities.
         :return:
         """
-        bw_database = bw.Database(self.name)
+        bw_database = bd.Database(self.name)
         serialized_fu = [
             serialized_activity
             for serialized_activity in self.context.serialized_activities

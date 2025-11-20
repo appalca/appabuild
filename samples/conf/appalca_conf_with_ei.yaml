@@ -1,0 +1,9 @@
+project_name: 'sample_project_with_ei_bw25'
+replace_bg: False
+databases:
+  foreground:
+    name: user_database
+    path: './samples/datasets/user_database/nvidia_ai_gpu'
+  ecoinvent:
+    version: "3.11"
+    system_model: "cutoff"
