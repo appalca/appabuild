@@ -8,6 +8,7 @@ from __future__ import annotations
 import itertools
 import logging
 import os
+import re
 from typing import List, Optional, Set, Tuple
 
 import bw2data as bd
@@ -72,6 +73,7 @@ class ImpactModelBuilder:
         functional_unit: str,
         methods: list[str],
         output_path: str,
+        activities_name_to_include: Optional[List[str]] = None,
         metadata: Optional[ModelMetadata] = ModelMetadata(),
         parameters: Optional[ImpactModelParams] = None,
     ):
@@ -84,6 +86,10 @@ class ImpactModelBuilder:
         :param metadata: information about the LCA behind the impact model.
             Should contain, or link to all information necessary for the end user's
             proper understanding of the impact model.
+        :param activities_name_to_include: list of activities name regexes to use as an
+        alternative to the include_in_tree activity flag. Any activity whose name matches
+        one of the regex in the list will be included in the impact model. This disables
+        the include_in_tree activity flag.
         :param parameters: an ImpactModelParam object will have to be created for each
         parameter used in all used datasets. See ImpactModelParam attributes to know
         required fields.
@@ -92,6 +98,7 @@ class ImpactModelBuilder:
         self.functional_unit = functional_unit
         self.parameters = parameters
         self.methods = methods
+        self.activities_name_to_include = activities_name_to_include
         self.metadata = metadata
         self.output_path = output_path
         self.bw_user_database = bd.Database(self.user_database_name)
@@ -113,6 +120,7 @@ class ImpactModelBuilder:
                 lca_config.model.path,
                 lca_config.model.name + ".yaml",
             ),
+            lca_config.model.activities_name_to_include,
             lca_config.model.metadata,
             ImpactModelParams.from_list(lca_config.model.parameters),
         )
@@ -122,7 +130,8 @@ class ImpactModelBuilder:
         self, foreground_database: Optional[ForegroundDatabase] = None
     ) -> ImpactModel:
         """
-        Build an Impact Model, the model is a represented as a tree with the functional unit as its root
+        Build an Impact Model, the model is a represented as a tree with the functional
+        unit as its root.
         :param foreground_database: database containing the functional unit
         :return: built impact model.
         """
@@ -259,7 +268,17 @@ class ImpactModelBuilder:
                     e = f"Found recursive activity: {sub_act.get('name')}"
                     logger.exception(e)
                     raise ForegroundDatabaseError(e)
-                if sub_act.get("include_in_tree"):
+                if self.activities_name_to_include is not None:
+                    regexes = [
+                        re.compile(activity_name_to_include)
+                        for activity_name_to_include in self.activities_name_to_include
+                    ]
+                    sub_act_to_include = any(
+                        regex.match(sub_act.get("name")) for regex in regexes
+                    )
+                else:
+                    sub_act_to_include = sub_act.get("include_in_tree")
+                if sub_act_to_include:
                     amount = _getAmountOrFormula(exch)
                     child_tree_node = tree_node.new_child(
                         name=sub_act["name"],

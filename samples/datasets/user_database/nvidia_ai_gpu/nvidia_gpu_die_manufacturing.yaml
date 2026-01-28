@@ -6,6 +6,7 @@ amount: 1
 parameters:
 - cuda_core
 - architecture
+include_in_tree: True
 comment: "NVIDIA GPU die for Pascal and Maxwell architectures. Number of CUDA cores is used to estimate die area and technology node. Information for modelisation can be found on techpowerup.com (https://www.techpowerup.com/gpu-specs/nvidia-gp108.g808 for example). We assume dies are manufactured in Taiwan. We assume (arbitrarily) a defect density of ?"
 exchanges:
 - database: user_database
