@@ -25,6 +25,10 @@ class Model(BaseModel):
         name: name of the yaml file corresponding to the impact model (do not include file extension).
         path: output folder for saving impact model.
         compile: if True, precompute the symbolic expressions needed by Appa Run and store them in the impact model.
+        activities_name_to_include: list of activities name regexes to use as an
+        alternative to the include_in_tree activity flag. Any activity whose name matches
+        one of the regex in the list will be included in the impact model. This disables
+        the include_in_tree activity flag.
         metadata: information about the impact model, meant to help the user of it to better understand the LCA leading to the impact model.
         parameters: information about all free parameters needed by the functional unit of the impact model.
     """
@@ -33,6 +37,7 @@ class Model(BaseModel):
     path: Optional[str] = "."
     compile: bool
     metadata: Optional[ModelMetadata] = None
+    activities_name_to_include: Optional[List[str]] = None
     parameters: Optional[List[ImpactModelParam]] = []
 
     @field_validator("parameters", mode="before")

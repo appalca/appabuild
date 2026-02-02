@@ -1,0 +1,66 @@
+scope:
+  fu:
+    name: 'nvidia_ai_gpu_chip'
+    database: "user_database"
+  methods:
+    - "EFV3_CLIMATE_CHANGE"
+model:
+  path: "."
+  name: "nvidia_ai_gpu_chip"
+  compile: True
+  activities_name_to_include:
+    - "nvidia_ai_gpu_chip"
+    - ".*_manufacturing_?[0-9]*$" #the _?[0-9]* is important here as some activities downstream the switch in nvidia_gpu_die_manufacturing will be duplicated with a "_{number_of_duplicate}" suffix
+  metadata:
+    author:
+      name: Maxime PERALTA
+      organization: CEA
+      mail: maxime.peralta@cea.fr
+    reviewer:
+      name: Mathias TORCASO
+      organization: CEA
+      mail:
+    report:
+      link: https://appalca.github.io/
+      description: "A mock example of Appa LCA's impact model corresponding to a fictive AI chip accelerator based on NVIDIA GPU."
+      date: 07/10/2025
+      version: "1"
+      license: proprietary
+      appabuild_version: "0.3.6"
+  parameters:
+    - name: cuda_core
+      type: float
+      default:
+        architecture:
+          Maxwell: 1344
+          Pascal: 1280
+      min: 256
+      max: 4096
+    - name: architecture
+      type: enum
+      default: Maxwell
+      weights:
+        Maxwell: 1
+        Pascal: 1
+    - name: usage_location
+      type: enum
+      default: FR
+      weights:
+        FR: 1
+        EU: 1
+    - name: energy_per_inference
+      type: float
+      default:
+        architecture: #we model energy by inference using a model of the TDP function of the number of cuda cores. We suppose that TDP power corresponds to running inferences at 90fps.
+          Maxwell: "0.0878*cuda_core*1000/(90*3600)"
+          Pascal: "0.0679*cuda_core*1000/(90*3600)"
+      pm_perc: 0.2
+    - name: lifespan
+      type: float
+      default: 2.0
+      pm: 1
+    - name: inference_per_day
+      type: float
+      default: "30*3600*8" #30fps 8 hours a day
+      min: 0
+      max: 86400000

@@ -13,9 +13,9 @@ from typing import Optional
 
 import bw2data as bd
 import bw2io as bi
+import lca_algebraic as lcaa
 import yaml
 from apparun.parameters import ImpactModelParams
-from lca_algebraic import resetParams, setForeground
 from lxml.etree import XMLSyntaxError
 from pydantic_core import ValidationError
 
@@ -48,7 +48,7 @@ class Database:
         already present in Brightway project.
         :return:
         """
-        resetParams(self.name)
+        return
 
     @abc.abstractmethod
     def import_in_project(self) -> None:
@@ -284,7 +284,7 @@ class ForegroundDatabase(Database):
 
     def execute_at_startup(self):
         if self.name in bd.databases:
-            resetParams(self.name)
+            lcaa.resetParams()
             del bd.databases[self.name]
 
         self.find_activities_on_disk()
@@ -323,4 +323,4 @@ class ForegroundDatabase(Database):
             activity.to_bw_format() for activity in self.context.activities
         ]
         bw_database.write(dict(to_write_activities))
-        setForeground(self.name)
+        lcaa.setForeground(self.name)

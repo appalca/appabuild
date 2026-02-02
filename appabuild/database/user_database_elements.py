@@ -399,7 +399,6 @@ class Activity(DatabaseElement):
                 ]
             )
             > 0
-            and serialized_activity.include_in_tree
         ):
             amount_of_copies = len(
                 [

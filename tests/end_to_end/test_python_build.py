@@ -1,5 +1,6 @@
 """
-Test that the command appabuild lca build works correctly with a simple example using CLI.
+Test that the command appabuild lca build works correctly with a simple example using
+Python API.
 """
 
 import os
@@ -9,31 +10,20 @@ import yaml
 from apparun.impact_model import ImpactModel
 from typer.testing import CliRunner
 
-from appabuild.cli.main import cli_app
+from appabuild.cli.lca import build
 from tests import DATA_DIR
 
 runner = CliRunner()
 
 
-def test_build_command():
+def test_build_with_include_in_tree():
     appaconf_file = os.path.join(DATA_DIR, "cmd_build", "appalca_conf_wo_ei.yaml")
     conf_file = os.path.join(DATA_DIR, "cmd_build", "nvidia_ai_gpu_chip_lca_conf.yaml")
     expected_file = os.path.join(
         DATA_DIR, "cmd_build", "nvidia_ai_gpu_chip_expected.yaml"
     )
     expected_scores_file = os.path.join(DATA_DIR, "cmd_build", "expected_scores.yaml")
-
-    result = runner.invoke(
-        cli_app,
-        [
-            "lca",
-            "build",
-            appaconf_file,
-            conf_file,
-        ],
-    )
-
-    assert result.exit_code == 0
+    build(appaconf_file, conf_file)
 
     # Check the generated impact model is the same as expected
     with open(expected_file, "r") as stream:
@@ -51,10 +41,33 @@ def test_build_command():
         score.name: score.lcia_scores.scores["EFV3_CLIMATE_CHANGE"][0]
         for score in scores
     }
-
     with open(expected_scores_file, "r") as stream:
         expected_scores = yaml.safe_load(stream)
 
     assert scores == pytest.approx(expected_scores)
-
     os.remove("nvidia_ai_gpu_chip.yaml")
+
+
+def test_build_wo_include_in_tree():
+    appaconf_file = os.path.join(DATA_DIR, "cmd_build", "appalca_conf_wo_ei.yaml")
+    conf_file = os.path.join(
+        DATA_DIR, "cmd_build", "nvidia_ai_gpu_chip_lca_conf_no_include_in_tree.yaml"
+    )
+    expected_scores_file = os.path.join(DATA_DIR, "cmd_build", "expected_scores.yaml")
+    build(appaconf_file, conf_file)
+
+    model = ImpactModel.from_yaml("nvidia_ai_gpu_chip.yaml")
+    assert len(model.tree.unnested_descendants) == 11
+
+    # Check that the generated impact model can be run by Appa Run
+    scores = model.get_nodes_scores()
+    scores = {
+        score.name: score.lcia_scores.scores["EFV3_CLIMATE_CHANGE"][0]
+        for score in scores
+    }
+    with open(expected_scores_file, "r") as stream:
+        expected_scores = yaml.safe_load(stream)
+
+    assert scores["nvidia_ai_gpu_chip"] == pytest.approx(
+        expected_scores["nvidia_ai_gpu_chip"]
+    )
