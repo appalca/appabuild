@@ -72,7 +72,7 @@ class ImpactModelBuilder:
         user_database_name: str,
         functional_unit: str,
         methods: list[str],
-        output_path: str,
+        output_path: Optional[str] = None,
         activities_name_to_include: Optional[List[str]] = None,
         metadata: Optional[ModelMetadata] = ModelMetadata(),
         parameters: Optional[ImpactModelParams] = None,
@@ -147,9 +147,11 @@ class ImpactModelBuilder:
         }
 
         root_node = ImpactTreeNode(
-            name=functional_unit_bw["name"],
+            name=functional_unit_bw.get("name"),
             amount=1,
-            properties=NodeProperties.from_dict(functional_unit_bw["properties"]),
+            properties=NodeProperties.from_dict(functional_unit_bw.get("properties"))
+            if functional_unit_bw.get("properties") is not None
+            else NodeProperties(properties={}),
         )
         self.declare_parameters_in_lcaa()
         self.build_tree_node(root_node)
@@ -238,24 +240,24 @@ class ImpactModelBuilder:
 
         for parameter in self.parameters:
             if parameter.name in _param_registry().keys():
-                e = f"Parameter {parameter.name} already in lcaa registry."
-                logging.error(e)
-                raise ParameterError(e)
-            if isinstance(parameter, FloatParam):
-                newFloatParam(
-                    name=parameter.name,
-                    default=parameter.default,
-                    save=False,
-                    dbname=self.user_database_name,
-                    min=0.0,
-                )
-            if isinstance(parameter, EnumParam):
-                newEnumParam(
-                    name=parameter.name,
-                    values=parameter.weights,
-                    default=parameter.default,
-                    dbname=self.user_database_name,
-                )
+                e = f"Warning: parameter {parameter.name} already in lcaa registry. Skipping."
+                logging.warning(e)
+            else:
+                if isinstance(parameter, FloatParam):
+                    newFloatParam(
+                        name=parameter.name,
+                        default=parameter.default,
+                        save=False,
+                        dbname=self.user_database_name,
+                        min=0.0,
+                    )
+                if isinstance(parameter, EnumParam):
+                    newEnumParam(
+                        name=parameter.name,
+                        values=parameter.weights,
+                        default=parameter.default,
+                        dbname=self.user_database_name,
+                    )
 
     def build_tree_node(self, tree_node: ImpactTreeNode):
         act = self.find_activity_in_bw(tree_node.name)
@@ -283,7 +285,9 @@ class ImpactModelBuilder:
                     child_tree_node = tree_node.new_child(
                         name=sub_act["name"],
                         amount=amount,
-                        properties=NodeProperties.from_dict(sub_act["properties"]),
+                        properties=NodeProperties.from_dict(sub_act.get("properties"))
+                        if sub_act.get("properties") is not None
+                        else NodeProperties(properties={}),
                     )
                     self.build_tree_node(child_tree_node)
 
