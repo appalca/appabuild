@@ -8,7 +8,10 @@ import abc
 import csv
 import json
 import os
+import pkgutil
 import re
+from io import StringIO
+from pathlib import Path
 from typing import Optional
 
 import bw2data as bd
@@ -25,7 +28,7 @@ from appabuild.database.user_database_elements import Activity, UserDatabaseCont
 from appabuild.exceptions import BwDatabaseError, SerializedDataError
 from appabuild.logger import log_validation_error, logger
 
-PATH_TO_METHODS = "data/methods/ecoinvent_3.11_methods.csv"
+DATA_MODULE = "appabuild.data"
 
 
 class Database:
@@ -105,21 +108,21 @@ class ImpactProxiesDatabase(Database):
         ei_bio_database = bd.Database(self.biosphere_name)
 
         if not self.with_ecoinvent:
-            with open(PATH_TO_METHODS, newline="") as csvfile:
-                reader = csv.reader(csvfile, delimiter=";")
-                for row in reader:
-                    method, category, indicator, unit = row
-                    key = self.name, method, category, indicator
-                    # todo add all empty methods
-                    # key = self.name = tuple csv
-                    if key not in bd.methods:
-                        method = bd.Method(key)
-                        method.register(
-                            unit=unit,
-                            filepath=PATH_TO_METHODS,
-                            ecoinvent_version="3.11",
-                            database=self.name,
-                        )
+            data = pkgutil.get_data(DATA_MODULE, "methods/ecoinvent_3.11_methods.csv")
+            reader = csv.reader(StringIO(data.decode()), delimiter=";")
+            for row in reader:
+                method, category, indicator, unit = row
+                key = self.name, method, category, indicator
+                # todo add all empty methods
+                # key = self.name = tuple csv
+                if key not in bd.methods:
+                    method = bd.Method(key)
+                    method.register(
+                        unit=unit,
+                        filepath="methods/ecoinvent_3.11_methods.csv",
+                        ecoinvent_version="3.11",
+                        database=self.name,
+                    )
 
         for method in bd.methods:
             bio_dataset = {
