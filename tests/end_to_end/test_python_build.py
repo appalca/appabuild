@@ -71,6 +71,7 @@ def test_build_wo_include_in_tree():
     assert scores["nvidia_ai_gpu_chip"] == pytest.approx(
         expected_scores["nvidia_ai_gpu_chip"]
     )
+    os.remove("nvidia_ai_gpu_chip.yaml")
 
 
 def test_build_piecewise():
@@ -137,3 +138,4 @@ def test_build_piecewise():
         )["EFV3_CLIMATE_CHANGE"][0]
         != 0
     )
+    os.remove("nvidia_ai_gpu_chip_piecewise.yaml")
