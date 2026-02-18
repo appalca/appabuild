@@ -7,7 +7,7 @@ packages = ["appabuild"]
 
 [project]
 name = "appabuild"
-version = "0.4.0"
+version = "0.4.1"
 authors = [{ name = "Maxime Peralta", email = "maxime.peralta@cea.fr"}]
 maintainers= [{name = "Maxime Peralta", email = "maxime.peralta@cea.fr"}]
 description = "Appa Build is a package to build impact models"
@@ -24,7 +24,7 @@ classifiers = [
 ]
 requires-python = ">=3.11,<3.12"
 dependencies = [
-    "apparun==0.4.0",
+    "apparun==0.4.1",
     "click<=8.1.8",
     "numpy==1.26.4",
     "pyarrow==22.0.0",
