@@ -1,4 +1,4 @@
-apparun==0.4.1
+apparun==0.4.2
 numpy
 pyarrow
 pandas
