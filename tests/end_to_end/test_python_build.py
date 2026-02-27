@@ -71,3 +71,71 @@ def test_build_wo_include_in_tree():
     assert scores["nvidia_ai_gpu_chip"] == pytest.approx(
         expected_scores["nvidia_ai_gpu_chip"]
     )
+    os.remove("nvidia_ai_gpu_chip.yaml")
+
+
+def test_build_piecewise():
+    appaconf_file = os.path.join(DATA_DIR, "cmd_build", "appalca_conf_wo_ei.yaml")
+    conf_file = os.path.join(
+        DATA_DIR, "cmd_build", "nvidia_ai_gpu_chip_lca_conf_piecewise.yaml"
+    )
+    build(appaconf_file, conf_file)
+    model = ImpactModel.from_yaml("nvidia_ai_gpu_chip_piecewise.yaml")
+    assert (
+        model.get_node_scores(node_name="ai_use_phase", architecture="Maxwell")[
+            "EFV3_CLIMATE_CHANGE"
+        ][0]
+        == 0
+    )
+    assert (
+        model.get_node_scores(
+            node_name="nvidia_gpu_chip_manufacturing", architecture="Maxwell"
+        )["EFV3_CLIMATE_CHANGE"][0]
+        != 0
+    )
+
+    assert (
+        model.get_node_scores(
+            node_name="ai_use_phase", architecture="Maxwell", cuda_core=1200
+        )["EFV3_CLIMATE_CHANGE"][0]
+        != 0
+    )
+    assert (
+        model.get_node_scores(
+            node_name="nvidia_gpu_chip_manufacturing",
+            architecture="Maxwell",
+            cuda_core=1200,
+        )["EFV3_CLIMATE_CHANGE"][0]
+        == 0
+    )
+
+    assert (
+        model.get_node_scores(
+            node_name="ai_use_phase", architecture="Pascal", cuda_core=1400
+        )["EFV3_CLIMATE_CHANGE"][0]
+        != 0
+    )
+    assert (
+        model.get_node_scores(
+            node_name="nvidia_gpu_chip_manufacturing",
+            architecture="Pascal",
+            cuda_core=1400,
+        )["EFV3_CLIMATE_CHANGE"][0]
+        != 0
+    )
+
+    assert (
+        model.get_node_scores(
+            node_name="ai_use_phase", architecture="Pascal", cuda_core=1200
+        )["EFV3_CLIMATE_CHANGE"][0]
+        == 0
+    )
+    assert (
+        model.get_node_scores(
+            node_name="nvidia_gpu_chip_manufacturing",
+            architecture="Pascal",
+            cuda_core=1200,
+        )["EFV3_CLIMATE_CHANGE"][0]
+        != 0
+    )
+    os.remove("nvidia_ai_gpu_chip_piecewise.yaml")
