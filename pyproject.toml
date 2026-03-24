@@ -53,7 +53,8 @@ dependencies = [
     "ruamel.yaml",
     "typer==0.15.1",
     "ipython>=7.6.0,<=8.34.0",
-    "mermaid-py==0.7.1"
+    "mermaid-py==0.7.1",
+    "peewee==3.18.2"
 ]
 
 [project.scripts]

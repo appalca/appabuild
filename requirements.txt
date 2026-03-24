@@ -34,3 +34,4 @@ pre-commit
 hatchling
 click==8.1.8
 mermaid-py==0.7.1
+peewee==3.18.2
