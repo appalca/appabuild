@@ -6,7 +6,3 @@ It intends to bring the best of the LCA method, which is versatile, holistic and
 It relies on the production and usage of impact models, which can be seen as standalone, parametric and modular LCA templates that operate at the impact level, i.e. after application of the LCIA methods.  
 
 Documentation of Appa LCA is hosted here: https://appalca.github.io/ 
-
-## Install
-**Warning:** as Appa Build and Appa Run are currently not packaged and published on PyPI, you wille need to follow the 
-[installation with source code](https://appalca.github.io/basics/getting_started/#installation-with-source-code) instructions of the documentation.
