@@ -5,7 +5,7 @@ Module containing all the classes and methods to load and validate Appa LCA conf
 from __future__ import annotations
 
 import os
-from typing import Dict, Optional, Union
+from typing import Dict, List, Optional, Union
 
 import yaml
 from pydantic import BaseModel, ValidationError, field_validator
@@ -44,6 +44,11 @@ class ForegroundDatabaseConfig(BaseModel):
         return path
 
 
+class CustomIndicator(BaseModel):
+    name: str
+    unit: str
+
+
 class AppaLCAConfig(BaseModel):
     """
     An Appa LCA configuration, contains information used to set up a Brightway's
@@ -52,11 +57,13 @@ class AppaLCAConfig(BaseModel):
     Attributes:
         project_name: name used by Brightway to initialize the environment.
         databases: databases to import, only one foreground database is required and ecoinvent database is optional.
+        custom_indicators: any indicator not being an LCIA method. Technosphere proxies will be created.
     """
 
     project_name: str
     replace_bg: Optional[bool] = False
     databases: DatabasesConfig
+    custom_indicators: Optional[List[CustomIndicator]] = []
 
     @field_validator("databases", mode="before")
     @classmethod

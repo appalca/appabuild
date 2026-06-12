@@ -1,0 +1,11 @@
+project_name: cmd_build_ete_test
+replace_bg: True
+databases:
+  foreground:
+    name: user_database
+    path: './tests/data/cmd_build/foreground_datasets'
+custom_indicators:
+  - name: cost
+    unit: "$"
+  - name: weight
+    unit: "kg"
