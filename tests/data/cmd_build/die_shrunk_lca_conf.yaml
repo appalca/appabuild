@@ -1,0 +1,52 @@
+scope:
+  fu:
+    name: 'die_shrunk'
+    database: "user_database"
+  methods:
+    - "EFV3_CLIMATE_CHANGE"
+model:
+  path: "."
+  name: "die_shrunk"
+  compile: True
+  metadata:
+    author:
+      name: Maxime PERALTA
+      organization: CEA
+      mail: maxime.peralta@cea.fr
+    reviewer:
+      name: Mathias TORCASO
+      organization: CEA
+      mail:
+    report:
+      link: https://appalca.github.io/
+      description: ""
+      date: 15/07/2026
+      version: "1"
+      license: proprietary
+      appabuild_version: "0.4.3"
+  parameters:
+    - name: die_area
+      type: float
+      default: 10
+      min: 1
+      max: 100
+    - name: fab_location
+      type: enum
+      default: TW
+      weights:
+        TW: 1
+    - name: die_defect_density
+      type: float
+      default: 0.0005
+      min: 0.0001
+      max: 0.001
+    - name: die_node
+      type: float
+      default: 28
+      min: 5
+      max: 90
+    - name: die_shrink_factor
+      type: float
+      default: 0.9
+      min: 0.8
+      max: 1

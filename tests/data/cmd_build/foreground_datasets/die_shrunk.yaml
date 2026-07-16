@@ -1,0 +1,24 @@
+name: die_shrunk
+location: GLO
+type: process
+unit: unit
+amount: 1
+parameters:
+- die_area
+- die_shrink_factor
+- die_defect_density
+- die_node
+include_in_tree: True
+comment: ""
+exchanges:
+- database: user_database
+  name: soc_die_manufacturing
+  type: technosphere
+  parameters_matching:
+    area: die_area*die_shrink_factor*die_shrink_factor
+    technology_node: die_node
+    defect_density: die_defect_density
+  amount: 1
+  input:
+    database: user_database
+    uuid: functional_logic_die_manufacturing
