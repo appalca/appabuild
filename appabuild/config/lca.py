@@ -129,10 +129,12 @@ class Scope(BaseModel):
     Attributes:
         fu: functional unit used in this scope.
         methods: LCIA methods to cover. Appa LCA uses a mapping between short keys and full LCIA method names as available in Brightway.
+        custom_indicators: any indicator not being an LCIA method. Technosphere proxies will be created.
     """
 
     fu: FunctionalUnit
-    methods: List[str]
+    methods: Optional[List[str]] = []
+    custom_indicators: Optional[List[str]] = []
 
 
 class LCAConfig(BaseModel):

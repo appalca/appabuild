@@ -1,12 +1,12 @@
 """
 Setup everything required to build an ImpactModel
 """
-from typing import Optional
+from typing import Dict, List, Optional
 
 import bw2data as bd
 import bw2io as bi
 
-from appabuild.config.appa_lca import AppaLCAConfig
+from appabuild.config.appa_lca import AppaLCAConfig, CustomIndicator
 from appabuild.database.databases import (
     EcoInventDatabase,
     ForegroundDatabase,
@@ -44,6 +44,7 @@ def initialize(appabuild_config_path: str) -> ForegroundDatabase:
         replace_bg=appabuild_config.replace_bg,
         foreground_name=appabuild_config.databases.foreground.name,
         foreground_path=appabuild_config.databases.foreground.path,
+        custom_indicators=appabuild_config.custom_indicators,
     )
 
 
@@ -76,6 +77,7 @@ def project_setup(
     ecoinvent_version: Optional[str] = None,
     ecoinvent_system_model: Optional[str] = None,
     replace_bg: Optional[bool] = False,
+    custom_indicators: Optional[List[CustomIndicator]] = None,
 ) -> ForegroundDatabase:
     """
     Triggers all Brightway functions and database import necessary to build an Impact
@@ -87,6 +89,8 @@ def project_setup(
     :param ecoinvent_system_model: #TODO
     :param replace_bg: if set to True, LCIA methods, biosphere DB and EcoInvent DB will
     be recreated.
+    :param custom_indicators: any indicator not being an LCIA method. Technosphere
+    proxies will be created.
     """
     bd.projects.set_current(project_name)
     databases = []
@@ -103,8 +107,7 @@ def project_setup(
         databases += [ecoinvent_database, proxy_database]
     else:
         proxy_database = ImpactProxiesDatabase(
-            biosphere_name=None,
-            replace=replace_bg,
+            biosphere_name=None, replace=replace_bg, custom_indicators=custom_indicators
         )
         databases += [proxy_database]
     foreground_database = ForegroundDatabase(

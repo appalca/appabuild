@@ -14,7 +14,7 @@ from typing import List, Optional, Set, Tuple
 import bw2data as bd
 import lca_algebraic as lcaa
 from apparun.impact_methods import MethodFullName
-from apparun.impact_model import ImpactModel, ModelMetadata
+from apparun.impact_model import CustomIndicator, ImpactModel, ModelMetadata
 from apparun.impact_tree import ImpactTreeNode
 from apparun.parameters import EnumParam, FloatParam, ImpactModelParams
 from apparun.tree_node import NodeProperties
@@ -39,7 +39,7 @@ from appabuild.exceptions import (
 from appabuild.logger import logger
 
 
-def to_bw_method(method_full_name: MethodFullName) -> Tuple[str, str, str]:
+def method_to_bw_method(method_full_name: MethodFullName) -> Tuple[str, str, str]:
     """
     Find corresponding method as known by Brightway.
     :param method_full_name: method to be found.
@@ -62,6 +62,27 @@ def to_bw_method(method_full_name: MethodFullName) -> Tuple[str, str, str]:
     return matching_methods[0]
 
 
+def custom_indicator_to_bw_method(custom_indicator_name: str) -> Tuple[str, str, str]:
+    matching_methods = [
+        method for method in bd.methods if custom_indicator_name == str(method[-1])
+    ]
+    try:
+        if len(matching_methods) < 1:
+            raise BwMethodError(
+                f"Cannot find custom indicator {custom_indicator_name}."
+            )
+        if len(matching_methods) > 1:
+            raise BwMethodError(
+                f"Too many custom indicators matching {custom_indicator_name}: "
+                f"{matching_methods}."
+            )
+    except BwMethodError as e:
+        logger.exception(e)
+        raise e
+
+    return matching_methods[0]
+
+
 class ImpactModelBuilder:
     """
     Main purpose of this class is to build Impact Models.
@@ -76,6 +97,7 @@ class ImpactModelBuilder:
         activities_name_to_include: Optional[List[str]] = None,
         metadata: Optional[ModelMetadata] = ModelMetadata(),
         parameters: Optional[ImpactModelParams] = None,
+        custom_indicators: Optional[List[str]] = None,
     ):
         """
         Initialize the model builder
@@ -93,6 +115,7 @@ class ImpactModelBuilder:
         :param parameters: an ImpactModelParam object will have to be created for each
         parameter used in all used datasets. See ImpactModelParam attributes to know
         required fields.
+        :param custom_indicators: any indicator not being an LCIA method.
         """
         self.user_database_name = user_database_name
         self.functional_unit = functional_unit
@@ -102,6 +125,9 @@ class ImpactModelBuilder:
         self.metadata = metadata
         self.output_path = output_path
         self.bw_user_database = bd.Database(self.user_database_name)
+        self.custom_indicators = (
+            custom_indicators if custom_indicators is not None else []
+        )
 
     @staticmethod
     def from_yaml(lca_config_path: str) -> ImpactModelBuilder:
@@ -123,6 +149,7 @@ class ImpactModelBuilder:
             lca_config.model.activities_name_to_include,
             lca_config.model.metadata,
             ImpactModelParams.from_list(lca_config.model.parameters),
+            lca_config.scope.custom_indicators,
         )
         return builder
 
@@ -143,7 +170,14 @@ class ImpactModelBuilder:
 
         functional_unit_bw = self.find_activity_in_bw(self.functional_unit)
         methods_bw = {
-            method: to_bw_method(MethodFullName[method]) for method in self.methods
+            **{
+                method: method_to_bw_method(MethodFullName[method])
+                for method in self.methods
+            },
+            **{
+                custom_indicator: custom_indicator_to_bw_method(custom_indicator)
+                for custom_indicator in self.custom_indicators
+            },
         }
 
         root_node = ImpactTreeNode(
@@ -160,7 +194,16 @@ class ImpactModelBuilder:
         self.check_symbols_are_known_parameters(free_symbols)
 
         impact_model = ImpactModel(
-            tree=root_node, parameters=self.parameters, metadata=self.metadata
+            tree=root_node,
+            parameters=self.parameters,
+            metadata=self.metadata,
+            custom_indicators=[
+                CustomIndicator(
+                    name=custom_indicator,
+                    unit=bd.methods[custom_indicator_to_bw_method("cost")]["unit"],
+                )
+                for custom_indicator in self.custom_indicators
+            ],
         )
         return impact_model
 

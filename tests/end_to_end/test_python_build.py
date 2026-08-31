@@ -71,3 +71,27 @@ def test_build_wo_include_in_tree():
     assert scores["nvidia_ai_gpu_chip"] == pytest.approx(
         expected_scores["nvidia_ai_gpu_chip"]
     )
+    os.remove("nvidia_ai_gpu_chip.yaml")
+
+
+def test_build_custom_indicator():
+    appaconf_file = os.path.join(
+        DATA_DIR, "cmd_build", "appalca_conf_wo_ei_custom_indicators.yaml"
+    )
+    conf_file = os.path.join(
+        DATA_DIR, "cmd_build", "nvidia_ai_gpu_chip_lca_conf_custom_indicators.yaml"
+    )
+    expected_scores_file = os.path.join(
+        DATA_DIR, "cmd_build", "expected_scores_custom_indicators.yaml"
+    )
+    with open(expected_scores_file, "r") as stream:
+        expected_scores = yaml.safe_load(stream)
+    build(appaconf_file, conf_file)
+    model = ImpactModel.from_yaml("nvidia_ai_gpu_chip_custom_indicators.yaml")
+    assert len(model.custom_indicators) == 1
+    assert model.custom_indicators[0].name == "cost"
+    assert model.custom_indicators[0].unit == "$"
+
+    scores = model.get_scores()
+    assert scores.scores["cost"][0] == pytest.approx(expected_scores["cost"])
+    os.remove("nvidia_ai_gpu_chip_custom_indicators.yaml")

@@ -12,7 +12,7 @@ import pkgutil
 import re
 from io import StringIO
 from pathlib import Path
-from typing import Optional
+from typing import Dict, List, Optional
 
 import bw2data as bd
 import bw2io as bi
@@ -22,6 +22,7 @@ from apparun.parameters import ImpactModelParams
 from lxml.etree import XMLSyntaxError
 from pydantic_core import ValidationError
 
+from appabuild.config.appa_lca import CustomIndicator
 from appabuild.database.bw_databases import BwDatabase
 from appabuild.database.serialized_data import SerializedActivity, SerializedExchange
 from appabuild.database.user_database_elements import Activity, UserDatabaseContext
@@ -74,7 +75,10 @@ class ImpactProxiesDatabase(Database):
     """
 
     def __init__(
-        self, biosphere_name: Optional[str] = None, replace: Optional[bool] = False
+        self,
+        biosphere_name: Optional[str] = None,
+        replace: Optional[bool] = False,
+        custom_indicators: Optional[List[CustomIndicator]] = None,
     ):
         Database.__init__(self, name="impact_proxies")
         self.biosphere_name = (
@@ -82,12 +86,19 @@ class ImpactProxiesDatabase(Database):
         )
         self.with_ecoinvent = biosphere_name is not None
         self.replace = replace
+        self.custom_indicators = (
+            custom_indicators if custom_indicators is not None else []
+        )
 
     def execute_at_startup(self):
         super().execute_at_startup()
         if self.name not in bd.databases or self.replace:
             if self.name in bd.databases:
                 del bd.databases[self.name]
+            if not self.with_ecoinvent:
+                method_names = [method for method in bd.methods]
+                for method in method_names:
+                    del bd.methods[method]
             self.import_in_project()
 
     def import_in_project(self) -> None:
@@ -113,7 +124,6 @@ class ImpactProxiesDatabase(Database):
             for row in reader:
                 method, category, indicator, unit = row
                 key = self.name, method, category, indicator
-                # todo add all empty methods
                 # key = self.name = tuple csv
                 if key not in bd.methods:
                     method = bd.Method(key)
@@ -124,21 +134,34 @@ class ImpactProxiesDatabase(Database):
                         database=self.name,
                     )
 
+        for custom_indicator in self.custom_indicators:
+            method = bd.Method((self.name, "custom_indicators", custom_indicator.name))
+            method.register(
+                unit=custom_indicator.unit,
+                filepath="N/A",
+                ecoinvent_version="N/A",
+                database=self.name,
+            )
+
         for method in bd.methods:
+            if method[1] == "custom_indicators":
+                method_name = method[-1]
+            else:
+                method_name = method[1:]
             bio_dataset = {
-                "name": f"Impact proxy for {method[1:]}",
+                "name": f"Impact proxy for {method_name}",
                 "unit": "unit",
                 "exchanges": [],
                 "type": "emission",
             }
             if not self.with_ecoinvent:
-                bio_datasets[self.name, f"{method[1:]}_proxy"] = bio_dataset
+                bio_datasets[self.name, f"{method_name}_proxy"] = bio_dataset
             else:
-                bio_dataset["code"] = f"{method[1:]}_proxy"
+                bio_dataset["code"] = f"{method_name}_proxy"
                 bio_node = ei_bio_database.new_node(**bio_dataset)
                 bio_node.save()
-            tech_datasets[self.name, f"{method[1:]}_technosphere_proxy"] = {
-                "name": f"Technosphere proxy for {method[1:]}",
+            tech_datasets[self.name, f"{method_name}_technosphere_proxy"] = {
+                "name": f"Technosphere proxy for {method_name}",
                 "unit": "unit",
                 "location": "GLO",
                 "production amount": 1,
@@ -146,7 +169,7 @@ class ImpactProxiesDatabase(Database):
                     {
                         "type": "biosphere",
                         "amount": 1,
-                        "input": [self.biosphere_name, f"{method[1:]}_proxy"],
+                        "input": [self.biosphere_name, f"{method_name}_proxy"],
                     }
                 ],
             }
@@ -155,11 +178,15 @@ class ImpactProxiesDatabase(Database):
         else:
             proxy_tech_database.write(tech_datasets)
         for method in bd.methods:
+            if method[1] == "custom_indicators":
+                method_name = method[-1]
+            else:
+                method_name = method[1:]
             if self.with_ecoinvent:
                 characterisation_factors = bd.Method(method).load()
             else:
                 characterisation_factors = []
-            biosphere_method_proxy_id = ei_bio_database.get(f"{method[1:]}_proxy").id
+            biosphere_method_proxy_id = ei_bio_database.get(f"{method_name}_proxy").id
             if (
                 len(
                     [
